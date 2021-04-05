@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
+import 'package:team_c_f/data/tournament.dart';
 import 'package:team_c_f/page/home.dart';
 import 'package:team_c_f/page/sign.dart';
 import 'package:team_c_f/servise/auth.dart';
@@ -35,8 +36,11 @@ Future<void> main() async {
       //     ),
       //   ),
       // ),
-      home: ChangeNotifierProvider<Account>(
-        create: (context) => Account(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => Account()),
+          ChangeNotifierProvider(create: (context) => Tournament()),
+        ],
         child: SafeArea(
           child: Page(),
         ),
@@ -58,7 +62,7 @@ class _PageState extends State<Page> {
   @override
   Widget build(BuildContext context) {
     if (firstStart) {
-      context.read<Account>().updateSignInfo();
+      context.read<Account>().initInfo();
       setState(() {
         firstStart = false;
       });
