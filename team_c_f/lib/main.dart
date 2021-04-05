@@ -68,7 +68,7 @@ class _PageState extends State<Page> {
       });
     }
     return Container(
-      child: context.watch<Account>().signIn
+      child: context.watch<Account>().registedInApp
           ? Homepage()
           : Sign(), //Проверка выполнен ли вход в гугл-аккаунт
     );

@@ -35,8 +35,8 @@ class Team {
     return {
       'Title': title,
       'Members': jsonEncode(members),
-      'Points': points,
-      'Position': position,
+      'Points': points.toString(),
+      'Position': position.toString(),
     };
   }
 }

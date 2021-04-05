@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:team_c_f/data/tournament.dart';
 import 'package:team_c_f/element/forecast.dart';
 import 'package:team_c_f/element/schedule.dart';
 import 'package:team_c_f/element/scorers.dart';
@@ -21,9 +19,6 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return 
-    // ChangeNotifierProvider<Tournament>(
-    //   create: (context) => Tournament(),
-    //   child: 
       Scaffold(
         body: selectedPage > 2
             ? selectedPage == 4
@@ -88,7 +83,6 @@ class _HomepageState extends State<Homepage> {
             ),
           ],
         ),
-      // ),
     );
   }
 }

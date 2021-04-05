@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:team_c_f/servise/auth.dart';
 import 'package:team_c_f/servise/operationdb.dart';
 
 import 'shortmatch.dart';
@@ -28,26 +29,34 @@ class DataShortMatch with ChangeNotifier {
 }
 
 class Account with ChangeNotifier {
-  bool _signIn = false;
+  bool _signInGoogle = false;
+  bool _registedInApp = false;
   String _userId = '';
 
-  bool get signIn => _signIn;
+  bool get signIn => _signInGoogle;
+  bool get registedInApp => _registedInApp;
   String get userId => _userId;
 
-  String getUserId() {
-    return FirebaseAuth.instance.currentUser != null
-        ? FirebaseAuth.instance.currentUser.uid
-        : '';
-  }
-
-  Future updateSignInfo() async {
+  Future initInfo() async {
     if (FirebaseAuth.instance.currentUser != null) {
       _userId = FirebaseAuth.instance.currentUser.uid;
-      _signIn = await DatabaseService().userExists(userId: _userId);
+      _signInGoogle = true;
+      _registedInApp = await DatabaseService().userExists(userId: _userId);
     } else {
-      _signIn = false;
+      _userId = '';
+      _signInGoogle = false;
+      _registedInApp = false;
     }
-    
+    notifyListeners();
+  }
+
+  Future changeSignIn() async {
+    _signInGoogle ? await signOutGoogle() : await signInWithGoogle();
+    initInfo();
+  }
+
+  void registedUser(){
+    _registedInApp = true;
     notifyListeners();
   }
 }

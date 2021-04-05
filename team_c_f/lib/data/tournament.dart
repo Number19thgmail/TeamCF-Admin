@@ -7,20 +7,47 @@ import 'package:team_c_f/data/team.dart';
 import 'package:team_c_f/servise/operationdb.dart';
 
 class Tournament with ChangeNotifier {
-  List<Team> allTeams;
+  List<Team> allTeams = [];
   CurrentTour current;
-  List<Tour> schedule;
-  List<Forecast> currentForecasts;
-  List<Player> allPlayers;
+  List<Tour> schedule = [];
+  List<Forecast> currentForecasts = [];
+  List<Player> allPlayers = [];
 
-  Tournament() {
-    DatabaseService().getAllTeam().then((value) => allTeams = value);
-    DatabaseService().getCurrentTour().then((value) => current = value);
-    DatabaseService().getAllTour().then((value) => schedule = value);
-    DatabaseService()
-        .getCurrentForecasts()
-        .then((value) => currentForecasts = value);
-    DatabaseService().getAllPlayers().then((value) => allPlayers = value);
+  void initInfo() {
+    DatabaseService().getAllTeam().then(
+      (value) {
+        allTeams = value;
+        notifyListeners();
+      },
+    );
+    DatabaseService().getCurrentTour().then(
+      (value) {
+        current = value;
+        notifyListeners();
+      },
+    );
+    DatabaseService().getAllTour().then(
+      (value) {
+        schedule = value;
+        notifyListeners();
+      },
+    );
+    DatabaseService().getCurrentForecasts().then(
+      (value) {
+        currentForecasts = value;
+        notifyListeners();
+      },
+    );
+    DatabaseService().getAllPlayers().then(
+      (value) {
+        allPlayers = value;
+        notifyListeners();
+      },
+    );
+  }
+
+  List<String> get allTeamNames {
+    return allTeams.isNotEmpty ? allTeams.map((t) => t.title).toList() : [];
   }
 
   void downloadForecasts({String tour}) {
