@@ -1,0 +1,45 @@
+import 'package:flutter/material.dart';
+import 'package:team_c_f/data/data.dart';
+import 'package:team_c_f/data/shortmatch.dart';
+import 'package:provider/provider.dart';
+
+class MatchView extends StatefulWidget {
+  final ShortMatch match;
+  const MatchView({
+    Key key,
+    @required this.match,
+  }) : super(key: key);
+
+  @override
+  _MatchViewState createState() => _MatchViewState();
+}
+
+class _MatchViewState extends State<MatchView> {
+  Color color = Colors.amber;
+
+  get home => widget.match.home;
+  get away => widget.match.away;
+  get time => widget.match.time;
+  get selected => widget.match.selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: selected ? Colors.blue : Colors.amber,
+      child: CheckboxListTile(
+        checkColor: Colors.blue,
+        activeColor: Colors.amber,
+        value: selected,
+        title: Text('$time. $home - $away'),
+        onChanged: (a) {
+          setState(() {
+            context.read<DataShortMatch>().selectMatch(
+                  m: widget.match,
+                  select: a,
+                );
+          });
+        },
+      ),
+    );
+  }
+}

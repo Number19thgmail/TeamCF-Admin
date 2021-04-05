@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1038841331273",
+    "project_id": "teamcf-197909",
+    "storage_bucket": "teamcf-197909.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038841331273:android:212adb187d1930fc410998",
+        "android_client_info": {
+          "package_name": "com.number19th.teamcfadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038841331273-7r9rsckfd0iiame2rd4nl1eqi5bdjgc9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.number19th.teamcfadmin",
+            "certificate_hash": "22f8ced15b9aa08f7b6dcfa9f4e86872b192d9d7"
+          }
+        },
+        {
+          "client_id": "1038841331273-0ls8f9q0k0vr2tbdv28j7camleiu9cjt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDglKVSOuvdnxkSp84hBZmBsTY8zSjlAWY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038841331273-0ls8f9q0k0vr2tbdv28j7camleiu9cjt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
