@@ -7,13 +7,15 @@ import 'package:team_c_f/data/team.dart';
 import 'package:team_c_f/servise/operationdb.dart';
 
 class Tournament with ChangeNotifier {
-  List<Team> allTeams = [];
-  CurrentTour current;
-  List<Tour> schedule = [];
-  List<Forecast> currentForecasts = [];
-  List<Player> allPlayers = [];
+  // Класс хранящий актуальную информацию с сервера
+  List<Team> allTeams = []; // Все команды
+  CurrentTour current; // Текущую информацию о туре
+  List<Tour> schedule = []; // Расписание
+  List<Forecast> currentForecasts = []; // Прогнозы на текущий тур
+  List<Player> allPlayers = []; // Все игроки
 
-  void initInfo() {
+  Tournament() {
+    // Конструктор
     DatabaseService().getAllTeam().then(
       (value) {
         allTeams = value;
@@ -47,18 +49,22 @@ class Tournament with ChangeNotifier {
   }
 
   List<String> get allTeamNames {
-    return allTeams.isNotEmpty ? allTeams.map((t) => t.title).toList() : [];
+    // Получение всех неполных команд для списка при регистрации
+    return allTeams.isNotEmpty
+        ? allTeams
+            .where((t) => t.members.length < 3)
+            .map((t) => t.title)
+            .toList()
+        : [];
   }
 
-  void downloadForecasts({String tour}) {
-    DatabaseService()
-        .getForecasts(tour: tour)
-        .then((value) => currentForecasts = value);
-
-    notifyListeners();
+  Future<List<Forecast>> getForecasts({String tour}) {
+    // Получение всех прогнозов на указанный тур
+    return DatabaseService().getForecasts(tour: tour).then((value) => value);
   }
 
   void getResults() {
+    // Получение новых результатов с сервера
     DatabaseService().getResults(tour: current.tour).then((value) => schedule
         .where((element) => element.tour == current.tour)
         .first
@@ -68,6 +74,7 @@ class Tournament with ChangeNotifier {
   }
 
   void updateResult() {
+    // Обновление результатов на сервере
     DatabaseService().updateResults(
         tour: schedule.where((element) => element.tour == current.tour).first);
   }

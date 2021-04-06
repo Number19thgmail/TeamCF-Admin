@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
 
 class ScheduleView extends StatelessWidget {
+  // Класс, отображающий результаты тура, по умолчанию текущего
   const ScheduleView({Key key}) : super(key: key);
 
   @override

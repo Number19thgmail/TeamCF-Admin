@@ -4,7 +4,8 @@ import 'package:team_c_f/data/shortmatch.dart';
 import 'package:provider/provider.dart';
 
 class MatchView extends StatefulWidget {
-  final ShortMatch match;
+  // Класс, отображащий информацию о матче, при выборе матчей
+  final ShortMatch match; // Краткая информация о матче
   const MatchView({
     Key key,
     @required this.match,
@@ -25,6 +26,7 @@ class _MatchViewState extends State<MatchView> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      // Карточка с информацией о матче
       color: selected ? Colors.blue : Colors.amber,
       child: CheckboxListTile(
         checkColor: Colors.blue,
@@ -32,12 +34,11 @@ class _MatchViewState extends State<MatchView> {
         value: selected,
         title: Text('$time. $home - $away'),
         onChanged: (a) {
-          setState(() {
-            context.read<DataShortMatch>().selectMatch(
-                  m: widget.match,
-                  select: a,
-                );
-          });
+          context.read<DataShortMatch>().selectMatch(
+                // Выбор матч
+                m: widget.match,
+                select: a,
+              );
         },
       ),
     );

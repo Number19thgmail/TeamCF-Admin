@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Match {
-  final String home;
-  final String away;
-  final String date;
-  final String time;
-  final String score;
-  final bool started;
+  // Информация о матче
+  final String home; // Хозяева
+  final String away; // Гости
+  final String date; // Дата матча
+  final String time; // Время матча
+  final String score; // Счет
+  final bool started; // Флаг начала матча
 
   Match({
+    // Базовый конструктов
     @required this.home,
     @required this.away,
     @required this.time,
@@ -18,6 +20,7 @@ class Match {
   });
 
   factory Match.fromJson({Map<String, dynamic> json, String docId}) {
+    // Именованный конструктор, используемый при десериализации
     return Match(
       home: json['Home'],
       away: json['Away'],
@@ -29,6 +32,7 @@ class Match {
   }
 
   Map<String, dynamic> toMap() {
+    // Фукнция сериализации
     return {
       'Home': home,
       'Away': away,

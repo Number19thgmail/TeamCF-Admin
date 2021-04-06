@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ShowScorers extends StatelessWidget {
+  // Класс, отображающий список бомбардиров
   const ShowScorers({Key key}) : super(key: key);
 
   @override

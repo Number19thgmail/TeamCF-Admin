@@ -6,56 +6,71 @@ import 'package:team_c_f/servise/operationdb.dart';
 import 'shortmatch.dart';
 
 class DataShortMatch with ChangeNotifier {
-  List<ShortMatch> _data = [];
-  DataShortMatch();
+  // Единый класс для выбора матчей
+  List<ShortMatch> _data = []; // Список матчей
   List<ShortMatch> get getData => _data;
 
   void addData(List<ShortMatch> d) {
+    // Добавление матча в список
     _data = [..._data, ...d];
 
     notifyListeners();
   }
 
   void clearData() {
+    // Очистка листа
     _data = [];
   }
 
   void selectMatch({ShortMatch m, bool select}) {
+    // Выбор матча (изменение его флага выбора)
     _data.where((element) => element == m).first.selected = select;
     notifyListeners();
   }
 
-  int get countSelected => _data.where((element) => element.selected).length;
+  int get countSelected => _data
+      .where((element) => element.selected)
+      .length; // Количество выбранных матчей
 }
 
 class Account with ChangeNotifier {
+  // Единый класс с информацией о Google-аккаунте и регистрации в приложении
   bool _signInGoogle = false;
   bool _registedInApp = false;
   String _userId = '';
 
-  bool get signIn => _signInGoogle;
-  bool get registedInApp => _registedInApp;
-  String get userId => _userId;
+  bool get signIn => _signInGoogle; // Выполнен вход в Google-аккаунт
+  bool get registedInApp =>
+      _registedInApp; // Выполнена ли регистрации в приложении
+  String get userId => _userId; // Уникальный идентификатор Google-аккаунта
 
-  Future initInfo() async {
+  Account() {
+    // Конструктор
+    calculateVariables();
+  }
+
+  void calculateVariables() { // Вычисление переменных
     if (FirebaseAuth.instance.currentUser != null) {
       _userId = FirebaseAuth.instance.currentUser.uid;
       _signInGoogle = true;
-      _registedInApp = await DatabaseService().userExists(userId: _userId);
+      DatabaseService().userExists(userId: _userId).then((value) {
+        _registedInApp = value;
+        notifyListeners();
+      });
     } else {
       _userId = '';
       _signInGoogle = false;
       _registedInApp = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  Future changeSignIn() async {
+  Future changeSignIn() async { // Изменение статуса входа в Google-аккаунт
     _signInGoogle ? await signOutGoogle() : await signInWithGoogle();
-    initInfo();
+    calculateVariables();
   }
 
-  void registedUser(){
+  void registedUser() { // Регистрация пользователя в приложении
     _registedInApp = true;
     notifyListeners();
   }

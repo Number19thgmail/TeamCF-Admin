@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team_c_f/data/match.dart';
 
 class ShortMatch extends Match {
+  // Основаная информация о матче, используется при выборе матчей
   String home;
   String away;
   String date;
@@ -16,30 +17,3 @@ class ShortMatch extends Match {
     @required this.tournament,
   });
 }
-
-List<ShortMatch> data = [
-  ShortMatch(
-      home: 'team1',
-      away: 'team2',
-      time: '19:30',
-      tournament: 'cup',
-      date: '04.03'),
-  ShortMatch(
-      home: 'team3',
-      away: 'team4',
-      time: '19:30',
-      tournament: 'cup',
-      date: '04.03'),
-  ShortMatch(
-      home: 'team5',
-      away: 'team6',
-      time: '19:30',
-      tournament: 'cup',
-      date: '04.03'),
-  ShortMatch(
-      home: 'team7',
-      away: 'team8',
-      time: '19:30',
-      tournament: 'liga',
-      date: '04.03'),
-];

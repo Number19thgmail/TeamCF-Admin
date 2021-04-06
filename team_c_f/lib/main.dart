@@ -16,7 +16,7 @@ import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(); // Инициализация Firebase
   runApp(
     MaterialApp(
       // theme: ThemeData(
@@ -37,9 +37,14 @@ Future<void> main() async {
       //   ),
       // ),
       home: MultiProvider(
+        // Мультипровайдер, для упроощения взаимодействия с данными
         providers: [
-          ChangeNotifierProvider(create: (context) => Account()),
-          ChangeNotifierProvider(create: (context) => Tournament()),
+          ChangeNotifierProvider(
+              create: (context) =>
+                  Account()), // Данные связанные с аутентификацией (гугл-вход и регистрация в приложении)
+          ChangeNotifierProvider(
+              create: (context) =>
+                  Tournament()), // Данные полученные из Firebase
         ],
         child: SafeArea(
           child: Page(),
@@ -57,20 +62,14 @@ class Page extends StatefulWidget {
 }
 
 class _PageState extends State<Page> {
-  bool firstStart = true;
-
   @override
   Widget build(BuildContext context) {
-    if (firstStart) {
-      context.read<Account>().initInfo();
-      setState(() {
-        firstStart = false;
-      });
-    }
     return Container(
-      child: context.watch<Account>().registedInApp
-          ? Homepage()
-          : Sign(), //Проверка выполнен ли вход в гугл-аккаунт
+      child: context
+              .watch<Account>()
+              .registedInApp // Проверка зарегистрирован ли пользователь в приложении
+          ? Homepage() // Домашняя страница приложения
+          : Sign(), // Регистрация в приложении + вход в гугл
     );
   }
 }

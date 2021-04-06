@@ -4,20 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Tour {
-  String docId;
-  final String tour;
-  final List<String> pair;
-  List<Match> matches;
-  DateTime deadline;
-  DateTime ending;
-  bool _show;
+  // Информация о туре
+  String docId; // Идентификатор документа с информацией о туре
+  final String tour; // Номер тура
+  final List<String> pair; // Список участников тура
+  List<Match> matches; // Список матчей тура
+  DateTime deadline; // Время дедлайна
+  DateTime ending; // Время завершения последнего матча + 2 часа
+  bool _show; // Флаг показа прогнозов //! изменяется администратором
 
   Tour.basic({
+    // Именованный конструктор, используемый администраторами для создания расписания
     @required this.tour,
     @required this.pair,
   });
 
   Tour({
+    // Конструктор
     @required this.tour,
     @required this.pair,
     @required this.matches,
@@ -28,6 +31,7 @@ class Tour {
   bool get show => _show;
 
   factory Tour.fromJson({Map<String, dynamic> json, String docId}) {
+    // Именованный конструктор, используемый для десериализации
     Tour t = Tour(
       tour: json['Tour'],
       pair: jsonDecode(json['Pair']),
@@ -41,6 +45,7 @@ class Tour {
   }
 
   Map<String, dynamic> toMap() {
+    // Фукнция сериализации
     return {
       'Tour': tour,
       'Pair': jsonEncode(pair),

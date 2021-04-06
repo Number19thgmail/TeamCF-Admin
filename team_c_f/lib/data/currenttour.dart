@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
-class CurrentTour {
-  final String tour;
-  final String tournament;
+class CurrentTour { // Класс с данными о текущем туре
+  final String tour; // Номер или стадия текущего тура
+  final String tournament; // Название текущей стадии
 
-  CurrentTour({
-    @required this.tour,
+  CurrentTour({ // Базовый конструктор
+    @required this.tour, 
     @required this.tournament,
   });
 
-  factory CurrentTour.fromJson({Map<String, dynamic> json}) {
+  factory CurrentTour.fromJson({Map<String, dynamic> json}) { // Именованный конструктор, используется для десериализации
     return CurrentTour(
       tour: json['Tour'],
       tournament: json['Tournament'],
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap() { // Функция, используется для сериализации
     return {
       'Tour': tour,
       'Tournament': tournament,

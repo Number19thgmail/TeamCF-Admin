@@ -1,15 +1,20 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:team_c_f/data/match.dart';
+import 'package:team_c_f/servise/make.dart';
 
 class Forecast {
-  String _docId;
-  final String userId;
-  final String tour;
-  final List<String> rate;
-  int _points;
+  // Информация о прогнозе
+  String _docId; // Идентификатор документа с прогнозом
+  final String
+      userId; // Идентификатор Google-аккаунта участника оставившего прогноз
+  final String tour; // Номер тура
+  final List<String> rate; // Список прогнозов
+  int _points; // Количество набранных очков
 
   Forecast({
+    // Конструктор
     @required this.userId,
     @required this.tour,
     @required this.rate,
@@ -22,6 +27,7 @@ class Forecast {
   int get points => _points;
 
   factory Forecast.fromJson({Map<String, dynamic> json, String docId}) {
+    // Именованный конструктор для десериализации
     Forecast f = Forecast(
       userId: json['UserId'],
       tour: json['Tour'],
@@ -33,6 +39,7 @@ class Forecast {
   }
 
   Map<String, dynamic> toMap() {
+    // Функция для десериализации
     return {
       'UserId': userId,
       'Tour': tour,
@@ -40,19 +47,17 @@ class Forecast {
       'Points': _points,
     };
   }
-}// String tour = "1";
-              // String userId = user.uid;
-              // List<String> rate = [
-              //   '0-0',
-              //   '1-0',
-              //   '0-1',
-              //   '1-1',
-              //   '2-1',
-              //   '1-2',
-              //   '2-2',
-              //   '3-2',
-              //   '2-3',
-              //   '3-3',
-              // ];
-              // DatabaseService().makeForecast(
-              //     forecast: Forecast(tour: tour, userId: userId, rate: rate));
+
+  void calculatePoints(List<Match> results) {
+    // Функция подсчета очков игрока по результатам матчей
+    _points = 0;
+    results.forEach(
+      (match) {
+        if (match.started) {
+          _points += calculatePointPerMatch(
+              result: match.score, forecast: rate[results.indexOf(match)]);
+        }
+      },
+    );
+  }
+}

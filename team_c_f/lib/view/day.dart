@@ -3,8 +3,9 @@ import 'package:team_c_f/data/shortmatch.dart';
 import 'package:team_c_f/servise/make.dart';
 
 class DayView extends StatefulWidget {
-  final String date;
-  final List<ShortMatch> matches;
+  // Класс, отобращающий все соревнования, в которых есть матчи, в текущий день
+  final String date; // Дата
+  final List<ShortMatch> matches; // Список матчей для отображения
   const DayView({
     Key key,
     @required this.date,
@@ -18,19 +19,13 @@ class DayView extends StatefulWidget {
 class _DayViewState extends State<DayView> {
   String get date => widget.date;
   List<ShortMatch> get matches => widget.matches;
-  bool hide = true;
-
-  Widget showTournament() {
-    return Column(
-      children: [
-        ...makeTournaments(matches: widget.matches),
-      ],
-    );
-  }
+  bool hide = true; // Флаг, показывающий скрывать ли список соревнований
 
   @override
   Widget build(BuildContext context) {
-    int count = matches.where((element) => element.selected).length;
+    int count = matches
+        .where((element) => element.selected)
+        .length; // Подсчет матчей, выбранных в этом дне
     String selected = ((count % 10 == 1) & (count / 10 != 1))
         ? '$count выбран'
         : '$count выбрано';
@@ -55,12 +50,18 @@ class _DayViewState extends State<DayView> {
               ),
               onPressed: () {
                 setState(() {
+                  // Изменение отображения или скрытия матчей
                   hide = !hide;
                 });
               },
             ),
           ),
-          hide ? SizedBox() : showTournament(),
+          hide
+              ? SizedBox()
+              : [
+                  ...makeTournaments(
+                      matches: widget.matches), // Создание списка соревнований
+                ],
         ],
       ),
     );

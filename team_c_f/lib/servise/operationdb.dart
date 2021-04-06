@@ -18,13 +18,15 @@ class DatabaseService {
   final CollectionReference teamsCollection =
       FirebaseFirestore.instance.collection('teams');
 
-  Future makeForecast({Forecast forecast}) {
+  Future makeForecast({Forecast forecast}) async {
+    // Создание прогноза
     return forecastsCollection
         .add(forecast.toMap())
         .then((response) => forecast.docId = response.id);
   }
 
-  Future<List<Player>> getAllPlayers() {
+  Future<List<Player>> getAllPlayers() async {
+    // Получение списка всех участников
     return playersCollection.get().then(
           (response) => response.docs
               .map(
@@ -37,7 +39,9 @@ class DatabaseService {
         );
   }
 
-  Future<Forecast> getForecast({String uid, String tour}) {
+//!(для редактирования прогноза)
+  Future<Forecast> getForecast({String uid, String tour}) async {
+    // Получение прогноза указанного пользователя на указанный тур
     Query query = forecastsCollection
         .where('UserId', isEqualTo: uid)
         .where('Tour', isEqualTo: tour);
@@ -53,7 +57,8 @@ class DatabaseService {
         );
   }
 
-  Future<List<Forecast>> getForecasts({String tour}) {
+  Future<List<Forecast>> getForecasts({String tour}) async {
+    // Получение всех прогноз на указанный тур
     Query query = forecastsCollection.where('Tour', isEqualTo: tour);
     return query.get().then(
           (QuerySnapshot value) => value.docs
@@ -68,6 +73,7 @@ class DatabaseService {
   }
 
   Future<List<Forecast>> getCurrentForecasts() async {
+    // Получение всех прогнохов на текущий тур
     Query query = forecastsCollection.where('Tour',
         isEqualTo: CurrentTour.fromJson(
                 json: (await currentCollection.get()).docs.first.data())
@@ -85,12 +91,14 @@ class DatabaseService {
   }
 
   Future registrationTeam({Team team}) {
+    // Регистрация команды
     return teamsCollection
         .add(team.toMap())
         .then((response) => team.docId = response.id);
   }
 
   Future<bool> userExists({String userId}) {
+    // Проверка существует ли пользователь с указанным Google-аккаунтом
     return playersCollection
         .where('UserId', isEqualTo: userId)
         .get()
@@ -98,6 +106,7 @@ class DatabaseService {
   }
 
   Future<bool> checkTeamName({String name}) {
+    // Проверка названия команды на уникальность
     return teamsCollection
         .where('Title', isEqualTo: name)
         .get()
@@ -105,10 +114,12 @@ class DatabaseService {
   }
 
   Future registrationPlayer({Player player}) {
+    // Регистрация игрока
     return playersCollection.add(player.toMap());
   }
 
   Future<List<String>> getAllTeamNames() {
+    // Получение списка названий всех команд для выбора участником своей команды
     return teamsCollection.get().then((response) {
       return response.docs
           .map((element) =>
@@ -118,6 +129,7 @@ class DatabaseService {
   }
 
   Future<List<Team>> getAllTeam() {
+    // Получение всех команд
     return teamsCollection.get().then(
           (response) => response.docs
               .map(
@@ -131,6 +143,7 @@ class DatabaseService {
   }
 
   Future<CurrentTour> getCurrentTour() {
+    // Получение информации о текущем туре
     return currentCollection.get().then(
           (response) => CurrentTour.fromJson(
             json: response.docs.first.data(),
@@ -139,6 +152,7 @@ class DatabaseService {
   }
 
   Future<List<Tour>> getAllTour() {
+    // Получение информации обо всех турах
     return scheduleCollection.get().then(
           (response) => response.docs
               .map(
@@ -151,7 +165,9 @@ class DatabaseService {
         );
   }
 
+//! Использовать для обновления результатов с сервера
   Future<List<Match>> getResults({String tour}) {
+    // Получение результатов матчей
     return scheduleCollection
         .where(
           'Tour',
@@ -166,45 +182,11 @@ class DatabaseService {
         );
   }
 
+//! Обновление результатов на сервера
   void updateResults({Tour tour}) {
+    // Обновление результатов матчей конкретного тура
     scheduleCollection.doc(tour.docId).update(
           tour.toMap(),
         );
   }
-
-  // void updateCurrentTour({String tour}) {
-  //   scheduleCollection.doc(tour.docId).update(
-  //         tour.toMap(),
-  //       );
-  // }
-
-  // final CollectionReference _mealCollection =
-  //     FirebaseFirestore.instance.collection('meals');
-
-  // Future addMeal({OneMeal meal}) {
-  //   return _mealCollection
-  //       .add(
-  //         meal.toMap(),
-  //       )
-  //       .then((value) => meal.docId = value.id);
-  // }
-
-  // Stream<List<OneMeal>> getMeal() {
-  //   Query query = _mealCollection.where(
-  //     'time',
-  //     isGreaterThan: DateTime.now().add(Duration(days: -2)).toString(),
-  //   );
-  //   return query
-  //       .snapshots(includeMetadataChanges: true)
-  //       .map((QuerySnapshot data) => data.docs
-  //           .map(
-  //             (DocumentSnapshot doc) =>
-  //                 OneMeal.fromJson(data: doc.data(), docId: doc.id),
-  //           )
-  //           .toList());
-  // }
-
-  // void deleteMeal(String id){
-  //   _mealCollection.doc(id).delete();
-  // }
 }

@@ -3,9 +3,11 @@ import 'package:team_c_f/data/shortmatch.dart';
 import 'package:team_c_f/view/match.dart';
 
 class TournamentView extends StatefulWidget {
-  final List<ShortMatch> matches;
-  final String tournament;
+  // Класс, отображения соревнований, в которых выбираются матчи
+  final List<ShortMatch> matches; // Список доступных матчей в соревновании
+  final String tournament; // Название соревнования
   const TournamentView({
+    // Конструктор
     Key key,
     @required this.tournament,
     @required this.matches,
@@ -16,10 +18,11 @@ class TournamentView extends StatefulWidget {
 }
 
 class _TournamentViewState extends State<TournamentView> {
-  bool hide = true;
+  bool hide = true; // Флаг, показывающий скрыты ли матчи на экране
   String get tournament => widget.tournament;
   List<ShortMatch> get matches => widget.matches;
   Widget showMatch() {
+    // Функция показа отображения списка матчей
     return Column(
       children: [
         ...widget.matches.map((e) => MatchView(match: e)).toList(),
@@ -29,7 +32,9 @@ class _TournamentViewState extends State<TournamentView> {
 
   @override
   Widget build(BuildContext context) {
-    int count = matches.where((element) => element.selected).length;
+    int count = matches
+        .where((element) => element.selected)
+        .length; // подсчёт количества выбранных матчей
     String selected = ((count % 10 == 1) & (count / 10 != 1))
         ? '$count выбран'
         : '$count выбрано';
@@ -48,7 +53,8 @@ class _TournamentViewState extends State<TournamentView> {
               ),
               onPressed: () {
                 setState(() {
-                  hide = !hide;
+                  hide =
+                      !hide; // Изменение состояния отображения матчей на экране
                 });
               },
             ),
