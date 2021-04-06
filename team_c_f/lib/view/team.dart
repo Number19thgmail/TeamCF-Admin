@@ -30,11 +30,6 @@ class _TeamViewState extends State<TeamView> {
         .allTeams
         .where((team) => team.title == me.team)
         .first;
-    Player myCapitan = context // Поиск капитана текущей команды
-        .read<Tournament>()
-        .allPlayers
-        .where((player) => player.team == me.team && player.capitan)
-        .first;
     return Container(
       child: Column(
         children: [
