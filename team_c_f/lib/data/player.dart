@@ -4,7 +4,7 @@ class Player {
   // Информация об участнике
   String docId; // Идентификатор документа с информацией об участнике
   final String name; // Имя и фамилия участника
-  String _uid; // Идентификатор Google-аккаунта участника
+  String uid; // Идентификатор Google-аккаунта участника
   final bool capitan; // Флаг капитана
   bool confirmed = false; // Флаг подтверждения участия в команде
   final String team; // Название команды
@@ -21,18 +21,18 @@ class Player {
     this.points = 0,
     this.position = 1,
   }) {
-    this._uid = uid;
+    this.uid = uid;
   }
 
-  bool itIsMe({String uid}) {
+  bool itIsMe({String userId}) {
     // Проверка It's me?
-    return uid == _uid;
+    return uid == userId;
   }
 
   void confirm() {
     // Подтверждение участия в команде
     confirmed = true;
-    //! отновление информации на сервере об утверждении
+    //! обновление информации на сервере об утверждении
   }
 
   factory Player.fromJson({Map<String, dynamic> json, String docId}) {
@@ -54,7 +54,7 @@ class Player {
     // Функция для сериализации
     return {
       'Name': name,
-      'UserId': _uid,
+      'UserId': uid,
       'Capitan': capitan,
       'Team': team,
       'Confirmed': confirmed,
