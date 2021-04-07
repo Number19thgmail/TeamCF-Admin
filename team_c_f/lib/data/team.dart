@@ -4,15 +4,11 @@ import 'package:flutter/material.dart';
 
 class Team {
   // Информация о команде
-  String _docId; // Идентификатор документа с командой на сервере
+  String docId; // Идентификатор документа с командой на сервере
   final String title; // Название команды
   final List<String> members; // Список участников
   int points = 0; // Количество очков в чемпионате
   int position = 1; // Позиция в турнирной таблице
-
-  set docId(String docId) {
-    _docId = docId;
-  }
 
   Team({
     // Конструктор
@@ -30,7 +26,7 @@ class Team {
       points: int.parse(json['Points']),
       position: int.parse(json['Position']),
     );
-    t._docId = docId;
+    t.docId = docId;
     return t;
   }
 

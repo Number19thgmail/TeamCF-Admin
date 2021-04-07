@@ -13,6 +13,8 @@ class Tournament with ChangeNotifier {
   List<Tour> schedule = []; // Расписание
   List<Forecast> currentForecasts = []; // Прогнозы на текущий тур
   List<Player> allPlayers = []; // Все игроки
+  Player me;
+  Team myTeam;
 
   Tournament() {
     // Конструктор
@@ -56,6 +58,17 @@ class Tournament with ChangeNotifier {
             .map((t) => t.title)
             .toList()
         : [];
+  }
+
+  void confirmedPlayer({@required Player player}) {
+    // Подтверждение игрока, добавление игрока в команду и загрузка на сервер
+    DatabaseService().updatePlayer(player: player);
+
+    Team t = allTeams.where((team) => team.title == player.team).first;
+    t.members.add(player.uid);
+    DatabaseService().updateTeam(team: t);
+
+    notifyListeners();
   }
 
   Future<List<Forecast>> getForecasts({String tour}) {

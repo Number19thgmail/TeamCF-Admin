@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:team_c_f/data/currenttour.dart';
 import 'package:team_c_f/data/forecast.dart';
 import 'package:team_c_f/data/player.dart';
@@ -179,6 +180,18 @@ class DatabaseService {
             json: response.docs.first.data(),
             docId: response.docs.first.id,
           ).matches,
+        );
+  }
+
+  void updatePlayer({@required Player player}) { // Обновление информации об игроке
+    playersCollection.doc(player.docId).update(
+          player.toMap(),
+        );
+  }
+  
+  void updateTeam({@required Team team}) { // Обновление информации о команде
+    teamsCollection.doc(team.docId).update(
+          team.toMap(),
         );
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:team_c_f/servise/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
 

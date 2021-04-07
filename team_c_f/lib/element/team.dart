@@ -41,7 +41,7 @@ class ShowTeam extends StatelessWidget {
                           .allPlayers
                           .where(
                             (player) => player.itIsMe(
-                              uid: uid,
+                              userId: uid,
                             ),
                           )
                           .first),

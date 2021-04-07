@@ -22,11 +22,11 @@ class _TeamViewState extends State<TeamView> {
         .read<Tournament>()
         .allPlayers
         .where(
-          (player) => player.itIsMe(uid: context.read<Account>().userId),
+          (player) => player.itIsMe(userId: context.watch<Account>().userId),
         )
         .first;
     Team myTeam = context // Поиск команды текущего игрока среди всех команд
-        .read<Tournament>()
+        .watch<Tournament>()
         .allTeams
         .where((team) => team.title == me.team)
         .first;
@@ -71,12 +71,12 @@ class _TeamViewState extends State<TeamView> {
           if (me
               .capitan) // Отображение для капитана списка игроков, которые зарегистрировались, но ещё не получили подтверждение в его команде
             ...context
-                .read<Tournament>()
+                .watch<Tournament>()
                 .allPlayers
                 .where((player) =>
                     (!player.confirmed && player.team == myTeam.title))
                 .map(
-                  (p) => PlayerToComfirm(player: p),
+                  (p) => PlayerToConfirm(player: p),
                 ),
           SizedBox(height: 20),
           ShowTeam(

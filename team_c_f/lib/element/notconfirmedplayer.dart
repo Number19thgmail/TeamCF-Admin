@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:team_c_f/data/player.dart';
+import 'package:team_c_f/data/tournament.dart';
+import 'package:provider/provider.dart';
 
-class PlayerToComfirm extends StatelessWidget {
+class PlayerToConfirm extends StatelessWidget {
   // Класс, для отображения неподтвержденных игроков
-  Player player; // Неподтвержденный игрок
-  PlayerToComfirm({Key key, @required this.player}) : super(key: key);
+  final Player player; // Неподтвержденный игрок
+  PlayerToConfirm({Key key, @required this.player}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +26,10 @@ class PlayerToComfirm extends StatelessWidget {
               color: Colors.green,
             ),
             onTap: () {
+              player.confirm();
+              context.read<Tournament>().confirmedPlayer(player: player);             
               Fluttertoast.showToast(
-                msg: 'Click done',
+                msg: '${player.name} добавлен в вашу команду',
               );
             },
           ),
@@ -39,7 +43,7 @@ class PlayerToComfirm extends StatelessWidget {
             ),
             onTap: () {
               Fluttertoast.showToast(
-                msg: 'Click cancel',
+                msg: 'Заявка отклонена',
               );
             },
           ),
