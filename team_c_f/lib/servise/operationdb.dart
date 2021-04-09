@@ -19,6 +19,51 @@ class DatabaseService {
   final CollectionReference teamsCollection =
       FirebaseFirestore.instance.collection('teams');
 
+  Future<bool> userExists({@required String userId}) {
+    // Проверка существует ли пользователь с указанным Google-аккаунтом
+    return playersCollection
+        .where('UserId', isEqualTo: userId)
+        .get()
+        .then((value) => value.docs.length == 1);
+  }
+
+  Future registrationPlayer({@required Player player}) {
+    // Регистрация игрока
+    return playersCollection
+        .add(player.toMap())
+        .then((response) => player.docId = response.id);
+  }
+
+  Future registrationTeam({@required Team team}) {
+    // Регистрация команды
+    return teamsCollection
+        .add(team.toMap())
+        .then((response) => team.docId = response.id);
+  }
+
+  Future<bool> checkTeamName({@required String name}) {
+    // Проверка названия команды на уникальность
+    return teamsCollection
+        .where('Title', isEqualTo: name)
+        .get()
+        .then((response) => response.docs.length == 0);
+  }
+
+  void updatePlayer({@required Player player}) {
+    // Обновление информации об игроке
+    playersCollection.doc(player.docId).update(
+          player.toMap(),
+        );
+  }
+
+  void updateTeam({@required Team team}) {
+    // Обновление информации о команде
+    teamsCollection.doc(team.docId).update(
+          team.toMap(),
+        );
+  }
+
+//! not used
   Future makeForecast({Forecast forecast}) async {
     // Создание прогноза
     return forecastsCollection
@@ -91,34 +136,6 @@ class DatabaseService {
         );
   }
 
-  Future registrationTeam({Team team}) {
-    // Регистрация команды
-    return teamsCollection
-        .add(team.toMap())
-        .then((response) => team.docId = response.id);
-  }
-
-  Future<bool> userExists({String userId}) {
-    // Проверка существует ли пользователь с указанным Google-аккаунтом
-    return playersCollection
-        .where('UserId', isEqualTo: userId)
-        .get()
-        .then((value) => value.docs.length == 1);
-  }
-
-  Future<bool> checkTeamName({String name}) {
-    // Проверка названия команды на уникальность
-    return teamsCollection
-        .where('Title', isEqualTo: name)
-        .get()
-        .then((response) => response.docs.length == 0);
-  }
-
-  Future registrationPlayer({Player player}) {
-    // Регистрация игрока
-    return playersCollection.add(player.toMap());
-  }
-
   Future<List<String>> getAllTeamNames() {
     // Получение списка названий всех команд для выбора участником своей команды
     return teamsCollection.get().then((response) {
@@ -180,18 +197,6 @@ class DatabaseService {
             json: response.docs.first.data(),
             docId: response.docs.first.id,
           ).matches,
-        );
-  }
-
-  void updatePlayer({@required Player player}) { // Обновление информации об игроке
-    playersCollection.doc(player.docId).update(
-          player.toMap(),
-        );
-  }
-  
-  void updateTeam({@required Team team}) { // Обновление информации о команде
-    teamsCollection.doc(team.docId).update(
-          team.toMap(),
         );
   }
 

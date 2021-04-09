@@ -26,8 +26,9 @@ class PlayerToConfirm extends StatelessWidget {
               color: Colors.green,
             ),
             onTap: () {
-              player.confirm();
-              context.read<Tournament>().confirmedPlayer(player: player);             
+              context
+                  .read<Tournament>()
+                  .confirmPlayer(uid: player.uid, confirm: true);
               Fluttertoast.showToast(
                 msg: '${player.name} добавлен в вашу команду',
               );
@@ -42,6 +43,9 @@ class PlayerToConfirm extends StatelessWidget {
               color: Colors.red,
             ),
             onTap: () {
+              context
+                  .read<Tournament>()
+                  .confirmPlayer(uid: player.uid, confirm: false);
               Fluttertoast.showToast(
                 msg: 'Заявка отклонена',
               );

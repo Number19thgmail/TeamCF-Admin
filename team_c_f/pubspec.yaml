@@ -39,6 +39,7 @@ dependencies:
   cloud_firestore: ^1.0.3
   google_sign_in: ^5.0.1
   fluttertoast: ^8.0.3
+  adaptive_dialog: ^0.10.0+5
 
 dev_dependencies:
   flutter_test:

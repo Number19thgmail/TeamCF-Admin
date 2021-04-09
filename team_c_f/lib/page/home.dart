@@ -6,6 +6,10 @@ import 'package:team_c_f/view/table.dart';
 import 'package:team_c_f/view/team.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 
+import 'package:provider/provider.dart';
+import 'package:team_c_f/data/tournament.dart';
+import 'package:team_c_f/data/data.dart';
+
 class Homepage extends StatefulWidget {
   // Класс отображающий домашнюю страницу с баром снизу
   const Homepage({Key key}) : super(key: key);
@@ -16,6 +20,12 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   int selectedPage = 2;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<Tournament>().initMeAndMyTeam(uid: context.read<Account>().userId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +87,7 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
           CustomNavigationBarItem(
-            icon: Icon(Icons.agriculture),
+            icon: Icon(Icons.list_alt),
             title: Text(
               'Бомбардиры',
               style: Theme.of(context).textTheme.caption,

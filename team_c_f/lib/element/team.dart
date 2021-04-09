@@ -39,11 +39,7 @@ class ShowTeam extends StatelessWidget {
                       player: context
                           .read<Tournament>()
                           .allPlayers
-                          .where(
-                            (player) => player.itIsMe(
-                              userId: uid,
-                            ),
-                          )
+                          .where((player) => player.uid == uid)
                           .first),
                 ),
               ],

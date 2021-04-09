@@ -14,8 +14,8 @@ class Team {
     // Конструктор
     @required this.title,
     @required this.members,
-    this.points,
-    this.position,
+    this.points = 0,
+    this.position = 1,
   });
 
   factory Team.fromJson({Map<String, dynamic> json, String docId}) {

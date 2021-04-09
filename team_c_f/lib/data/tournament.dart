@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/data/currenttour.dart';
+import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/data/forecast.dart';
 import 'package:team_c_f/data/player.dart';
 import 'package:team_c_f/data/schedule.dart';
@@ -60,35 +61,75 @@ class Tournament with ChangeNotifier {
         : [];
   }
 
-  void confirmedPlayer({@required Player player}) {
-    // Подтверждение игрока, добавление игрока в команду и загрузка на сервер
-    DatabaseService().updatePlayer(player: player);
+  void initMeAndMyTeam({@required String uid}) {
+    // Инициализация для более быстрой работы
+    if (allPlayers.isNotEmpty)
+      me = allPlayers.where((player) => player.uid == uid).single;
+    myTeam = allTeams.isNotEmpty && me.team != ''
+        ? allTeams.where((team) => team.title == me.team).single
+        : null;
+  }
 
-    Team t = allTeams.where((team) => team.title == player.team).first;
-    t.members.add(player.uid);
+  Future registrationPlayer({
+    // Регистрация игрока
+    @required uid,
+    @required capitan,
+    @required name,
+    @required team,
+  }) async {
+    if (await DatabaseService().userExists(userId: uid)) {
+      me.team = team;
+      me.confirmed = capitan;
+      me.capitan = capitan;
+      DatabaseService().updatePlayer(player: me);
+    } else {
+      Player p = Player(
+        name: name,
+        capitan: capitan,
+        team: team,
+        uid: uid,
+        confirmed: capitan,
+      );
+      allPlayers.add(p);
+      me = p;
+      DatabaseService()
+          .registrationPlayer(player: p)
+          .whenComplete(() => notifyListeners());
+    }
+  }
+
+  void registrationTeam({
+    // Регистрация команды
+    @required title,
+  }) {
+    Team t = Team(title: title, members: [me.uid]);
+    allTeams.add(t);
+    DatabaseService().registrationTeam(team: t);
+    myTeam = t;
+
+    notifyListeners();
+  }
+
+  void confirmPlayer({@required String uid, @required bool confirm}) {
+    Player p = allPlayers.where((player) => player.uid == uid).single;
+    Team t = allTeams.where((team) => team.title == p.team).single;
+    p.confirmed = confirm;
+    confirm ? t.members.add(uid) : p.team = '';
+    DatabaseService().updatePlayer(player: p);
     DatabaseService().updateTeam(team: t);
 
     notifyListeners();
   }
 
-  Future<List<Forecast>> getForecasts({String tour}) {
-    // Получение всех прогнозов на указанный тур
-    return DatabaseService().getForecasts(tour: tour).then((value) => value);
-  }
-
-  void getResults() {
-    // Получение новых результатов с сервера
-    DatabaseService().getResults(tour: current.tour).then((value) => schedule
-        .where((element) => element.tour == current.tour)
-        .first
-        .matches = value);
+  void removePlayerFromMyTeam({@required String uid}) {
+    Player p = allPlayers.where((player) => player.uid == uid).first;
+    Team t = allTeams.where((team) => team.title == p.team).first;
+    p.confirmed = false;
+    p.team = '';
+    t.members.remove(p.uid);
+    DatabaseService().updatePlayer(player: p);
+    DatabaseService().updateTeam(team: t);
 
     notifyListeners();
-  }
-
-  void updateResult() {
-    // Обновление результатов на сервере
-    DatabaseService().updateResults(
-        tour: schedule.where((element) => element.tour == current.tour).first);
   }
 }

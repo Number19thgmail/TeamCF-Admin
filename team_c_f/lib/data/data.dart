@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:team_c_f/servise/auth.dart';
 import 'package:team_c_f/servise/operationdb.dart';
-
 import 'shortmatch.dart';
 
 class DataShortMatch with ChangeNotifier {
@@ -49,7 +48,8 @@ class Account with ChangeNotifier {
     calculateVariables();
   }
 
-  void calculateVariables() { // Вычисление переменных
+  void calculateVariables() {
+    // Вычисление переменных
     if (FirebaseAuth.instance.currentUser != null) {
       _userId = FirebaseAuth.instance.currentUser.uid;
       _signInGoogle = true;
@@ -65,13 +65,16 @@ class Account with ChangeNotifier {
     }
   }
 
-  Future changeSignIn() async { // Изменение статуса входа в Google-аккаунт
+  Future changeSignIn() async {
+    // Изменение статуса входа в Google-аккаунт
     _signInGoogle ? await signOutGoogle() : await signInWithGoogle();
     calculateVariables();
   }
 
-  void registedUser() { // Регистрация пользователя в приложении
+  void registedUser() {
+    // Регистрация пользователя в приложении
     _registedInApp = true;
+    
     notifyListeners();
   }
 }

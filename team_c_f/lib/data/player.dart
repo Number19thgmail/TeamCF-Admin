@@ -5,34 +5,23 @@ class Player {
   String docId; // Идентификатор документа с информацией об участнике
   final String name; // Имя и фамилия участника
   String uid; // Идентификатор Google-аккаунта участника
-  final bool capitan; // Флаг капитана
-  bool confirmed = false; // Флаг подтверждения участия в команде
-  final String team; // Название команды
+  bool capitan; // Флаг капитана
+  bool confirmed; // Флаг подтверждения участия в команде
+  String team; // Название команды
   int position; // Позиция в списке бомбардиров
   int points; // Количество набранных очков
 
   Player({
     // Конструктор
     @required this.name,
-    String uid,
+    @required String uid,
     @required this.capitan,
     @required this.team,
-    this.confirmed,
+    @required this.confirmed,
     this.points = 0,
     this.position = 1,
   }) {
     this.uid = uid;
-  }
-
-  bool itIsMe({String userId}) {
-    // Проверка It's me?
-    return uid == userId;
-  }
-
-  void confirm() {
-    // Подтверждение участия в команде
-    confirmed = true;
-    //! обновление информации на сервере об утверждении
   }
 
   factory Player.fromJson({Map<String, dynamic> json, String docId}) {
