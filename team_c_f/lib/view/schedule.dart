@@ -103,8 +103,6 @@ class _ScheduleViewState extends State<ScheduleView> {
       '1',
       '2',
       '3',
-      '4',
-      '5', '6'
     ]; //context.read<Tournament>().allTeamNames;
     List<Tour> curr = [];
     int circles = 2; //int.parse(circle.text);
