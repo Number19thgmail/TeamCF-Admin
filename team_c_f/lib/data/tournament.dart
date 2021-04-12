@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/data/currenttour.dart';
-import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/data/forecast.dart';
 import 'package:team_c_f/data/player.dart';
 import 'package:team_c_f/data/schedule.dart';
@@ -10,12 +9,14 @@ import 'package:team_c_f/servise/operationdb.dart';
 class Tournament with ChangeNotifier {
   // Класс хранящий актуальную информацию с сервера
   List<Team> allTeams = []; // Все команды
-  CurrentTour current; // Текущую информацию о туре
+  CurrentTour current; // Информацию о текущем туре
   List<Tour> schedule = []; // Расписание
   List<Forecast> currentForecasts = []; // Прогнозы на текущий тур
   List<Player> allPlayers = []; // Все игроки
-  Player me;
-  Team myTeam;
+  Player me; // Текущий игрок
+  Team myTeam; // Моя команда
+  String selectTour = ''; // Тур для просмотра
+  List<Forecast> forecast = []; // Прогнозы тура, который просматривается
 
   Tournament() {
     // Конструктор
@@ -146,6 +147,18 @@ class Tournament with ChangeNotifier {
     );
     //schedule.add(Tour.basic(tour: tour, pair: pair));
 
+    notifyListeners();
+  }
+
+  void select(String tour) {
+    tour != '' ?
+    DatabaseService().getForecasts(tour: tour).then((value) {
+      forecast = value;
+      selectTour = tour;
+
+      notifyListeners();
+    })
+    : selectTour = '';
     notifyListeners();
   }
 }

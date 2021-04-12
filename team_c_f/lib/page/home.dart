@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:team_c_f/element/tour.dart';
 import 'package:team_c_f/view/forecast.dart';
 import 'package:team_c_f/view/emptyschedule.dart';
 import 'package:team_c_f/view/scorers.dart';
@@ -37,7 +38,7 @@ class _HomepageState extends State<Homepage> {
               : ShowTable()
           : selectedPage > 0
               ? selectedPage == 2
-                  ? MakeForecast()
+                  ? ShowTour(tour: context.read<Tournament>().current.tour)
                   : ScheduleView()
               : TeamView(),
       bottomNavigationBar: CustomNavigationBar(
@@ -52,9 +53,17 @@ class _HomepageState extends State<Homepage> {
         items: [
           CustomNavigationBarItem(
             icon: Icon(Icons.people),
-            title: Text(
-              'Моя команда',
-              style: Theme.of(context).textTheme.caption,
+            title: Column(
+              children: [
+                Text(
+                  'Моя',
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                Text(
+                  'команда',
+                  style: Theme.of(context).textTheme.caption,
+                ),
+              ],
             ),
           ),
           CustomNavigationBarItem(
@@ -69,11 +78,11 @@ class _HomepageState extends State<Homepage> {
             title: Column(
               children: [
                 Text(
-                  'Оставить',
+                  'Текущий',
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Text(
-                  'прогноз',
+                  'тур',
                   style: Theme.of(context).textTheme.caption,
                 ),
               ],
