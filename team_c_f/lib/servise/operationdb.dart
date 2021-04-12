@@ -63,6 +63,13 @@ class DatabaseService {
         );
   }
 
+  void addTour({@required Tour tour}) {
+    // Добавление тура на сервер
+    scheduleCollection
+        .add(tour.toMap())
+        .then((reaponse) => tour.docId = reaponse.id);
+  }
+
 //! not used
   Future makeForecast({Forecast forecast}) async {
     // Создание прогноза

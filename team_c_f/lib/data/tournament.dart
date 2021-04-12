@@ -111,6 +111,7 @@ class Tournament with ChangeNotifier {
   }
 
   void confirmPlayer({@required String uid, @required bool confirm}) {
+    // Подтверждение игрока и доабвление его в команду
     Player p = allPlayers.where((player) => player.uid == uid).single;
     Team t = allTeams.where((team) => team.title == p.team).single;
     p.confirmed = confirm;
@@ -122,6 +123,7 @@ class Tournament with ChangeNotifier {
   }
 
   void removePlayerFromMyTeam({@required String uid}) {
+    // Удаление игрока из команды и обнуление команды у игрока
     Player p = allPlayers.where((player) => player.uid == uid).first;
     Team t = allTeams.where((team) => team.title == p.team).first;
     p.confirmed = false;
@@ -129,6 +131,20 @@ class Tournament with ChangeNotifier {
     t.members.remove(p.uid);
     DatabaseService().updatePlayer(player: p);
     DatabaseService().updateTeam(team: t);
+
+    notifyListeners();
+  }
+
+  void createSchedule({@required List<Tour> tours}) {
+    //Создание расписания
+    tours.forEach(
+      (tour) {
+        Tour t = Tour.basic(tour: tour.tour, pair: tour.pair);
+        schedule.add(t);
+        DatabaseService().addTour(tour: t);
+      },
+    );
+    //schedule.add(Tour.basic(tour: tour, pair: pair));
 
     notifyListeners();
   }

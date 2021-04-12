@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/view/forecast.dart';
-import 'package:team_c_f/view/schedule.dart';
+import 'package:team_c_f/view/emptyschedule.dart';
 import 'package:team_c_f/view/scorers.dart';
 import 'package:team_c_f/view/table.dart';
 import 'package:team_c_f/view/team.dart';

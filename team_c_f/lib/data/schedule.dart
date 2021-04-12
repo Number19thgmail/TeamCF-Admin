@@ -8,10 +8,11 @@ class Tour {
   String docId; // Идентификатор документа с информацией о туре
   final String tour; // Номер тура
   final List<String> pair; // Список участников тура
-  List<Match> matches; // Список матчей тура
-  DateTime deadline; // Время дедлайна
-  DateTime ending; // Время завершения последнего матча + 2 часа
-  bool _show; // Флаг показа прогнозов //! изменяется администратором
+  List<Match> matches = []; // Список матчей тура
+  DateTime deadline = DateTime(2040); // Время дедлайна
+  DateTime ending =
+      DateTime(2040); // Время завершения последнего матча + 2 часа
+  bool _show = false; // Флаг показа прогнозов //! изменяется администратором
 
   Tour.basic({
     // Именованный конструктор, используемый администраторами для создания расписания
@@ -49,7 +50,7 @@ class Tour {
     return {
       'Tour': tour,
       'Pair': jsonEncode(pair),
-      'Matchs': jsonEncode(matches.map((e) => e.toString()).toList()),
+      'Matchs': jsonEncode(matches.map((e) => e.toMap()).toList()),
       'Deadline': DateFormat('yyyy-MM-dd HH:mm').format(deadline),
       'Ending': DateFormat('yyyy-MM-dd HH:mm').format(ending),
       'Show': _show,
