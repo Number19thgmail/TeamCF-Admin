@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/data/schedule.dart';
 import 'package:team_c_f/data/tournament.dart';
 import 'package:team_c_f/element/meet.dart';
-import 'package:team_c_f/element/schedule.dart';
-import 'package:team_c_f/page/selectmatch.dart';
-import 'package:team_c_f/view/match.dart';
+import 'package:team_c_f/element/match.dart';
 
 class ShowTour extends StatefulWidget {
   // Класс, отображающий результаты выбранного тура тура
@@ -52,6 +51,8 @@ class _ShowTourState extends State<ShowTour> {
               SizedBox(height: 20),
               selectTour.matches.length == 10
                   ? Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      direction: Axis.horizontal,
                       spacing: 10,
                       runSpacing: 10,
                       children: [
@@ -61,7 +62,7 @@ class _ShowTourState extends State<ShowTour> {
                     )
                   : ElevatedButton(
                       onPressed: () {
-                        SelectMatch();
+                        context.read<DataShortMatch>().matchSelectingStart();
                       },
                       child: Text('Выбрать матчи')),
               SizedBox(height: 20),
@@ -71,7 +72,13 @@ class _ShowTourState extends State<ShowTour> {
                 children: [
                   ...selectTour.pair.map((pair) => MeetView(match: pair)),
                 ],
-              )
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  
+                },
+                child: Text('Запросить пуш'),
+              ),
             ],
           )
         : Text('Загрузка данных тура');
