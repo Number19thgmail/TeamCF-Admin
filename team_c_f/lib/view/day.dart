@@ -58,10 +58,13 @@ class _DayViewState extends State<DayView> {
           ),
           hide
               ? SizedBox()
-              : [
-                  ...makeTournaments(
-                      matches: widget.matches), // Создание списка соревнований
-                ],
+              : Column(
+                  children: [
+                    ...makeTournaments(
+                        matches:
+                            widget.matches), // Создание списка соревнований
+                  ],
+                ),
         ],
       ),
     );

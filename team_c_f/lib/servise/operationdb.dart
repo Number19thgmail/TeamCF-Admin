@@ -70,6 +70,13 @@ class DatabaseService {
         .then((reaponse) => tour.docId = reaponse.id);
   }
 
+  void updateTour({@required Tour tour}) {
+    // Обновление тура на сервере
+    scheduleCollection.doc(tour.docId).update(
+          tour.toMap(),
+        );
+  }
+
 //! not used
   Future makeForecast({Forecast forecast}) async {
     // Создание прогноза
@@ -188,6 +195,15 @@ class DatabaseService {
               )
               .toList(),
         );
+  }
+
+  Future<Tour> getTour({@required String tour}) {
+    // Получение одного тура по названию
+    Query query = scheduleCollection.where('Tour', isEqualTo: tour);
+    return query.get().then((QuerySnapshot value) => Tour.fromJson(
+          json: value.docs.single.data(),
+          docId: value.docs.single.id,
+        ));
   }
 
 //! Использовать для обновления результатов с сервера

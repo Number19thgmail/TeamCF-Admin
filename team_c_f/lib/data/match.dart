@@ -19,7 +19,7 @@ class Match {
     @required this.started,
   });
 
-  factory Match.fromJson({Map<String, dynamic> json, String docId}) {
+  factory Match.fromJson({Map<String, dynamic> json}) {
     // Именованный конструктор, используемый при десериализации
     return Match(
       home: json['Home'],

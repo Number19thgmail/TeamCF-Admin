@@ -1,19 +1,18 @@
-import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/data/tournament.dart';
 import 'package:team_c_f/page/home.dart';
 import 'package:team_c_f/page/sign.dart';
-import 'package:team_c_f/servise/auth.dart';
-import 'package:team_c_f/servise/make.dart';
-import 'package:team_c_f/servise/htmlparse.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<void> main() async {
+  MyApp();
+}
+
+MyApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(); // Инициализация Firebase
   runApp(
@@ -44,6 +43,9 @@ Future<void> main() async {
           ChangeNotifierProvider(
               create: (context) =>
                   Tournament()), // Данные полученные из Firebase
+          ChangeNotifierProvider(
+              create: (context) =>
+                  DataShortMatch()), // Данные для выбора матчей для прогнозирования
         ],
         child: SafeArea(
           child: Page(),

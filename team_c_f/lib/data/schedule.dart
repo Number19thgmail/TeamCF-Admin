@@ -35,8 +35,12 @@ class Tour {
     // Именованный конструктор, используемый для десериализации
     Tour t = Tour(
       tour: json['Tour'],
-      pair: jsonDecode(json['Pair']),
-      matches: List<Match>.from(json['Matchs']),
+      pair: jsonDecode(json['Pair']).cast<String>(),
+      matches: [...jsonDecode(json['Matchs'])
+          .map(
+            (value) => Match.fromJson(json: value),
+          )
+          .toList()],
       deadline: DateTime.parse(json['Deadline']),
       ending: DateTime.parse(json['Ending']),
     );

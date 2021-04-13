@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:team_c_f/data/currenttour.dart';
 import 'package:team_c_f/data/forecast.dart';
 import 'package:team_c_f/data/player.dart';
 import 'package:team_c_f/data/schedule.dart';
+import 'package:team_c_f/data/shortmatch.dart';
 import 'package:team_c_f/data/team.dart';
 import 'package:team_c_f/servise/operationdb.dart';
+import 'package:team_c_f/data/match.dart';
+import 'package:intl/intl.dart';
 
 class Tournament with ChangeNotifier {
   // Класс хранящий актуальную информацию с сервера
@@ -16,7 +20,6 @@ class Tournament with ChangeNotifier {
   Player me; // Текущий игрок
   Team myTeam; // Моя команда
   String selectTour = ''; // Тур для просмотра
-  List<Forecast> forecast = []; // Прогнозы тура, который просматривается
 
   Tournament() {
     // Конструктор
@@ -34,7 +37,29 @@ class Tournament with ChangeNotifier {
     );
     DatabaseService().getAllTour().then(
       (value) {
-        schedule = value;
+        List<Tour> curr = [];
+        curr = [...value.where((element) => element.tour.length < 2)];
+        curr.sort((a, b) => a.tour[0].compareTo(b.tour[0]));
+        schedule = [...curr];
+
+        curr = [...value.where((element) => element.tour.length == 2)];
+        curr.sort((a, b) => a.tour[1].compareTo(b.tour[1]));
+        curr.sort((a, b) => a.tour[0].compareTo(b.tour[0]));
+        schedule.addAll([...curr]);
+
+        curr = [
+          ...value.where(
+              (element) => element.tour.length > 2 && element.tour.length < 11)
+        ];
+        curr.sort((a, b) => a.tour[4].compareTo(b.tour[4]));
+        curr.sort((a, b) => b.tour[2].compareTo(a.tour[2]));
+        schedule.addAll([...curr]);
+
+        curr = [...value.where((element) => element.tour.length == 12)];
+        curr.sort((a, b) => a.tour[6].compareTo(b.tour[6]));
+        schedule.addAll([...curr]);
+
+        // schedule.sort((a, b) => a.tour.length.compareTo(b.tour.length));
         notifyListeners();
       },
     );
@@ -151,14 +176,35 @@ class Tournament with ChangeNotifier {
   }
 
   void select(String tour) {
-    tour != '' ?
-    DatabaseService().getForecasts(tour: tour).then((value) {
-      forecast = value;
-      selectTour = tour;
-
-      notifyListeners();
-    })
-    : selectTour = '';
+    // Выбор тура или обнуление его
+    tour != '' ? selectTour = tour : selectTour = '';
     notifyListeners();
+  }
+
+  Future<Tour> getTour({@required String tour}) {
+    // Получение информации о туре
+    return DatabaseService().getTour(tour: tour).then((Tour value) => value);
+  }
+
+  void createMatchesForTour(
+      {@required List<ShortMatch> matches, String stage}) {
+    // Добавление матчей для прогнозирования на сервер
+    Tour t = schedule.where((tour) => tour.tour == stage).single;
+    matches.sort(
+      (a, b) => DateTime.parse('${a.date} ${a.time}').compareTo(
+        DateTime.parse('${b.date} ${b.time}'),
+      ),
+    );
+    t.matches = matches;
+    t.deadline =
+        DateTime.parse('${t.matches.first.date} ${t.matches.first.time}')
+            .add(Duration(hours: -1));
+    t.ending =
+        DateTime.parse('${t.matches.last.date} ${t.matches.last.time}')
+            .add(Duration(hours: 3));
+    Fluttertoast.showToast(
+        msg: 'Дедлайн в ${DateFormat('MM.dd HH.mm').format(t.deadline)}\n' +
+        'Окончание тура в ${DateFormat('MM.dd HH.mm').format(t.ending)}');
+    DatabaseService().updateTour(tour: t);
   }
 }

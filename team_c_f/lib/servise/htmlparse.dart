@@ -17,13 +17,20 @@ List<ShortMatch> getMatchs({
   List<Element> curr =
       element.getElementsByClassName('light-gray-title corners-3px');
   //! Сделать проверку. Если реклама, то удалить
-  curr.removeAt(0);
+  if (curr[0].innerHtml.contains('Реклама') ||
+      curr[0].innerHtml.contains('Матч дня')) curr.removeAt(0);
+  if (curr[0].innerHtml.contains('Реклама') ||
+      curr[0].innerHtml.contains('Матч дня')) curr.removeAt(0);
   List<String> tournamentName =
       curr.map((e) => e.getElementsByTagName('a').first.text).toList();
 
   curr = element.getElementsByClassName('stat onlines-box');
   //! Сделать проверку
-  curr.removeAt(0);
+
+  if (curr[0].innerHtml.contains('Реклама') ||
+      curr[0].innerHtml.contains('Матч дня')) curr.removeAt(0);
+  if (curr[0].innerHtml.contains('Реклама') ||
+      curr[0].innerHtml.contains('Матч дня')) curr.removeAt(0);
   int i = 0;
   curr.forEach((element) {
     data[tournamentName[i++]] = element.getElementsByTagName('tr');

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1038841331273",
+    "firebase_url": "https://teamcf-197909-default-rtdb.firebaseio.com",
     "project_id": "teamcf-197909",
     "storage_bucket": "teamcf-197909.appspot.com"
   },
@@ -14,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "1038841331273-7r9rsckfd0iiame2rd4nl1eqi5bdjgc9.apps.googleusercontent.com",
+          "client_id": "1038841331273-dfe7k0fjmstt6ckv39dv8c0h0lu4setq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.number19th.teamcfadmin",
-            "certificate_hash": "22f8ced15b9aa08f7b6dcfa9f4e86872b192d9d7"
+            "certificate_hash": "8ccd344fb55ed7f376fab095feb5871a8a814b8c"
+          }
+        },
+        {
+          "client_id": "1038841331273-piiid0odjrcsec16bi7latmf2j1ok4cs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.number19th.teamcfadmin",
+            "certificate_hash": "37aa2310cd77348e5064ffbaa15a24a55f65e8d2"
           }
         },
         {

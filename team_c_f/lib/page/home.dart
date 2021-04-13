@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/element/tour.dart';
+import 'package:team_c_f/page/selectmatch.dart';
 import 'package:team_c_f/view/forecast.dart';
 import 'package:team_c_f/view/emptyschedule.dart';
 import 'package:team_c_f/view/scorers.dart';
@@ -25,11 +26,14 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    context.read<Tournament>().initMeAndMyTeam(uid: context.read<Account>().userId);
+    context
+        .read<Tournament>()
+        .initMeAndMyTeam(uid: context.read<Account>().userId);
   }
 
   @override
   Widget build(BuildContext context) {
+    bool matchSelecting = context.watch<DataShortMatch>().matchSelecting;
     return Scaffold(
       // Логика отображения страниц в соответствии с выбранным элементом бара
       body: selectedPage > 2
@@ -39,7 +43,9 @@ class _HomepageState extends State<Homepage> {
           : selectedPage > 0
               ? selectedPage == 2
                   ? ShowTour(tour: context.read<Tournament>().current.tour)
-                  : ScheduleView()
+                  : matchSelecting
+                      ? SelectMatch()
+                      : ScheduleView()
               : TeamView(),
       bottomNavigationBar: CustomNavigationBar(
         // Бар с вариантами выбора страниц
