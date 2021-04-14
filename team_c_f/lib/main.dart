@@ -15,6 +15,16 @@ Future<void> main() async {
 MyApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(); // Инициализация Firebase
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  await _firebaseMessaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
   runApp(
     MaterialApp(
       // theme: ThemeData(

@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
@@ -5,6 +9,7 @@ import 'package:team_c_f/data/schedule.dart';
 import 'package:team_c_f/data/tournament.dart';
 import 'package:team_c_f/element/meet.dart';
 import 'package:team_c_f/element/match.dart';
+import 'package:http/http.dart' as http;
 
 class ShowTour extends StatefulWidget {
   // Класс, отображающий результаты выбранного тура тура
@@ -74,8 +79,33 @@ class _ShowTourState extends State<ShowTour> {
                 ],
               ),
               ElevatedButton(
-                onPressed: () {
-                  
+                onPressed: () async {
+                  await http.post(
+                    Uri(host: 'https://fcm.googleapis.com/fcm/send'),
+                    headers: <String, String>{
+                      'Content-Type': 'application/json',
+                    },
+                    body: jsonEncode(
+                      <String, dynamic>{
+                        'notification': <String, dynamic>{
+                          'body': 'Message from android',
+                          'title': 'FlutterCloudMessage'
+                        },
+                        'priority': 'high',
+                        'to': '1:1038841331273:android:212adb187d1930fc410998',
+                      },
+                    ),
+                  );
+
+                  final FirebaseMessaging _firebaseMessaging =
+                      FirebaseMessaging.instance;
+                  _firebaseMessaging.sendMessage(
+                    to: 'AIzaSyDglKVSOuvdnxkSp84hBZmBsTY8zSjlAWY',
+                    data: {
+                      'body': 'text',
+                      'title': 'titleText',
+                    },
+                  );
                 },
                 child: Text('Запросить пуш'),
               ),
