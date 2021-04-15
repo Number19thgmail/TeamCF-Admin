@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
@@ -6,7 +8,7 @@ import 'package:team_c_f/data/tournament.dart';
 import 'package:team_c_f/element/meet.dart';
 import 'package:team_c_f/element/match.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class ShowTour extends StatefulWidget {
   // Класс, отображающий результаты выбранного тура тура
@@ -76,7 +78,42 @@ class _ShowTourState extends State<ShowTour> {
                 ],
               ),
               ElevatedButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  OneSignal.shared.getPermissionSubscriptionState().then(
+                    (status) {
+                      OneSignal().postNotificationWithJson(
+                        {
+                          //'app_id': '93b27d54-e442-4af5-86e4-a215faf20e3a',
+                          'heading': {
+                            'ru': 'Title',
+                            'en': 'Title',
+                          },
+                          'contents': {
+                            'ru': 'Группе currentUser',
+                            'en': 'Group',
+                          },
+                          'include_player_ids': [
+                            'fb358c70-8c52-407f-9234-0421392dc1d4'
+                          ], //'included_segments': ['currentUser'],
+                          // 'playerIds': [
+                          //   '493cb552-64c9-4b3d-a5af-fc6877926741',
+                          //   'fb358c70-8c52-407f-9234-0421392dc1d4'
+                          // ],
+                        },
+                      );
+                      // OneSignal().postNotification(
+                      //   OSCreateNotification(
+                      //     heading: 'Title',
+                      //     content: 'Уведомление на 2 устройства',
+                      //     playerIds: [
+                      //       '493cb552-64c9-4b3d-a5af-fc6877926741',
+                      //       'fb358c70-8c52-407f-9234-0421392dc1d4'
+                      //     ],
+                      //   ),
+                      // );
+                    },
+                  );
+                },
                 child: Text('Запросить пуш'),
               ),
             ],

@@ -6,7 +6,7 @@ import 'package:team_c_f/data/tournament.dart';
 import 'package:team_c_f/page/home.dart';
 import 'package:team_c_f/page/sign.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 Future<void> main() async {
   MyApp();
@@ -15,16 +15,16 @@ Future<void> main() async {
 MyApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(); // Инициализация Firebase
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  await _firebaseMessaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
+
+  //OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+
+  OneSignal.shared.init('93b27d54-e442-4af5-86e4-a215faf20e3a', iOSSettings: {
+    OSiOSSettings.autoPrompt: false,
+    OSiOSSettings.inAppLaunchUrl: false
+  });
+  OneSignal.shared
+      .setInFocusDisplayType(OSNotificationDisplayType.notification);
+
   runApp(
     MaterialApp(
       // theme: ThemeData(
@@ -48,14 +48,14 @@ MyApp() async {
         // Мультипровайдер, для упроощения взаимодействия с данными
         providers: [
           ChangeNotifierProvider(
-              create: (context) =>
-                  Account()), // Данные связанные с аутентификацией (гугл-вход и регистрация в приложении)
+            create: (context) => Account(),
+          ), // Данные связанные с аутентификацией (гугл-вход и регистрация в приложении)
           ChangeNotifierProvider(
-              create: (context) =>
-                  Tournament()), // Данные полученные из Firebase
+            create: (context) => Tournament(),
+          ), // Данные полученные из Firebase
           ChangeNotifierProvider(
-              create: (context) =>
-                  DataShortMatch()), // Данные для выбора матчей для прогнозирования
+            create: (context) => DataShortMatch(),
+          ), // Данные для выбора матчей для прогнозирования
         ],
         child: SafeArea(
           child: Page(),
