@@ -83,7 +83,7 @@ class _ShowTourState extends State<ShowTour> {
                     (status) {
                       OneSignal().postNotificationWithJson(
                         {
-                          //'app_id': '93b27d54-e442-4af5-86e4-a215faf20e3a',
+                          'app_id': '93b27d54-e442-4af5-86e4-a215faf20e3a',
                           'heading': {
                             'ru': 'Title',
                             'en': 'Title',
@@ -92,25 +92,28 @@ class _ShowTourState extends State<ShowTour> {
                             'ru': 'Группе currentUser',
                             'en': 'Group',
                           },
-                          'include_player_ids': [
-                            'fb358c70-8c52-407f-9234-0421392dc1d4'
-                          ], //'included_segments': ['currentUser'],
+                          'included_segments': ['currentUser'],
                           // 'playerIds': [
                           //   '493cb552-64c9-4b3d-a5af-fc6877926741',
                           //   'fb358c70-8c52-407f-9234-0421392dc1d4'
                           // ],
+                          // 
+                          // 'include_player_ids': [
+                          //   'fb358c70-8c52-407f-9234-0421392dc1d4'
+                          // ],
                         },
                       );
-                      // OneSignal().postNotification(
-                      //   OSCreateNotification(
-                      //     heading: 'Title',
-                      //     content: 'Уведомление на 2 устройства',
-                      //     playerIds: [
-                      //       '493cb552-64c9-4b3d-a5af-fc6877926741',
-                      //       'fb358c70-8c52-407f-9234-0421392dc1d4'
-                      //     ],
-                      //   ),
-                      // );
+                      OneSignal().postNotification(
+                        OSCreateNotification(
+                          heading: 'Отложенное уведомление',
+                          content: 'Уведомление на 2 устройства',
+                          playerIds: [
+                            '493cb552-64c9-4b3d-a5af-fc6877926741',
+                            'fb358c70-8c52-407f-9234-0421392dc1d4'
+                          ],
+                          sendAfter: DateTime(2021, 4, 15, 18, 06),
+                        ),
+                      );
                     },
                   );
                 },
