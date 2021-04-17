@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/data/push.dart';
 import 'package:team_c_f/data/schedule.dart';
 import 'package:team_c_f/data/tournament.dart';
 import 'package:team_c_f/element/meet.dart';
 import 'package:team_c_f/element/match.dart';
-import 'package:http/http.dart' as http;
 
 class ShowTour extends StatefulWidget {
   // Класс, отображающий результаты выбранного тура тура
@@ -76,23 +72,6 @@ class _ShowTourState extends State<ShowTour> {
                 children: [
                   ...selectTour.pair.map((pair) => MeetView(match: pair)),
                 ],
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  Uri url =
-                      Uri.parse('https://onesignal.com/api/v1/notifications');
-                  Map<String, String> headers = {};
-                  headers['authorization'] =
-                      'Basic ODkyZTdlNDUtM2Y0Yy00MDQ0LThjYmMtY2MxMzljMzQ1YzQ5';
-                  headers['Content-Type'] = 'application/json; charset=utf-8';
-                  String s =
-                      '{\"app_id\": \"93b27d54-e442-4af5-86e4-a215faf20e3a\",\"contents\": {\"en\": \"English Message\", \"ru\": \"Russian Message\"},\"headings\" : {\"en\": \"English Title\", \"ru\": \"Russian Title\"},\"included_segments\": [\"Subscribed Users\"]}';
-                  var body = Push(enTitle: 'Title English', enContent: 'Content English', ruTitle: 'Title RU', ruContent: 'Content RU').toMap();
-                  http
-                      .post(url, headers: headers, body: body)
-                      .then((value) => print(value.body));
-                },
-                child: Text('Запросить пуш'),
               ),
             ],
           )

@@ -3,12 +3,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:team_c_f/data/currenttour.dart';
 import 'package:team_c_f/data/forecast.dart';
 import 'package:team_c_f/data/player.dart';
+import 'package:team_c_f/data/push.dart';
 import 'package:team_c_f/data/schedule.dart';
 import 'package:team_c_f/data/shortmatch.dart';
 import 'package:team_c_f/data/team.dart';
 import 'package:team_c_f/servise/operationdb.dart';
 import 'package:team_c_f/data/match.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class Tournament with ChangeNotifier {
   // Класс хранящий актуальную информацию с сервера
@@ -199,12 +201,67 @@ class Tournament with ChangeNotifier {
     t.deadline =
         DateTime.parse('${t.matches.first.date} ${t.matches.first.time}')
             .add(Duration(hours: -1));
-    t.ending =
-        DateTime.parse('${t.matches.last.date} ${t.matches.last.time}')
-            .add(Duration(hours: 3));
+    t.ending = DateTime.parse('${t.matches.last.date} ${t.matches.last.time}')
+        .add(Duration(hours: 3));
     Fluttertoast.showToast(
         msg: 'Дедлайн в ${DateFormat('MM.dd HH.mm').format(t.deadline)}\n' +
-        'Окончание тура в ${DateFormat('MM.dd HH.mm').format(t.ending)}');
+            'Окончание тура в ${DateFormat('MM.dd HH.mm').format(t.ending)}');
     DatabaseService().updateTour(tour: t);
+
+    Uri url = Uri.parse('https://onesignal.com/api/v1/notifications');
+    Map<String, String> headers = {};
+    headers['authorization'] =
+        'Basic ODkyZTdlNDUtM2Y0Yy00MDQ0LThjYmMtY2MxMzljMzQ1YzQ5';
+    headers['Content-Type'] = 'application/json; charset=utf-8';
+    String notifyNow = Push(
+      enTitle: 'Title English',
+      enContent: 'Content English',
+      ruTitle: 'Заголовок',
+      ruContent: 'Контекст',
+    ).toJson();
+    String notifyDayToDeadline = Push(
+      enTitle: 'Title English',
+      enContent: 'Content English',
+      ruTitle: 'Title RU',
+      ruContent: 'Content RU',
+      date: t.deadline.add(Duration(days: -1)),
+    ).toJson();
+    String notifyHourToDeadline = Push(
+      enTitle: 'Title English',
+      enContent: 'Content English',
+      ruTitle: 'Title RU',
+      ruContent: 'Content RU',
+      date: t.deadline.add(Duration(hours: -1)),
+    ).toJson();
+    String notifyDeadline = Push(
+      enTitle: 'Title English',
+      enContent: 'Content English',
+      ruTitle: 'Title RU',
+      ruContent: 'Content RU',
+      date: t.deadline,
+    ).toJson();
+    String notifyTourIsEnd = Push(
+      enTitle: 'Title English',
+      enContent: 'Content English',
+      ruTitle: 'Title RU',
+      ruContent: 'Content RU',
+      date: t.ending,
+    ).toJson();
+
+    http
+        .post(url, headers: headers, body: notifyNow)
+        .then((value) => print(value.body));
+    http
+        .post(url, headers: headers, body: notifyDayToDeadline)
+        .then((value) => print(value.body));
+    http
+        .post(url, headers: headers, body: notifyHourToDeadline)
+        .then((value) => print(value.body));
+    http
+        .post(url, headers: headers, body: notifyDeadline)
+        .then((value) => print(value.body));
+    http
+        .post(url, headers: headers, body: notifyTourIsEnd)
+        .then((value) => print(value.body));
   }
 }
