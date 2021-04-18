@@ -6,21 +6,8 @@ import 'shortmatch.dart';
 
 class DataShortMatch with ChangeNotifier {
   // Единый класс для выбора матчей
-  List<ShortMatch> _data = []; // Список матчей
+  
   List<ShortMatch> get getData => _data;
-  bool matchSelecting = false;
-
-  void matchSelectingStart() // Начало выбора матчей
-  {
-    matchSelecting = true;
-    notifyListeners();
-  }
-
-  void matchSelectingEnd() // Окончание выбора матчей
-  {
-    matchSelecting = false;
-    notifyListeners();
-  }
 
   void addData(List<ShortMatch> d) {
     // Добавление матча в список
