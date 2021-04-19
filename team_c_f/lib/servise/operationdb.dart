@@ -19,6 +19,93 @@ class DatabaseService {
   final CollectionReference teamsCollection =
       FirebaseFirestore.instance.collection('teams');
 
+  Stream<CurrentTour> getCurrentTour() {
+    // Получение информации о текущем туре
+    return currentCollection.snapshots().map(
+          (QuerySnapshot data) => CurrentTour.fromJson(
+            json: data.docs.first.data(),
+          ),
+        );
+  }
+
+  Future<List<Player>> getAllPlayers() {
+    // Получение списка всех участников
+    return playersCollection.get().then(
+          (QuerySnapshot data) => data.docs
+              .map(
+                (QueryDocumentSnapshot doc) => Player.fromJson(
+                  json: doc.data(),
+                  docId: doc.id,
+                ),
+              )
+              .toList(),
+        );
+  }
+
+  Stream<List<Forecast>> getCurrentForecasts({@required String stage}) {
+    // Получение всех прогнозов на текущий тур
+    return forecastsCollection
+        .where(
+          'Tour',
+          isEqualTo: stage,
+        )
+        .snapshots()
+        .map(
+          (QuerySnapshot data) => data.docs
+              .map(
+                (QueryDocumentSnapshot doc) => Forecast.fromJson(
+                  json: doc.data(),
+                  docId: doc.id,
+                ),
+              )
+              .toList(),
+        );
+  }
+
+  Future<List<Team>> getAllTeam() {
+    // Получение всех команд
+    return teamsCollection.get().then(
+          (QuerySnapshot data) => data.docs
+              .map(
+                (QueryDocumentSnapshot doc) => Team.fromJson(
+                  json: doc.data(),
+                  docId: doc.id,
+                ),
+              )
+              .toList(),
+        );
+  }
+
+  Stream<Tour> getTour({@required String stage}) {
+    // Получение информации о туре stage
+    return scheduleCollection
+        .where(
+          'Tour',
+          isEqualTo: stage,
+        )
+        .snapshots()
+        .map(
+          (QuerySnapshot data) => Tour.fromJson(
+            json: data.docs.first.data(),
+            docId: data.docs.first.id,
+          ),
+        );
+  }
+
+  Future<List<Tour>> getAllTour() {
+    // Получение информации обо всех турах
+    return scheduleCollection.get().then(
+          (QuerySnapshot data) => data.docs
+              .map(
+                (QueryDocumentSnapshot doc) => Tour.fromJson(
+                  json: doc.data(),
+                  docId: doc.id,
+                ),
+              )
+              .toList(),
+        );
+  }
+
   Future<bool> userExists({@required String userId}) {
     // Проверка существует ли пользователь с указанным Google-аккаунтом
     return playersCollection
@@ -77,26 +164,18 @@ class DatabaseService {
         );
   }
 
-//! not used
+  // Future<bool> existForecast({@required String stage}){ // Проверка прогноза на сервере
+  // forecastsCollection.where('Tour')
+  //   return true;
+  // }
+
+//! Выше используется и не требует изменений
+
   Future makeForecast({Forecast forecast}) async {
     // Создание прогноза
     return forecastsCollection
         .add(forecast.toMap())
         .then((response) => forecast.docId = response.id);
-  }
-
-  Future<List<Player>> getAllPlayers() async {
-    // Получение списка всех участников
-    return playersCollection.get().then(
-          (response) => response.docs
-              .map(
-                (e) => Player.fromJson(
-                  json: e.data(),
-                  docId: e.id,
-                ),
-              )
-              .toList(),
-        );
   }
 
 //!(для редактирования прогноза)
@@ -130,80 +209,6 @@ class DatabaseService {
               )
               .toList(),
         );
-  }
-
-  Future<List<Forecast>> getCurrentForecasts() async {
-    // Получение всех прогнохов на текущий тур
-    Query query = forecastsCollection.where('Tour',
-        isEqualTo: CurrentTour.fromJson(
-                json: (await currentCollection.get()).docs.first.data())
-            .tour);
-    return query.get().then(
-          (QuerySnapshot value) => value.docs
-              .map(
-                (DocumentSnapshot doc) => Forecast.fromJson(
-                  json: doc.data(),
-                  docId: doc.id,
-                ),
-              )
-              .toList(),
-        );
-  }
-
-  Future<List<String>> getAllTeamNames() {
-    // Получение списка названий всех команд для выбора участником своей команды
-    return teamsCollection.get().then((response) {
-      return response.docs
-          .map((element) =>
-              Team.fromJson(json: element.data(), docId: element.id).title)
-          .toList();
-    });
-  }
-
-  Future<List<Team>> getAllTeam() {
-    // Получение всех команд
-    return teamsCollection.get().then(
-          (response) => response.docs
-              .map(
-                (element) => Team.fromJson(
-                  json: element.data(),
-                  docId: element.id,
-                ),
-              )
-              .toList(),
-        );
-  }
-
-  Future<CurrentTour> getCurrentTour() {
-    // Получение информации о текущем туре
-    return currentCollection.get().then(
-          (response) => CurrentTour.fromJson(
-            json: response.docs.first.data(),
-          ),
-        );
-  }
-
-  Future<List<Tour>> getAllTour() {
-    // Получение информации обо всех турах
-    return scheduleCollection.get().then(
-          (response) => response.docs
-              .map(
-                (element) => Tour.fromJson(
-                  json: element.data(),
-                  docId: element.id,
-                ),
-              )
-              .toList(),
-        );
-  }
-
-  Future<Tour> getTour({@required String tour}) {
-    // Получение одного тура по названию
-    Query query = scheduleCollection.where('Tour', isEqualTo: tour);
-    return query.get().then((QuerySnapshot value) => Tour.fromJson(
-          json: value.docs.single.data(),
-          docId: value.docs.single.id,
-        ));
   }
 
 //! Использовать для обновления результатов с сервера

@@ -20,3 +20,25 @@ class ShortMatch extends Match {
           score: '',
         );
 }
+
+class DataMatch extends ChangeNotifier {
+  List<ShortMatch> _data = []; // Список матчей
+
+  List<ShortMatch> get data => _data;
+
+  void add(List<ShortMatch> curr) {
+    _data = [..._data, ...curr];
+
+    notifyListeners();
+  }
+
+  void clear() {
+    _data.clear();
+    notifyListeners();
+  }
+
+  void selectMatch(ShortMatch match,bool key){
+    match.selected = key;
+    notifyListeners();
+  }
+}

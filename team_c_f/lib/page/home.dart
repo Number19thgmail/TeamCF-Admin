@@ -33,7 +33,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    bool matchSelecting = context.watch<DataShortMatch>().matchSelecting;
+    //bool matchSelecting = context.watch<DataShortMatch>().matchSelecting;
     return Scaffold(
       // Логика отображения страниц в соответствии с выбранным элементом бара
       body: selectedPage > 2
@@ -42,10 +42,8 @@ class _HomepageState extends State<Homepage> {
               : ShowTable()
           : selectedPage > 0
               ? selectedPage == 2
-                  ? ShowTour(tour: context.read<Tournament>().current.tour)
-                  : matchSelecting
-                      ? SelectMatch()
-                      : ScheduleView()
+                  ? ShowTour(tour: context.watch<Tournament>().current.tour)
+                  : ScheduleView()
               : TeamView(),
       bottomNavigationBar: CustomNavigationBar(
         // Бар с вариантами выбора страниц

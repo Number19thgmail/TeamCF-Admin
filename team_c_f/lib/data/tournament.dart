@@ -25,18 +25,35 @@ class Tournament with ChangeNotifier {
 
   Tournament() {
     // Конструктор
-    DatabaseService().getAllTeam().then(
-      (value) {
-        allTeams = value;
-        notifyListeners();
+    Stream<CurrentTour> streamCurrentTour = DatabaseService().getCurrentTour();
+    streamCurrentTour.listen(
+      (CurrentTour currentTour) {
+        current = currentTour;
+
+        Stream<List<Forecast>> streamCurrentForecat =
+            DatabaseService().getCurrentForecasts(stage: current.tour);
+        streamCurrentForecat.listen(
+          (List<Forecast> forecasts) {
+            currentForecasts = forecasts;
+            notifyListeners();
+          },
+        );
       },
     );
-    DatabaseService().getCurrentTour().then(
-      (value) {
-        current = value;
-        notifyListeners();
+
+    DatabaseService().getAllPlayers().then(
+      (List<Player> players) {
+        allPlayers = players;
+        DatabaseService().getAllTeam().then(
+          (List<Team> teams) {
+            allTeams = teams;
+            initMeAndMyTeam(uid: me.uid);
+            notifyListeners();
+          },
+        );
       },
     );
+
     DatabaseService().getAllTour().then(
       (value) {
         List<Tour> curr = [];
@@ -65,26 +82,14 @@ class Tournament with ChangeNotifier {
         notifyListeners();
       },
     );
-    DatabaseService().getCurrentForecasts().then(
-      (value) {
-        currentForecasts = value;
-        notifyListeners();
-      },
-    );
-    DatabaseService().getAllPlayers().then(
-      (value) {
-        allPlayers = value;
-        notifyListeners();
-      },
-    );
   }
 
   List<String> get allTeamNames {
     // Получение всех неполных команд для списка при регистрации
     return allTeams.isNotEmpty
         ? allTeams
-            .where((t) => t.members.length < 3)
-            .map((t) => t.title)
+            .where((team) => team.members.length < 3)
+            .map((team) => team.title)
             .toList()
         : [];
   }
@@ -118,8 +123,6 @@ class Tournament with ChangeNotifier {
         uid: uid,
         confirmed: capitan,
       );
-      allPlayers.add(p);
-      me = p;
       DatabaseService()
           .registrationPlayer(player: p)
           .whenComplete(() => notifyListeners());
@@ -144,10 +147,8 @@ class Tournament with ChangeNotifier {
     Team t = allTeams.where((team) => team.title == p.team).single;
     p.confirmed = confirm;
     confirm ? t.members.add(uid) : p.team = '';
-    DatabaseService().updatePlayer(player: p);
     DatabaseService().updateTeam(team: t);
-
-    notifyListeners();
+    DatabaseService().updatePlayer(player: p);
   }
 
   void removePlayerFromMyTeam({@required String uid}) {
@@ -157,10 +158,8 @@ class Tournament with ChangeNotifier {
     p.confirmed = false;
     p.team = '';
     t.members.remove(p.uid);
-    DatabaseService().updatePlayer(player: p);
     DatabaseService().updateTeam(team: t);
-
-    notifyListeners();
+    DatabaseService().updatePlayer(player: p);
   }
 
   void createSchedule({@required List<Tour> tours}) {
@@ -172,8 +171,6 @@ class Tournament with ChangeNotifier {
         DatabaseService().addTour(tour: t);
       },
     );
-    //schedule.add(Tour.basic(tour: tour, pair: pair));
-
     notifyListeners();
   }
 
@@ -183,9 +180,11 @@ class Tournament with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Tour> getTour({@required String tour}) {
+  Future<Tour> getTour({@required String tour}) async{
     // Получение информации о туре
-    return DatabaseService().getTour(tour: tour).then((Tour value) => value);
+    Tour t = await DatabaseService().getTour(stage: tour).first;
+    schedule.setAll(schedule.indexWhere((element) => element.docId == t.docId), [t]);
+    return t;
   }
 
   void createMatchesForTour(
@@ -214,54 +213,49 @@ class Tournament with ChangeNotifier {
         'Basic ODkyZTdlNDUtM2Y0Yy00MDQ0LThjYmMtY2MxMzljMzQ1YzQ5';
     headers['Content-Type'] = 'application/json; charset=utf-8';
     String notifyNow = Push(
-      enTitle: 'Title English',
-      enContent: 'Content English',
-      ruTitle: 'Заголовок',
-      ruContent: 'Контекст',
+      enTitle: 'New tour',
+      enContent:
+          'You can leave a forecast for ${!stage.contains(' ') ? '$stage round' : stage}',
+      ruTitle: 'Новый тур',
+      ruContent:
+          'Можно оставить прогноз на ${!stage.contains(' ') ? '$stage тур' : '$stage'}',
     ).toJson();
     String notifyDayToDeadline = Push(
-      enTitle: 'Title English',
-      enContent: 'Content English',
-      ruTitle: 'Title RU',
-      ruContent: 'Content RU',
+      enTitle: 'Less than a day before the deadline',
+      enContent:
+          'Be in time by ${DateFormat('HH:mm').format(t.deadline)} tomorrow',
+      ruTitle: 'Менее суток до дедлайна',
+      ruContent: 'Успей до завтра до ${DateFormat('HH:mm').format(t.deadline)}',
       date: t.deadline.add(Duration(days: -1)),
     ).toJson();
     String notifyHourToDeadline = Push(
-      enTitle: 'Title English',
-      enContent: 'Content English',
-      ruTitle: 'Title RU',
-      ruContent: 'Content RU',
+      enTitle: 'Less than an hour to deadline',
+      enContent: 'Be in time before ${DateFormat('HH:mm').format(t.deadline)}',
+      ruTitle: 'До дедлайна менее часа',
+      ruContent: 'Успей до ${DateFormat('HH:mm').format(t.deadline)}',
       date: t.deadline.add(Duration(hours: -1)),
     ).toJson();
     String notifyDeadline = Push(
-      enTitle: 'Title English',
-      enContent: 'Content English',
-      ruTitle: 'Title RU',
-      ruContent: 'Content RU',
+      enTitle: 'Acceptance of forecasts is closed',
+      enContent:
+          'Go to the app to see the predictions of your team and the opposing team',
+      ruTitle: 'Приём прогнозов закрыт',
+      ruContent:
+          'Зайти в приложение посмотреть прогнозы своей команды и команды соперников',
       date: t.deadline,
     ).toJson();
     String notifyTourIsEnd = Push(
-      enTitle: 'Title English',
-      enContent: 'Content English',
-      ruTitle: 'Title RU',
-      ruContent: 'Content RU',
+      enTitle: 'Tour completed',
+      enContent: 'Summing up',
+      ruTitle: 'Тур завершён',
+      ruContent: 'Подводим итоги',
       date: t.ending,
     ).toJson();
 
-    http
-        .post(url, headers: headers, body: notifyNow)
-        .then((value) => print(value.body));
-    http
-        .post(url, headers: headers, body: notifyDayToDeadline)
-        .then((value) => print(value.body));
-    http
-        .post(url, headers: headers, body: notifyHourToDeadline)
-        .then((value) => print(value.body));
-    http
-        .post(url, headers: headers, body: notifyDeadline)
-        .then((value) => print(value.body));
-    http
-        .post(url, headers: headers, body: notifyTourIsEnd)
-        .then((value) => print(value.body));
+    http.post(url, headers: headers, body: notifyNow);
+    http.post(url, headers: headers, body: notifyDayToDeadline);
+    http.post(url, headers: headers, body: notifyHourToDeadline);
+    http.post(url, headers: headers, body: notifyDeadline);
+    http.post(url, headers: headers, body: notifyTourIsEnd);
   }
 }

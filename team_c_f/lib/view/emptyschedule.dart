@@ -17,7 +17,7 @@ class _ScheduleViewState extends State<ScheduleView> {
   @override
   Widget build(BuildContext context) {
     return context.watch<Tournament>().schedule.isNotEmpty
-        ? context.read<Tournament>().selectTour == ''
+        ? context.watch<Tournament>().selectTour == ''
             ? ShowSchedules()
             : Container(
               width: double.infinity,

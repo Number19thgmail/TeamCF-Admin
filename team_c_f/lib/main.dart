@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
+import 'package:team_c_f/data/shortmatch.dart';
 import 'package:team_c_f/data/tournament.dart';
 import 'package:team_c_f/page/home.dart';
 import 'package:team_c_f/page/sign.dart';
@@ -26,38 +27,38 @@ MyApp() async {
       .setInFocusDisplayType(OSNotificationDisplayType.notification);
 
   runApp(
-    MaterialApp(
-      // theme: ThemeData(
-      //   textTheme: TextTheme(
-      //     bodyText2: TextStyle(
-      //       color: Colors.black,
-      //       fontWeight: FontWeight.normal,
-      //     ),
-      //     bodyText1: TextStyle(
-      //       color: Colors.black,
-      //       decoration: TextDecoration.lineThrough,
-      //       fontWeight: FontWeight.normal,
-      //     ),
-      //     caption: TextStyle(
-      //       color: Colors.green,
-      //       fontWeight: FontWeight.w400,
-      //     ),
-      //   ),
-      // ),
-      home: MultiProvider(
-        // Мультипровайдер, для упроощения взаимодействия с данными
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) => Account(),
-          ), // Данные связанные с аутентификацией (гугл-вход и регистрация в приложении)
-          ChangeNotifierProvider(
-            create: (context) => Tournament(),
-          ), // Данные полученные из Firebase
-          ChangeNotifierProvider(
-            create: (context) => DataShortMatch(),
-          ), // Данные для выбора матчей для прогнозирования
-        ],
-        child: SafeArea(
+    MultiProvider(
+      // Мультипровайдер, для упроощения взаимодействия с данными
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => Account(),
+        ), // Данные связанные с аутентификацией (гугл-вход и регистрация в приложении)
+        ChangeNotifierProvider(
+          create: (context) => Tournament(),
+        ), // Данные полученные из Firebase
+        ChangeNotifierProvider(
+          create: (context) => DataMatch(),
+        ),
+      ],
+      child: MaterialApp(
+        // theme: ThemeData(
+        //   textTheme: TextTheme(
+        //     bodyText2: TextStyle(
+        //       color: Colors.black,
+        //       fontWeight: FontWeight.normal,
+        //     ),
+        //     bodyText1: TextStyle(
+        //       color: Colors.black,
+        //       decoration: TextDecoration.lineThrough,
+        //       fontWeight: FontWeight.normal,
+        //     ),
+        //     caption: TextStyle(
+        //       color: Colors.green,
+        //       fontWeight: FontWeight.w400,
+        //     ),
+        //   ),
+        // ),
+        home: SafeArea(
           child: Page(),
         ),
       ),

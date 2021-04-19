@@ -2,35 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:team_c_f/servise/auth.dart';
 import 'package:team_c_f/servise/operationdb.dart';
-import 'shortmatch.dart';
-
-class DataShortMatch with ChangeNotifier {
-  // Единый класс для выбора матчей
-  
-  List<ShortMatch> get getData => _data;
-
-  void addData(List<ShortMatch> d) {
-    // Добавление матча в список
-    _data = [..._data, ...d];
-
-    notifyListeners();
-  }
-
-  void clearData() {
-    // Очистка листа
-    _data = [];
-  }
-
-  void selectMatch({ShortMatch m, bool select}) {
-    // Выбор матча (изменение его флага выбора)
-    _data.where((element) => element == m).first.selected = select;
-    notifyListeners();
-  }
-
-  int get countSelected => _data
-      .where((element) => element.selected)
-      .length; // Количество выбранных матчей
-}
 
 class Account with ChangeNotifier {
   // Единый класс с информацией о Google-аккаунте и регистрации в приложении

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/data/shortmatch.dart';
 import 'package:provider/provider.dart';
+import 'package:team_c_f/data/shortmatch.dart';
 
 class MatchView extends StatefulWidget {
   // Класс, отображащий информацию о матче, при выборе матчей
@@ -34,11 +33,7 @@ class _MatchViewState extends State<MatchView> {
         value: selected,
         title: Text('$time. $home - $away'),
         onChanged: (a) {
-          context.read<DataShortMatch>().selectMatch(
-                // Выбор матч
-                m: widget.match,
-                select: a,
-              );
+          context.read<DataMatch>().selectMatch(widget.match, a);
         },
       ),
     );
