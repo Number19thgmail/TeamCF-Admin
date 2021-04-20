@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:team_c_f/data/currenttour.dart';
 import 'package:team_c_f/element/tour.dart';
 import 'package:team_c_f/page/selectmatch.dart';
 import 'package:team_c_f/view/forecast.dart';
@@ -34,6 +35,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     //bool matchSelecting = context.watch<DataShortMatch>().matchSelecting;
+    CurrentTour current = context.watch<Tournament>().current;
     return Scaffold(
       // Логика отображения страниц в соответствии с выбранным элементом бара
       body: selectedPage > 2
@@ -42,7 +44,7 @@ class _HomepageState extends State<Homepage> {
               : ShowTable()
           : selectedPage > 0
               ? selectedPage == 2
-                  ? ShowTour(tour: context.watch<Tournament>().current.tour)
+                  ? ShowTour(tour: current != null ? current.tour : null)
                   : ScheduleView()
               : TeamView(),
       bottomNavigationBar: CustomNavigationBar(

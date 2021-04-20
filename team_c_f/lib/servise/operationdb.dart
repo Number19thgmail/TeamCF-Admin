@@ -171,15 +171,31 @@ class DatabaseService {
 
 //! Выше используется и не требует изменений
 
-  Future makeForecast({Forecast forecast}) async {
+  Future<bool> checkForecast({
+    @required String uid,
+    @required String stage,
+  }) {
+    return forecastsCollection
+        .where(
+          'UserId',
+          isEqualTo: uid,
+        )
+        .where('Tour', isEqualTo: stage)
+        .get()
+        .then((QuerySnapshot response) => response.docs.length == 1);
+  }
+
+  Future makeForecast({@required Forecast forecast}) async {
     // Создание прогноза
     return forecastsCollection
         .add(forecast.toMap())
         .then((response) => forecast.docId = response.id);
   }
 
-//!(для редактирования прогноза)
-  Future<Forecast> getForecast({String uid, String tour}) async {
+  Future<Forecast> getForecast({
+    @required String uid,
+    @required String tour,
+  }) async {
     // Получение прогноза указанного пользователя на указанный тур
     Query query = forecastsCollection
         .where('UserId', isEqualTo: uid)

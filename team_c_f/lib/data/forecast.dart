@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:team_c_f/data/match.dart';
 import 'package:team_c_f/servise/make.dart';
@@ -12,12 +11,14 @@ class Forecast {
   final String tour; // Номер тура
   final List<String> rate; // Список прогнозов
   int _points; // Количество набранных очков
+  final String team;
 
   Forecast({
     // Конструктор
     @required this.userId,
     @required this.tour,
     @required this.rate,
+    @required this.team,
   });
 
   set docId(String docId) {
@@ -32,6 +33,7 @@ class Forecast {
       userId: json['UserId'],
       tour: json['Tour'],
       rate: jsonDecode(json['Team']).cast<String>(),
+      team: json['Team'],
     );
     f._points = int.parse(json['Points']);
     f._docId = docId;
@@ -43,8 +45,9 @@ class Forecast {
     return {
       'UserId': userId,
       'Tour': tour,
-      'Team': jsonEncode(rate),
+      'Rate': jsonEncode(rate),
       'Points': _points,
+      'Team': team,
     };
   }
 

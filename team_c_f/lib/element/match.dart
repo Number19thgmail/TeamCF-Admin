@@ -9,7 +9,7 @@ class MatchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> score = match.score == ':' ? match.score.split(':') : ['', ''];
+    List<String> score = match.score != '' ? match.score.split(':') : ['', ''];
     return Container(
       width: MediaQuery.of(context).size.shortestSide / 2 - 10,
       color: Colors.green,
@@ -22,11 +22,20 @@ class MatchView extends StatelessWidget {
                 : DateFormat('dd.MM').format(
                     DateTime.parse(match.date),
                   ),
-                  textAlign: TextAlign.center,
+            textAlign: TextAlign.center,
           ),
-          Text(
-            '${match.home} ${score[0]}',
-            textAlign: TextAlign.start,
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                '${match.home}',
+                textAlign: TextAlign.start,
+              ),
+              Text(
+                '${score[0]}',
+                textAlign: TextAlign.end,
+              ),
+            ],
           ),
           Text(
             '${match.away} ${score[1]}',

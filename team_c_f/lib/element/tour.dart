@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:team_c_f/data/forecast.dart';
 import 'package:team_c_f/data/schedule.dart';
 import 'package:team_c_f/data/shortmatch.dart';
 import 'package:team_c_f/data/tournament.dart';
@@ -7,6 +8,7 @@ import 'package:team_c_f/element/meet.dart';
 import 'package:team_c_f/element/match.dart';
 import 'package:team_c_f/page/leaveforecast.dart';
 import 'package:team_c_f/page/selectmatch.dart';
+import 'package:team_c_f/servise/operationdb.dart';
 
 class ShowTour extends StatefulWidget {
   // Класс, отображающий результаты выбранного тура тура
@@ -19,6 +21,7 @@ class ShowTour extends StatefulWidget {
 
 class _ShowTourState extends State<ShowTour> {
   Tour selectTour;
+  bool leaveForecast = false;
 
   @override
   void initState() {
@@ -27,15 +30,31 @@ class _ShowTourState extends State<ShowTour> {
         .read<Tournament>()
         .getTour(
             tour: widget.tour == null
-                ? context.read<Tournament>().selectTour
+                ? context.read<Tournament>().selectTour == null
+                    ? '1'
+                    : context.read<Tournament>().selectTour
                 : widget.tour)
         .then(
-          (value) => setState(
-            () {
-              selectTour = value;
-            },
-          ),
+      (value) {
+        setState(
+          () {
+            selectTour = value;
+          },
         );
+        context.read<Tournament>().checkForecast(stage: selectTour.tour).then(
+          (response) {
+            LeaveForecast.rate = response
+                ? context
+                    .read<Tournament>()
+                    .getCurrentForecast(stage: selectTour.tour)
+                : ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'];
+            setState(() {
+              leaveForecast = response;
+            });
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -46,9 +65,10 @@ class _ShowTourState extends State<ShowTour> {
               Card(
                 color: Colors.yellow,
                 child: ListTile(
-                    leading: Text(selectTour.tour),
-                    title: Text(
-                        '${selectTour.matches.where((element) => element.started).length}/10 матчей')),
+                  leading: Text(selectTour.tour),
+                  title: Text(
+                      '${selectTour.matches.where((element) => element.started).length}/10 матчей'),
+                ),
               ),
               SizedBox(height: 20),
               selectTour.matches.length == 10
@@ -64,23 +84,50 @@ class _ShowTourState extends State<ShowTour> {
                                 .map((match) => MatchView(match: match)),
                           ],
                         ),
-                        SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<void>(
-                                builder: (BuildContext context) {
-                                  return LeaveForecast(
-                                    stage: selectTour.tour,
+                        if (DateTime.now().isBefore(selectTour.deadline))
+                          Column(
+                            children: [
+                              SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<List<String>>(
+                                      builder: (BuildContext context) {
+                                        return LeaveForecast(
+                                          tour: selectTour,
+                                        );
+                                      },
+                                    ),
+                                  ).then(
+                                    (List<String> value) {
+                                      //context.read<Tournament>()
+                                      //! отправка прогноза
+                                      if (value != null) {
+                                        context
+                                            .read<Tournament>()
+                                            .makeForecast(
+                                              forecast: Forecast(
+                                                  rate: [...LeaveForecast.rate],
+                                                  team: '',
+                                                  tour: '',
+                                                  userId: ''),
+                                            )
+                                            .then(
+                                              (bool response) => setState(
+                                                () => leaveForecast = response,
+                                              ),
+                                            );
+                                      }
+                                    },
                                   );
                                 },
+                                child: Text(leaveForecast
+                                    ? 'Изменить прогноз'
+                                    : 'Оставить прогноз'),
                               ),
-                            );
-                          },
-//!
-                          child: Text('Оставить прогноз'),
-                        ),
+                            ],
+                          ),
                       ],
                     )
                   : ElevatedButton(
@@ -89,7 +136,6 @@ class _ShowTourState extends State<ShowTour> {
                           MaterialPageRoute<List<ShortMatch>>(
                             builder: (BuildContext context) {
                               return SelectMatch(stage: selectTour.tour);
-                              //return SelectMatch(stage: selectTour.tour);
                             },
                           ),
                         ).then(

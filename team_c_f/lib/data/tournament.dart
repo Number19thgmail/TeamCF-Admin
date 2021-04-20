@@ -22,6 +22,8 @@ class Tournament with ChangeNotifier {
   Player me; // Текущий игрок
   Team myTeam; // Моя команда
   String selectTour = ''; // Тур для просмотра
+  // bool leaveForecastForSelectedTour =
+  //     false; // Оставлен ли прогноз на текущий тур
 
   Tournament() {
     // Конструктор
@@ -30,9 +32,9 @@ class Tournament with ChangeNotifier {
       (CurrentTour currentTour) {
         current = currentTour;
 
-        Stream<List<Forecast>> streamCurrentForecat =
+        Stream<List<Forecast>> streamCurrentForecast =
             DatabaseService().getCurrentForecasts(stage: current.tour);
-        streamCurrentForecat.listen(
+        streamCurrentForecast.listen(
           (List<Forecast> forecasts) {
             currentForecasts = forecasts;
             notifyListeners();
@@ -82,6 +84,10 @@ class Tournament with ChangeNotifier {
         notifyListeners();
       },
     );
+  }
+
+  Future<bool> checkForecast({@required String stage}) async {
+    return DatabaseService().checkForecast(uid: me.uid, stage: stage);
   }
 
   List<String> get allTeamNames {
@@ -180,11 +186,23 @@ class Tournament with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Tour> getTour({@required String tour}) async{
+  Future<Tour> getTour({@required String tour}) async {
     // Получение информации о туре
     Tour t = await DatabaseService().getTour(stage: tour).first;
-    schedule.setAll(schedule.indexWhere((element) => element.docId == t.docId), [t]);
+    schedule.setAll(
+        schedule.indexWhere((element) => element.docId == t.docId), [t]);
     return t;
+  }
+
+  Future<bool> makeForecast({@required Forecast forecast}) {
+    return DatabaseService().makeForecast(forecast: forecast).then(
+          (response) => DatabaseService()
+              .checkForecast(uid: me.uid, stage: forecast.tour),
+        );
+  }
+
+  Future<Forecast> getCurrentForecast({@required String stage}) {
+    return DatabaseService().getForecast(uid: me.uid, tour: stage);
   }
 
   void createMatchesForTour(
