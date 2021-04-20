@@ -39,78 +39,83 @@ class _ForecastViewState extends State<ForecastView> {
       width: MediaQuery.of(context).size.width - 10,
       child: Card(
         color: Colors.deepPurple[200],
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(date[1] + '.' + date[0]),
-              Column(
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(widget.match.home),
-                      // SizedBox(width: 20),
-                      DropdownButton<String>(
-                        value: home,
-                        onChanged: (result) {
-                          setState(
-                            () {
-                              home = result;
-                              LeaveForecast.rate[index] = home +
-                                  '-' +
-                                  LeaveForecast.rate[index].split('-')[1];
-                            },
-                          );
-                        },
-                        items: [
-                          ...numbers.map<DropdownMenuItem<String>>(
-                            (String number) => DropdownMenuItem(
-                              child: Text(number),
-                              value: number,
+        child: Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          columnWidths: {1: FractionColumnWidth(0.7)},
+          children: [
+            TableRow(
+              children: [
+                Text(date[1] + '.' + date[0], textAlign: TextAlign.center,),
+                Table(
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  columnWidths: {1: FractionColumnWidth(0.2)},
+                  children: [
+                    TableRow(
+                      children: [
+                        Text(
+                          widget.match.home,
+                          softWrap: false,
+                          overflow: TextOverflow.visible,
+                        ),
+                        DropdownButton<String>(
+                          value: home,
+                          onChanged: (result) {
+                            setState(
+                              () {
+                                home = result;
+                                LeaveForecast.rate[index] = home +
+                                    '-' +
+                                    LeaveForecast.rate[index].split('-')[1];
+                              },
+                            );
+                          },
+                          items: [
+                            ...numbers.map<DropdownMenuItem<String>>(
+                              (String number) => DropdownMenuItem(
+                                child: Text(number),
+                                value: number,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(widget.match.away),
-                      // SizedBox(width: 20),
-                      DropdownButton<String>(
-                        value: away,
-                        onChanged: (result) {
-                          setState(
-                            () {
-                              away = result;
-                              LeaveForecast.rate[index] =
-                                  LeaveForecast.rate[index].split('-')[0] +
-                                      '-' +
-                                      away;
-                            },
-                          );
-                        },
-                        items: [
-                          ...numbers.map<DropdownMenuItem<String>>(
-                            (String number) => DropdownMenuItem(
-                              child: Text(number),
-                              value: number,
+                          ],
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        Text(
+                          widget.match.away,
+                          softWrap: false,
+                          overflow: TextOverflow.visible,
+                        ),
+                        DropdownButton<String>(
+                          value: away,
+                          onChanged: (result) {
+                            setState(
+                              () {
+                                away = result;
+                                LeaveForecast.rate[index] =
+                                    LeaveForecast.rate[index].split('-')[0] +
+                                        '-' +
+                                        away;
+                              },
+                            );
+                          },
+                          items: [
+                            ...numbers.map<DropdownMenuItem<String>>(
+                              (String number) => DropdownMenuItem(
+                                child: Text(number),
+                                value: number,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
