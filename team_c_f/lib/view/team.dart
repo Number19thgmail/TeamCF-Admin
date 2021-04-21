@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/data/player.dart';
-import 'package:team_c_f/data/team.dart';
 import 'package:team_c_f/data/tournament.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/element/notconfirmedplayer.dart';
 import 'package:team_c_f/element/selectTeam.dart';
 import 'package:team_c_f/element/team.dart';
-import 'package:team_c_f/servise/operationdb.dart';
 
 class TeamView extends StatefulWidget {
   // Класс, отображающий информацию о команде участника

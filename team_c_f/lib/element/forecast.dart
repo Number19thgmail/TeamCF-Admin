@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/data/match.dart';
-import 'package:team_c_f/element/tour.dart';
 import 'package:team_c_f/page/leaveforecast.dart';
 
 class ForecastView extends StatefulWidget {

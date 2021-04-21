@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/data/currenttour.dart';
 import 'package:team_c_f/element/tour.dart';
-import 'package:team_c_f/page/selectmatch.dart';
-import 'package:team_c_f/view/forecast.dart';
 import 'package:team_c_f/view/emptyschedule.dart';
 import 'package:team_c_f/view/scorers.dart';
 import 'package:team_c_f/view/table.dart';

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:team_c_f/data/schedule.dart';
 import 'package:team_c_f/element/forecast.dart';
 import 'package:team_c_f/data/match.dart';
-import 'package:team_c_f/element/tour.dart';
 
 class LeaveForecast extends StatefulWidget {
   final Tour tour;

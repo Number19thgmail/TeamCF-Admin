@@ -8,7 +8,6 @@ import 'package:team_c_f/element/meet.dart';
 import 'package:team_c_f/element/match.dart';
 import 'package:team_c_f/page/leaveforecast.dart';
 import 'package:team_c_f/page/selectmatch.dart';
-import 'package:team_c_f/servise/operationdb.dart';
 
 class ShowTour extends StatefulWidget {
   // Класс, отображающий результаты выбранного тура тура

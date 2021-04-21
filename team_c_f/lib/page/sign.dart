@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/data/player.dart';
-import 'package:team_c_f/data/team.dart';
-import 'package:team_c_f/data/tournament.dart';
 import 'package:team_c_f/element/selectTeam.dart';
-import 'package:team_c_f/servise/operationdb.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Sign extends StatefulWidget {
   // Класс отображения страницы входа в Google-аккаунт и регистрации в приложении
@@ -24,8 +19,11 @@ class _SignState extends State<Sign> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        height: double.infinity,
         width: double.infinity,
         child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
               onPressed: () {
@@ -33,9 +31,18 @@ class _SignState extends State<Sign> {
                     .read<Account>()
                     .changeSignIn(); // Изменение состояния входа в Google-аккаунт
               },
-              child: Text(context.watch<Account>().signIn
-                  ? 'Выбрать другой Google-аккаунт'
-                  : 'Войти, используя Google-аккаунт'),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(context.watch<Account>().signIn ? 'Выйти' : 'Войти'),
+                  SizedBox(width: 10),
+                  Image(
+                      image: AssetImage('assets/images/google.png'),
+                      fit: BoxFit.fill,
+                      height: 30,
+                    ),
+                ],
+              ),
             ),
             Text(
               context.watch<Account>().signIn
@@ -47,12 +54,26 @@ class _SignState extends State<Sign> {
               height: 20,
             ),
             Container(
+              padding: const EdgeInsets.all(8.0),
               margin: const EdgeInsets.all(8.0),
-              color: Colors.blue,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(16.0),
+              ),
               child: Column(
                 children: [
-                  Text('Введите ваше имя и фамилию'),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Введите ваше имя и фамилию',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                   TextField(
+                    decoration:
+                        InputDecoration(fillColor: Colors.white, filled: true),
                     // Ввод имени участника
                     controller: nameController,
                     onChanged: (str) {
@@ -60,14 +81,14 @@ class _SignState extends State<Sign> {
                     },
                     textAlign: TextAlign.center,
                   ),
-                  SelectTeam(
-                    message: 'Зарегистрироваться',
-                    name:
-                        nameController.text.trim(), //! Узнать передаётся ли имя
-                  ),
                 ],
               ),
             ),
+            SelectTeam(
+              message: 'Зарегистрироваться',
+              name: nameController.text.trim(),
+            ),
+            SizedBox(height: 100,),
           ],
         ),
       ),

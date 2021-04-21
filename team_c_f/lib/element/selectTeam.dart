@@ -23,75 +23,119 @@ class _SelectTeamState extends State<SelectTeam> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Checkbox(
-              // Чекбокс для капитанов
-              value: capitan,
-              onChanged: (value) {
-                setState(
-                  () {
-                    capitan = value;
-                  },
-                );
-              },
-            ),
-            Text('Я капитан команды'),
-          ],
-        ),
         Container(
-          child: capitan
-              ? Column(
-                  children: [
-                    Text('Введите название вашей команды'),
-                    TextField(
-                      // Ввод названия команды для капитана
-                      controller: teamController,
-                      onChanged: (name) {
-                        setState(() {});
-                      },
-                      textAlign: TextAlign.center,
+          padding: const EdgeInsets.all(8.0),
+          margin: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Checkbox(
+                    // Чекбокс для капитанов
+                    value: capitan,
+                    checkColor: Colors.blue,
+                    activeColor: Colors.white,
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          capitan = value;
+                        },
+                      );
+                    },
+                  ),
+                  Text(
+                    'Я капитан команды',
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
-                  ],
-                )
-              : context
-                      .watch<Tournament>()
-                      .allTeamNames
-                      .isEmpty // Проверка существуют ли команды, чтобы в них зарегистрироваться
-                  ? Column(
-                      // Для пустого списка
-                      children: [
-                        Text('Ни одной доступной команды нет'),
-                        Text('Можешь создать команду сам \u261d')
-                      ],
-                    )
-                  : Column(
-                      // Для непустого списка
-                      children: [
-                        Text('Выбери свою команду'),
-                        DropdownButton<String>(
-                          value: teamSelect,
-                          onChanged: (newName) {
-                            setState(() {
-                              teamSelect = newName;
-                            });
-                          },
-                          items: [
-                            ...context
-                                .watch<Tournament>()
-                                .allTeamNames
-                                .map<DropdownMenuItem<String>>(
-                                  (String team) => DropdownMenuItem(
-                                    child: Text(team),
-                                    value: team,
-                                  ),
-                                )
-                                .toList(),
-                          ],
-                        ),
-                      ],
-                    ),
+                  ),
+                ],
+              ),
+              Container(
+                child: capitan
+                    ? Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Введите название вашей команды',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          TextField(
+                            // Ввод названия команды для капитана
+                            decoration: InputDecoration(
+                                fillColor: Colors.white, filled: true),
+                            controller: teamController,
+                            onChanged: (name) {
+                              setState(() {});
+                            },
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      )
+                    : context
+                            .watch<Tournament>()
+                            .allTeamNames
+                            .isEmpty // Проверка существуют ли команды, чтобы в них зарегистрироваться
+                        ? Column(
+                            // Для пустого списка
+                            children: [
+                              Text(
+                                'Ни одной доступной команды нет',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                'Можешь создать команду сам \u261d',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          )
+                        : Column(
+                            // Для непустого списка
+                            children: [
+                              Text(
+                                'Выбери свою команду',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              DropdownButton<String>(
+                                value: teamSelect,
+                                onChanged: (newName) {
+                                  setState(() {
+                                    teamSelect = newName;
+                                  });
+                                },
+                                items: [
+                                  ...context
+                                      .watch<Tournament>()
+                                      .allTeamNames
+                                      .map<DropdownMenuItem<String>>(
+                                        (String team) => DropdownMenuItem(
+                                          child: Text(team),
+                                          value: team,
+                                        ),
+                                      )
+                                      .toList(),
+                                ],
+                              ),
+                            ],
+                          ),
+              ),
+            ],
+          ),
         ),
         ElevatedButton(
           // Кнопка регистрации
@@ -115,8 +159,7 @@ class _SelectTeamState extends State<SelectTeam> {
                   if (capitan &&
                       !(await DatabaseService().checkTeamName(
                           // Проверка уникальности имени команды
-                          name: teamController.text.trim()))) 
-                          {
+                          name: teamController.text.trim()))) {
                     Fluttertoast.showToast(
                       msg: 'Команда с таким названием уже зарегистрирована',
                       toastLength: Toast.LENGTH_LONG,
