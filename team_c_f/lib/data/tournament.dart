@@ -8,7 +8,6 @@ import 'package:team_c_f/data/schedule.dart';
 import 'package:team_c_f/data/shortmatch.dart';
 import 'package:team_c_f/data/team.dart';
 import 'package:team_c_f/servise/operationdb.dart';
-import 'package:team_c_f/data/match.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
