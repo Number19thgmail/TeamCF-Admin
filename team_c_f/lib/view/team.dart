@@ -49,7 +49,7 @@ class _TeamViewState extends State<TeamView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Показываем статус игрока, подтвержден ли он капитаном команды
-                      Icon( Icons.done,
+                      Icon(Icons.done,
                           color: context.read<Tournament>().me.confirmed
                               ? Colors.green
                               : Colors.grey),
@@ -57,15 +57,13 @@ class _TeamViewState extends State<TeamView> {
                     ],
                   )
                 : SelectTeam(message: 'Подтвердить'),
-            trailing: InkWell(
-              // Кнопка выхода из аккаунта
-              onTap: () {
-                context.read<Account>().changeSignIn();
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.blue[100],
-                child: Icon(Icons.exit_to_app),
-              ),
+            trailing: CircleAvatar(
+              backgroundColor: Colors.blue[100],
+              child: IconButton(
+                  icon: Icon(Icons.exit_to_app),
+                  onPressed: () {
+                    context.read<Account>().changeSignIn();
+                  }),
             ),
           ),
           SizedBox(height: 20),
