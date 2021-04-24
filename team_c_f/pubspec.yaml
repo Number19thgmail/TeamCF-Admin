@@ -41,6 +41,7 @@ dependencies:
   fluttertoast: ^8.0.3
   adaptive_dialog: ^0.10.0+5
   onesignal_flutter: ^2.6.3
+  flutter_bloc: ^7.0.0
 
 dev_dependencies:
   flutter_test:
