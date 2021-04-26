@@ -11,27 +11,32 @@ class SelectTeamService {
   Future<bool> checkTeamName({required String name}) {
     // Проверка названия команды на уникальность
     return _teamsCollection
-        .where('Name2', isEqualTo: name)
+        .where('Name', isEqualTo: name)
         .get()
         .then((response) => response.docs.length == 0);
   }
 
-  void registrateTeam({required Team team}){
+  void registrateTeam({required Team team}) {
     // регистрация команды
     _teamsCollection.add(team.toMap());
   }
 
-  // Future<bool> existPlayer({required String uid}){
-  //   _playersCollection.where(field)
-  // }
+  Future<String?> existPlayer({required String uid}) {
+    return _playersCollection
+        .where(
+          'UserId',
+          isEqualTo: uid,
+        )
+        .get()
+        .then((QuerySnapshot response) => response.docs.isNotEmpty ? response.docs.single.id : null);
+  }
 
-  void registratePlayer({required Player player}){
+  void registratePlayer({required Player player}) {
     // регистрация игрока
     _playersCollection.add(player.toMap());
   }
 
-  void updatePlayer({required Player player}){
-
+  void updatePlayer({required Player player}) {
     // обновление игрока (добавление команды)
   }
 }

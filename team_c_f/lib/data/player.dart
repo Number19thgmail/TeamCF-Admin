@@ -1,10 +1,10 @@
 class Player {
-  late String docId;
+  String? docId;
   final String uid;
   final String name;
   late List<int?> points = [];
 
-  Player({required this.uid, required this.name});
+  Player({required this.uid, required this.name, this.docId});
 
   Map<String, dynamic> toMap() {
     return {

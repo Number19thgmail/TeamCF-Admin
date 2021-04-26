@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
 import 'package:team_c_f/store/selectteam/selectteam.dart';
 
 class SelectTeamView extends StatelessWidget {
@@ -149,7 +148,7 @@ class SelectTeamView extends StatelessWidget {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.green),
             ),
-            onPressed: selectTeam.capitan ? 
+            onPressed: selectTeam.capitan && selectTeam.enableName ? 
               selectTeam.registrateTeam // отправить на сервер новую команду
              : null,
             child: Observer(

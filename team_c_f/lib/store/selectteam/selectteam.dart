@@ -8,7 +8,6 @@ part 'selectteam.g.dart';
 class SelectTeam = _SelectTeamBase with _$SelectTeam;
 
 abstract class _SelectTeamBase with Store {
-  //_SelectTeamBase({required this.uid, required this.userName});
   String? uid;
   String? userName;
 
@@ -49,19 +48,29 @@ abstract class _SelectTeamBase with Store {
   );
 
   @action
-  void registrateTeam() {// Регистрация команды
+  void registrateTeam() {
+    // Регистрация команды
     SelectTeamService().registrateTeam(
       team: Team(
         name: teamName,
         uidCapitan: uid!,
       ),
     );
-    //SelectTeamService().
-    SelectTeamService().registratePlayer( 
-      player: Player(
-        name: userName!,
-        uid: uid!,
-      ),
+    SelectTeamService().existPlayer(uid: uid!).then(
+      (String? docId) {
+        Player p = Player(
+          name: userName!,
+          uid: uid!,
+          docId: docId,
+        );
+        docId == null
+            ? SelectTeamService().registratePlayer(
+                player: p,
+              )
+            : SelectTeamService().updatePlayer(
+                player: p,
+              );
+      },
     );
   }
 }
