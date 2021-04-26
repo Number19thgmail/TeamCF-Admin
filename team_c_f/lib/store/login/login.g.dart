@@ -17,21 +17,6 @@ mixin _$Login on LoginBase, Store {
               name: 'LoginBase.updatedLoginStatus'))
       .value;
 
-  final _$loginAtom = Atom(name: 'LoginBase.login');
-
-  @override
-  bool get login {
-    _$loginAtom.reportRead();
-    return super.login;
-  }
-
-  @override
-  set login(bool value) {
-    _$loginAtom.reportWrite(value, super.login, () {
-      super.login = value;
-    });
-  }
-
   final _$userNameAtom = Atom(name: 'LoginBase.userName');
 
   @override
@@ -103,7 +88,6 @@ mixin _$Login on LoginBase, Store {
   @override
   String toString() {
     return '''
-login: ${login},
 userName: ${userName},
 loginStatus: ${loginStatus},
 updatedLoginStatus: ${updatedLoginStatus}

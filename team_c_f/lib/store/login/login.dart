@@ -14,10 +14,8 @@ abstract class LoginBase with Store {
   LoginBase() {
     googleLogin();
   }
-
-  @observable
-  bool login = false;
-
+  String uid = '';
+  
   @observable
   String userName = 'No user';
 
@@ -56,8 +54,10 @@ abstract class LoginBase with Store {
 
     if (user?.uid != null) {
       loginStatus = ObservableFuture.value(true);
+      uid = user!.uid;
     } else {
       loginStatus = ObservableFuture.value(false);
+      uid = '';
     }
     return Future.value(true);
   }
@@ -67,6 +67,7 @@ abstract class LoginBase with Store {
     _googleSignIn.signOut();
     _auth.signOut();
     loginStatus = ObservableFuture.value(false);
+    uid = '';
     return await Future.value(true);
   }
 

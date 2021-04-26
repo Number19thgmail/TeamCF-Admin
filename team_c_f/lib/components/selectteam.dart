@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:team_c_f/data/singledata/login.dart';
-import 'package:team_c_f/servises/login.dart';
-import 'package:team_c_f/store/login/login.dart';
 import 'package:team_c_f/store/selectteam/selectteam.dart';
 
 class SelectTeamView extends StatelessWidget {
   // Класс отображения выбора команды или регистрации новой
-  final String name;
   final SelectTeam selectTeam;
 
   const SelectTeamView({
     Key? key,
-    required this.name,
     required this.selectTeam,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Column(
       children: [
         Container(
@@ -29,28 +23,30 @@ class SelectTeamView extends StatelessWidget {
             color: Colors.blue,
             borderRadius: BorderRadius.circular(16.0),
           ),
-          child: Observer(
-            builder: (_) => Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Checkbox(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Observer(
+                    builder: (_) => Checkbox(
                       // Чекбокс для капитанов
                       value: selectTeam.capitan,
                       checkColor: Colors.blue,
                       activeColor: Colors.white,
                       onChanged: selectTeam.changeCapitan,
                     ),
-                    Text(
-                      'Я капитан команды',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                  ),
+                  Text(
+                    'Я капитан команды',
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
-                  ],
-                ),
-                Container(
+                  ),
+                ],
+              ),
+              Observer(
+                builder: (_) => Container(
                     child: Column(
                   children: [
                     Padding(
@@ -65,19 +61,27 @@ class SelectTeamView extends StatelessWidget {
                       ),
                     ),
                     selectTeam.capitan
-                        ? TextField(
-                            // Ввод названия команды для капитана
-                            decoration: InputDecoration(
-                                fillColor: Colors.white, filled: true),
-                            onChanged: selectTeam.changeTeam,
-                            controller: TextEditingController.fromValue(
-                              TextEditingValue(
-                                text: selectTeam.lastTeamName,
-                                selection: TextSelection.collapsed(
-                                    offset: selectTeam.lastTeamName.length),
+                        ? ListTile(
+                            leading: SizedBox(),
+                            title: Observer(
+                              builder: (_) => TextField(
+                                // Ввод названия команды для капитана
+                                decoration: InputDecoration(
+                                    fillColor: Colors.white, filled: true),
+                                onChanged: selectTeam.changeTeam,
+                                controller: TextEditingController.fromValue(
+                                  TextEditingValue(
+                                    text: selectTeam.lastTeamName,
+                                    selection: TextSelection.collapsed(
+                                        offset: selectTeam.lastTeamName.length),
+                                  ),
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            textAlign: TextAlign.center,
+                            trailing: Observer(
+                              builder: (_) => selectTeam.enableIcon,
+                            ),
                           )
                         : Text('Список команд'),
                   ],
@@ -135,8 +139,8 @@ class SelectTeamView extends StatelessWidget {
                     //     ],
                     //   ),
                     ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         Observer(
@@ -145,8 +149,14 @@ class SelectTeamView extends StatelessWidget {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.green),
             ),
-            onPressed: selectTeam.capitan ? () {} : null,
-            child: Text(selectTeam.capitan ? 'Зарегистрировать команду' : ''),
+            onPressed: selectTeam.capitan ? 
+              selectTeam.registrateTeam // отправить на сервер новую команду
+             : null,
+            child: Observer(
+              builder: (_) => Text(selectTeam.capitan && selectTeam.enableName
+                  ? 'Зарегистрировать команду'
+                  : ''),
+            ),
           ),
         ),
       ],
