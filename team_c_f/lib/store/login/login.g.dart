@@ -69,11 +69,11 @@ mixin _$Login on LoginBase, Store {
     return _$googleLoginAsyncAction.run(() => super.googleLogin());
   }
 
-  final _$logoutAccountAsyncAction = AsyncAction('LoginBase.logoutAccount');
+  final _$googleLogoutAsyncAction = AsyncAction('LoginBase.googleLogout');
 
   @override
-  Future<bool> logoutAccount() {
-    return _$logoutAccountAsyncAction.run(() => super.logoutAccount());
+  Future<bool> googleLogout() {
+    return _$googleLogoutAsyncAction.run(() => super.googleLogout());
   }
 
   final _$LoginBaseActionController = ActionController(name: 'LoginBase');

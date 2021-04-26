@@ -8,7 +8,7 @@ import 'package:team_c_f/store/login/login.dart';
 class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Login login = context.read<DataLogin>().login!;
+    final Login login = Provider.of<Login>(context);
     return Container(
       height: double.infinity,
       width: double.infinity,
@@ -20,7 +20,7 @@ class LoginView extends StatelessWidget {
             builder: (_) => ElevatedButton(
               onPressed: () {
                 login.updatedLoginStatus
-                    ? login.logoutAccount()
+                    ? login.googleLogout()
                     : login.googleLogin();
               },
               child: Row(
@@ -81,9 +81,9 @@ class LoginView extends StatelessWidget {
             ),
           ),
           Observer(
-            builder: (_) => SelectTeam(
-              message: 'Зарегистрироваться',
-              name: login.userName,
+            builder: (_) => SelectTeamView(
+              selectTeam: Provider.of<Login>(context).selectTeam,
+              name: '',
             ),
           ),
         ],

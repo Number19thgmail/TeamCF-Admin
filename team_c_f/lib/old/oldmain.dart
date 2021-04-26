@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 // import 'package:team_c_f/page/home.dart';
 // import 'package:team_c_f/page/sign.dart';
 import 'package:firebase_core/firebase_core.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 Future<void> main() async {
@@ -17,13 +18,8 @@ myApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(); // Инициализация Firebase
 
-  OneSignal.shared.init('93b27d54-e442-4af5-86e4-a215faf20e3a', iOSSettings: {
-    OSiOSSettings.autoPrompt: false,
-    OSiOSSettings.inAppLaunchUrl: false
-  });
-  OneSignal.shared
-      .setInFocusDisplayType(OSNotificationDisplayType.notification);
-
+  OneSignal.shared.setAppId('93b27d54-e442-4af5-86e4-a215faf20e3a');
+  
   runApp(
     MultiProvider(
       // Мультипровайдер, для упроощения взаимодействия с данными

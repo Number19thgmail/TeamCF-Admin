@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobx/mobx.dart';
+import 'package:team_c_f/store/selectteam/selectteam.dart';
 
 part 'login.g.dart';
 
@@ -24,6 +25,8 @@ abstract class LoginBase with Store {
   void changeName(String text) {
     userName = text.trim();
   }
+
+  final selectTeam = SelectTeam();
 
   @observable
   ObservableFuture<bool> loginStatus = ObservableFuture<bool>.value(false);
@@ -60,7 +63,7 @@ abstract class LoginBase with Store {
   }
 
   @action
-  Future<bool> logoutAccount() async {
+  Future<bool> googleLogout() async {
     _googleSignIn.signOut();
     _auth.signOut();
     loginStatus = ObservableFuture.value(false);
