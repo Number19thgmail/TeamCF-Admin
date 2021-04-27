@@ -16,9 +16,9 @@ class SelectTeamService {
         .then((response) => response.docs.length == 0);
   }
 
-  void registrateTeam({required Team team}) {
+  Future registrateTeam({required Team team}) async {
     // регистрация команды
-    _teamsCollection.add(team.toMap());
+    await _teamsCollection.add(team.toMap());
   }
 
   Future<String?> existPlayer({required String uid}) {
@@ -28,15 +28,33 @@ class SelectTeamService {
           isEqualTo: uid,
         )
         .get()
-        .then((QuerySnapshot response) => response.docs.isNotEmpty ? response.docs.single.id : null);
+        .then((QuerySnapshot response) =>
+            response.docs.isNotEmpty ? response.docs.single.id : null);
   }
 
-  void registratePlayer({required Player player}) {
+  Future<List<String>?> allTeamNames() {
+    return _teamsCollection.get().then(
+          (QuerySnapshot response) => response.docs
+              .where((QueryDocumentSnapshot doc) =>
+                  Team.fromMap(doc.data()).players.length < 3)
+              .map(
+                (QueryDocumentSnapshot doc) => Team.fromMap(doc.data()).name,
+              )
+              .toList(),
+        );
+  }
+
+  Future<bool> registratePlayer({required Player player}) async {
     // регистрация игрока
-    _playersCollection.add(player.toMap());
+    await _playersCollection.add(player.toMap());
+    return true;
   }
 
-  void updatePlayer({required Player player}) {
+  Future<bool> updatePlayer({required Player player}) async {
     // обновление игрока (добавление команды)
+    await _playersCollection.doc(player.docId).update(
+          player.toMap(),
+        );
+    return true;
   }
 }

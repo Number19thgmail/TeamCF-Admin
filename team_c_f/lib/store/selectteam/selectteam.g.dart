@@ -69,19 +69,49 @@ mixin _$SelectTeam on _SelectTeamBase, Store {
     });
   }
 
-  final _$enableIconAtom = Atom(name: '_SelectTeamBase.enableIcon');
+  final _$selectedTeamAtom = Atom(name: '_SelectTeamBase.selectedTeam');
 
   @override
-  Icon get enableIcon {
-    _$enableIconAtom.reportRead();
-    return super.enableIcon;
+  String? get selectedTeam {
+    _$selectedTeamAtom.reportRead();
+    return super.selectedTeam;
   }
 
   @override
-  set enableIcon(Icon value) {
-    _$enableIconAtom.reportWrite(value, super.enableIcon, () {
-      super.enableIcon = value;
+  set selectedTeam(String? value) {
+    _$selectedTeamAtom.reportWrite(value, super.selectedTeam, () {
+      super.selectedTeam = value;
     });
+  }
+
+  final _$allTeamNamesAtom = Atom(name: '_SelectTeamBase.allTeamNames');
+
+  @override
+  List<String> get allTeamNames {
+    _$allTeamNamesAtom.reportRead();
+    return super.allTeamNames;
+  }
+
+  @override
+  set allTeamNames(List<String> value) {
+    _$allTeamNamesAtom.reportWrite(value, super.allTeamNames, () {
+      super.allTeamNames = value;
+    });
+  }
+
+  final _$assertTeamAsyncAction = AsyncAction('_SelectTeamBase.assertTeam');
+
+  @override
+  Future<bool> assertTeam() {
+    return _$assertTeamAsyncAction.run(() => super.assertTeam());
+  }
+
+  final _$registrateTeamAsyncAction =
+      AsyncAction('_SelectTeamBase.registrateTeam');
+
+  @override
+  Future<dynamic> registrateTeam() {
+    return _$registrateTeamAsyncAction.run(() => super.registrateTeam());
   }
 
   final _$_SelectTeamBaseActionController =
@@ -110,11 +140,11 @@ mixin _$SelectTeam on _SelectTeamBase, Store {
   }
 
   @override
-  void registrateTeam() {
+  void selestTeam(String? name) {
     final _$actionInfo = _$_SelectTeamBaseActionController.startAction(
-        name: '_SelectTeamBase.registrateTeam');
+        name: '_SelectTeamBase.selestTeam');
     try {
-      return super.registrateTeam();
+      return super.selestTeam(name);
     } finally {
       _$_SelectTeamBaseActionController.endAction(_$actionInfo);
     }
@@ -127,7 +157,8 @@ teamName: ${teamName},
 enableName: ${enableName},
 lastTeamName: ${lastTeamName},
 capitan: ${capitan},
-enableIcon: ${enableIcon}
+selectedTeam: ${selectedTeam},
+allTeamNames: ${allTeamNames}
     ''';
   }
 }

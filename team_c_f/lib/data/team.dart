@@ -15,4 +15,13 @@ class Team {
       'Players': players,
     };
   }
+
+  factory Team.fromMap(Map<String, dynamic> map) {
+    Team t = Team(
+      name: map['Name'] as String,
+      uidCapitan: map['Capitan'],
+    );
+    t.players = [...map['Players']];
+    return t;
+  }
 }

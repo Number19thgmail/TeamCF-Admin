@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+import 'package:team_c_f/store/login/login.dart';
 import 'package:team_c_f/store/selectteam/selectteam.dart';
 
 class SelectTeamView extends StatelessWidget {
@@ -12,7 +14,7 @@ class SelectTeamView extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -46,23 +48,21 @@ class SelectTeamView extends StatelessWidget {
               ),
               Observer(
                 builder: (_) => Container(
-                    child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        selectTeam.capitan
-                            ? 'Введите название вашей команды'
-                            : 'Выбери команду',
-                        style: TextStyle(
-                          color: Colors.white,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          selectTeam.capitan
+                              ? 'Введите название вашей команды'
+                              : 'Выбери команду',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                    selectTeam.capitan
-                        ? ListTile(
-                            leading: SizedBox(),
-                            title: Observer(
+                      selectTeam.capitan
+                          ? Observer(
                               builder: (_) => TextField(
                                 // Ввод названия команды для капитана
                                 decoration: InputDecoration(
@@ -77,67 +77,46 @@ class SelectTeamView extends StatelessWidget {
                                 ),
                                 textAlign: TextAlign.center,
                               ),
+                            )
+                          : Observer(
+                              builder: (_) => selectTeam.allTeamNames.isNotEmpty
+                                  ? DropdownButton<String>(
+                                      value: selectTeam.selectedTeam,
+                                      onChanged: selectTeam.selestTeam,
+                                      items: [
+                                        ...selectTeam.allTeamNames
+                                            .map<DropdownMenuItem<String>>(
+                                              (String team) => DropdownMenuItem(
+                                                child: Text(team),
+                                                value: team,
+                                              ),
+                                            )
+                                            .toList(),
+                                      ],
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Ни одной доступной команды нет',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Можешь создать команду сам \u261d',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
                             ),
-                            trailing: Observer(
-                              builder: (_) => selectTeam.enableIcon,
-                            ),
-                          )
-                        : Text('Список команд'),
-                  ],
-                )
-                    // : LoginService().checkTeamName(name: login.teamName) // Проверка существуют ли команды, чтобы в них зарегистрироваться
-                    //     ? Column(
-                    //         // Для пустого списка
-                    //         children: [
-                    //           Text(
-                    //             'Ни одной доступной команды нет',
-                    //             style: TextStyle(
-                    //               color: Colors.white,
-                    //             ),
-                    //           ),
-                    //           Text(
-                    //             'Можешь создать команду сам \u261d',
-                    //             style: TextStyle(
-                    //               color: Colors.white,
-                    //             ),
-                    //           )
-                    //         ],
-                    //       )
-                    // : Column(
-                    //     // Для непустого списка
-                    //     children: [
-                    //       Observer(
-                    //         builder: (_) => Text(
-                    //           login.userName,
-                    //           //'Выбери свою команду',
-                    //           style: TextStyle(
-                    //             color: Colors.white,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //       // DropdownButton<String>(
-                    //       //   value: teamSelect,
-                    //       //   onChanged: (newName) {
-                    //       //     setState(() {
-                    //       //       teamSelect = newName;
-                    //       //     });
-                    //       //   },
-                    //       //   items: [
-                    //       //     ...context
-                    //       //         .watch<Tournament>()
-                    //       //         .allTeamNames
-                    //       //         .map<DropdownMenuItem<String>>(
-                    //       //           (String team) => DropdownMenuItem(
-                    //       //             child: Text(team),
-                    //       //             value: team,
-                    //       //           ),
-                    //       //         )
-                    //       //         .toList(),
-                    //       //   ],
-                    //       // ),
-                    //     ],
-                    //   ),
-                    ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -148,13 +127,43 @@ class SelectTeamView extends StatelessWidget {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.green),
             ),
-            onPressed: selectTeam.capitan && selectTeam.enableName ? 
-              selectTeam.registrateTeam // отправить на сервер новую команду
-             : null,
+            onPressed: selectTeam.uName.isNotEmpty
+                ? selectTeam.capitan
+                    ? selectTeam.teamName.isNotEmpty
+                        ? selectTeam.enableName
+                            ? () {
+                                selectTeam.registrateTeam().then(
+                                  (_) {
+                                    context.read<Login>().validateInApp();
+                                    context.read<Login>().clearData();
+                                  },
+                                );
+                              }
+                            : null
+                        : null
+                    : selectTeam.selectedTeam != null
+                        ? () {
+                            selectTeam.assertTeam().then(
+                              (_) {
+                                context.read<Login>().validateInApp();
+                                context.read<Login>().clearData();
+                              },
+                            );
+                          }
+                        : null
+                : null,
             child: Observer(
-              builder: (_) => Text(selectTeam.capitan && selectTeam.enableName
-                  ? 'Зарегистрировать команду'
-                  : ''),
+              builder: (_) => Text(selectTeam.uName.isNotEmpty
+                  ? selectTeam.capitan
+                      ? selectTeam.teamName.isNotEmpty
+                          ? selectTeam.enableName
+                              ? 'Зарегистрировать команду'
+                              : 'Данное название команды недоступно'
+                          : 'Введите название команды'
+                      : selectTeam.selectedTeam != null
+                          ? selectTeam.regButtonText
+                          : 'Выберите команду'
+                  : 'Введите имя и фамилию'),
             ),
           ),
         ),

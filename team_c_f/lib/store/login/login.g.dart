@@ -32,6 +32,21 @@ mixin _$Login on LoginBase, Store {
     });
   }
 
+  final _$registrateInAppAtom = Atom(name: 'LoginBase.registrateInApp');
+
+  @override
+  bool get registrateInApp {
+    _$registrateInAppAtom.reportRead();
+    return super.registrateInApp;
+  }
+
+  @override
+  set registrateInApp(bool value) {
+    _$registrateInAppAtom.reportWrite(value, super.registrateInApp, () {
+      super.registrateInApp = value;
+    });
+  }
+
   final _$loginStatusAtom = Atom(name: 'LoginBase.loginStatus');
 
   @override
@@ -61,6 +76,13 @@ mixin _$Login on LoginBase, Store {
     return _$googleLogoutAsyncAction.run(() => super.googleLogout());
   }
 
+  final _$validateInAppAsyncAction = AsyncAction('LoginBase.validateInApp');
+
+  @override
+  Future<dynamic> validateInApp() {
+    return _$validateInAppAsyncAction.run(() => super.validateInApp());
+  }
+
   final _$LoginBaseActionController = ActionController(name: 'LoginBase');
 
   @override
@@ -86,9 +108,21 @@ mixin _$Login on LoginBase, Store {
   }
 
   @override
+  void clearData() {
+    final _$actionInfo =
+        _$LoginBaseActionController.startAction(name: 'LoginBase.clearData');
+    try {
+      return super.clearData();
+    } finally {
+      _$LoginBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 userName: ${userName},
+registrateInApp: ${registrateInApp},
 loginStatus: ${loginStatus},
 updatedLoginStatus: ${updatedLoginStatus}
     ''';

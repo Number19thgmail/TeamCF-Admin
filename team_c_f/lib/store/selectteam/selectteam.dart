@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:team_c_f/servises/selectteam.dart';
 import 'package:team_c_f/data/team.dart';
@@ -8,22 +7,26 @@ part 'selectteam.g.dart';
 class SelectTeam = _SelectTeamBase with _$SelectTeam;
 
 abstract class _SelectTeamBase with Store {
-  String? uid;
-  String? userName;
+  _SelectTeamBase() {
+    getAllTeamNames().then(
+      (List<String>? allNames) =>
+          allTeamNames = allNames == null ? [] : [...allNames],
+    );
+  }
+  String regButtonText = 'Зарегистрироваться';
+  String? uId;
+  String uName = '';
 
   @observable
-  String teamName = 'No team';
+  String teamName = '';
 
   @action
   void changeTeam(String text) {
     teamName = text.trim();
     SelectTeamService().checkTeamName(name: teamName).then((bool enable) {
-      enableIcon = Icon(
-        enable ? Icons.done : Icons.cancel,
-        color: enable ? Colors.green : Colors.red,
-      );
       enableName = enable;
     });
+    editNameComplite(text: text);
   }
 
   @observable
@@ -31,6 +34,10 @@ abstract class _SelectTeamBase with Store {
 
   @observable
   String lastTeamName = '';
+
+  void editNameComplite({required String text}) {
+    lastTeamName = text;
+  }
 
   @observable
   bool capitan = false;
@@ -42,35 +49,49 @@ abstract class _SelectTeamBase with Store {
   }
 
   @observable
-  Icon enableIcon = Icon(
-    Icons.done,
-    color: Colors.green,
-  );
+  String? selectedTeam;
 
   @action
-  void registrateTeam() {
+  void selestTeam(String? name) {
+    selectedTeam = name;
+  }
+
+  @observable
+  List<String> allTeamNames = [];
+
+  @action
+  Future<bool> assertTeam() async {
+    // Выбор команды
+    String? docId = await SelectTeamService().existPlayer(uid: uId!);
+
+    Player p = Player(
+      team: capitan ? teamName : selectedTeam,
+      name: uName,
+      uid: uId!,
+      docId: docId,
+    );
+    return docId == null
+        ? await SelectTeamService().registratePlayer(
+            player: p,
+          )
+        : await SelectTeamService().updatePlayer(
+            player: p,
+          );
+  }
+
+  @action
+  Future registrateTeam() async {
     // Регистрация команды
-    SelectTeamService().registrateTeam(
+    await SelectTeamService().registrateTeam(
       team: Team(
         name: teamName,
-        uidCapitan: uid!,
+        uidCapitan: uId!,
       ),
     );
-    SelectTeamService().existPlayer(uid: uid!).then(
-      (String? docId) {
-        Player p = Player(
-          name: userName!,
-          uid: uid!,
-          docId: docId,
-        );
-        docId == null
-            ? SelectTeamService().registratePlayer(
-                player: p,
-              )
-            : SelectTeamService().updatePlayer(
-                player: p,
-              );
-      },
-    );
+    await assertTeam();
+  }
+
+  Future<List<String>?> getAllTeamNames() {
+    return SelectTeamService().allTeamNames();
   }
 }

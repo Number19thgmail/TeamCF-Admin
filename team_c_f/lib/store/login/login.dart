@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobx/mobx.dart';
+import 'package:team_c_f/servises/login.dart';
 import 'package:team_c_f/store/selectteam/selectteam.dart';
 
 part 'login.g.dart';
@@ -14,10 +15,10 @@ abstract class LoginBase with Store {
   LoginBase() {
     googleLogin();
   }
-  String uid = '';
-  
+  String userId = '';
+
   @observable
-  String userName = 'No user';
+  String userName = '';
 
   @action
   void changeName(String text) {
@@ -25,6 +26,9 @@ abstract class LoginBase with Store {
   }
 
   final selectTeam = SelectTeam();
+
+  @observable
+  bool registrateInApp = false;
 
   @observable
   ObservableFuture<bool> loginStatus = ObservableFuture<bool>.value(false);
@@ -52,12 +56,14 @@ abstract class LoginBase with Store {
 
     user = userCredential.user;
 
-    if (user?.uid != null) {
+    if (user != null) {
       loginStatus = ObservableFuture.value(true);
-      uid = user!.uid;
+      userId = user.uid;
+      validateInApp();
     } else {
       loginStatus = ObservableFuture.value(false);
-      uid = '';
+      userId = '';
+      registrateInApp = false;
     }
     return Future.value(true);
   }
@@ -67,8 +73,14 @@ abstract class LoginBase with Store {
     _googleSignIn.signOut();
     _auth.signOut();
     loginStatus = ObservableFuture.value(false);
-    uid = '';
+    userId = '';
+    registrateInApp = false;
     return await Future.value(true);
+  }
+
+  @action
+  Future validateInApp() async {
+    registrateInApp = await   LoginService().existPlayer(uid: userId);
   }
 
   Future getGoogleUser() async {
@@ -80,5 +92,22 @@ abstract class LoginBase with Store {
       googleUser = await _googleSignIn.signIn();
     }
     return googleUser;
+  }
+
+  @action
+  void clearData(){
+    userName = '';
+    selectTeam.lastTeamName = '';
+    selectTeam.teamName = '';
+    selectTeam.uName = '';
+    selectTeam.selectedTeam = null;
+  }
+
+  void setDataToSelectTeam({
+    required String buttonText,
+  }) {
+    selectTeam.uId = userId;
+    selectTeam.uName = userName;
+    selectTeam.regButtonText = buttonText;
   }
 }

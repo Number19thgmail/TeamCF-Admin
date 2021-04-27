@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/components/selectteam.dart';
 import 'package:team_c_f/store/login/login.dart';
-import 'package:team_c_f/store/selectteam/selectteam.dart';
 
 class LoginView extends StatelessWidget {
   @override
@@ -82,11 +81,9 @@ class LoginView extends StatelessWidget {
           ),
           Observer(
             builder: (_) {
-              SelectTeam selectTeam = Provider.of<Login>(context).selectTeam;
-              selectTeam.userName = Provider.of<Login>(context).userName;
-              selectTeam.uid = Provider.of<Login>(context).uid;
+              Provider.of<Login>(context).setDataToSelectTeam(buttonText: 'Зарегистрироваться');
               return SelectTeamView(
-                selectTeam: selectTeam,
+                selectTeam: Provider.of<Login>(context).selectTeam,
               );
             },
           ),
