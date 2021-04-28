@@ -4,6 +4,15 @@ class Team {
   final String uidCapitan;
   List<String> players = [];
 
+  late int maxTour;
+  late int goals;
+  late int missed;
+  late int win;
+  late int draw;
+  late int lose;
+  int get points => win * 3 + draw;
+  late int position;
+
   Team({required this.name, required this.uidCapitan}) {
     players.add(this.uidCapitan);
   }
@@ -16,12 +25,12 @@ class Team {
     };
   }
 
-  factory Team.fromMap(Map<String, dynamic> map) {
+  factory Team.fromMap({required Map<String, dynamic> data}) {
     Team t = Team(
-      name: map['Name'] as String,
-      uidCapitan: map['Capitan'],
+      name: data['Name'] as String,
+      uidCapitan: data['Capitan'],
     );
-    t.players = [...map['Players']];
+    t.players = [...data['Players']];
     return t;
   }
 }

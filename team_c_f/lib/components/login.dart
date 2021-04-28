@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:team_c_f/components/reglament.dart';
 import 'package:team_c_f/components/selectteam.dart';
 import 'package:team_c_f/store/login/login.dart';
 
@@ -46,8 +47,17 @@ class LoginView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(
-            height: 20,
+          Observer(
+            builder: (_) => TextButton(
+              onPressed: () {
+                if (login.info != null)
+                  Navigator.of(context)
+                      .push(MaterialPageRoute<bool?>(
+                          builder: (_) => Reglament(info: login.info!)))
+                      .then((value) => login.changeName(value!.toString()));
+              },
+              child: Text('Правила конкурса'),
+            ),
           ),
           Container(
             padding: const EdgeInsets.all(8.0),
@@ -81,7 +91,8 @@ class LoginView extends StatelessWidget {
           ),
           Observer(
             builder: (_) {
-              Provider.of<Login>(context).setDataToSelectTeam(buttonText: 'Зарегистрироваться');
+              Provider.of<Login>(context)
+                  .setDataToSelectTeam(buttonText: 'Зарегистрироваться');
               return SelectTeamView(
                 selectTeam: Provider.of<Login>(context).selectTeam,
               );

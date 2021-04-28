@@ -14,7 +14,7 @@ abstract class _SelectTeamBase with Store {
     );
   }
   String regButtonText = 'Зарегистрироваться';
-  String? uId;
+  String uId = '';
   String uName = '';
 
   @observable
@@ -62,12 +62,12 @@ abstract class _SelectTeamBase with Store {
   @action
   Future<bool> assertTeam() async {
     // Выбор команды
-    String? docId = await SelectTeamService().existPlayer(uid: uId!);
+    String? docId = await SelectTeamService().existPlayer(uid: uId);
 
     Player p = Player(
       team: capitan ? teamName : selectedTeam,
       name: uName,
-      uid: uId!,
+      uid: uId,
       docId: docId,
     );
     return docId == null
@@ -85,7 +85,7 @@ abstract class _SelectTeamBase with Store {
     await SelectTeamService().registrateTeam(
       team: Team(
         name: teamName,
-        uidCapitan: uId!,
+        uidCapitan: uId,
       ),
     );
     await assertTeam();

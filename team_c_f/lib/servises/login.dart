@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team_c_f/data/info.dart';
 
 class LoginService {
   final CollectionReference _playersCollection =
       FirebaseFirestore.instance.collection('players');
+  final CollectionReference _infoCollection =
+      FirebaseFirestore.instance.collection('information');
 
   Future<bool> existPlayer({required String uid}) {
     return _playersCollection
@@ -11,7 +14,14 @@ class LoginService {
           isEqualTo: uid,
         )
         .get()
-        .then((QuerySnapshot response) =>
-            response.docs.isNotEmpty);
+        .then((QuerySnapshot response) => response.docs.isNotEmpty);
+  }
+
+  Future<Info> getInfo() {
+    return _infoCollection.get().then(
+          (QuerySnapshot response) => Info.fromMap(
+            data: response.docs.single.data(),
+          ),
+        );
   }
 }

@@ -153,17 +153,19 @@ class SelectTeamView extends StatelessWidget {
                         : null
                 : null,
             child: Observer(
-              builder: (_) => Text(selectTeam.uName.isNotEmpty
-                  ? selectTeam.capitan
-                      ? selectTeam.teamName.isNotEmpty
-                          ? selectTeam.enableName
-                              ? 'Зарегистрировать команду'
-                              : 'Данное название команды недоступно'
-                          : 'Введите название команды'
-                      : selectTeam.selectedTeam != null
-                          ? selectTeam.regButtonText
-                          : 'Выберите команду'
-                  : 'Введите имя и фамилию'),
+              builder: (_) => Text(selectTeam.uId.isNotEmpty
+                  ? selectTeam.uName.isNotEmpty
+                      ? selectTeam.capitan
+                          ? selectTeam.teamName.isNotEmpty
+                              ? selectTeam.enableName
+                                  ? 'Зарегистрировать команду'
+                                  : 'Данное название команды недоступно'
+                              : 'Введите название команды'
+                          : selectTeam.selectedTeam != null
+                              ? selectTeam.regButtonText
+                              : 'Выберите команду'
+                      : 'Введите имя и фамилию'
+                  : 'Необходимо войти в Google-аккаунт'),
             ),
           ),
         ),
