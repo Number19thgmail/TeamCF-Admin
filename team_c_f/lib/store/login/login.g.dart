@@ -17,6 +17,21 @@ mixin _$Login on LoginBase, Store {
               name: 'LoginBase.updatedLoginStatus'))
       .value;
 
+  final _$infoAtom = Atom(name: 'LoginBase.info');
+
+  @override
+  Info? get info {
+    _$infoAtom.reportRead();
+    return super.info;
+  }
+
+  @override
+  set info(Info? value) {
+    _$infoAtom.reportWrite(value, super.info, () {
+      super.info = value;
+    });
+  }
+
   final _$userNameAtom = Atom(name: 'LoginBase.userName');
 
   @override
@@ -86,6 +101,17 @@ mixin _$Login on LoginBase, Store {
   final _$LoginBaseActionController = ActionController(name: 'LoginBase');
 
   @override
+  void initInfo() {
+    final _$actionInfo =
+        _$LoginBaseActionController.startAction(name: 'LoginBase.initInfo');
+    try {
+      return super.initInfo();
+    } finally {
+      _$LoginBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void changeName(String text) {
     final _$actionInfo =
         _$LoginBaseActionController.startAction(name: 'LoginBase.changeName');
@@ -121,6 +147,7 @@ mixin _$Login on LoginBase, Store {
   @override
   String toString() {
     return '''
+info: ${info},
 userName: ${userName},
 registrateInApp: ${registrateInApp},
 loginStatus: ${loginStatus},

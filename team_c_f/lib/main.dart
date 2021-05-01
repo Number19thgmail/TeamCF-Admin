@@ -35,7 +35,7 @@ class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Observer(
-        builder: (_) => Provider.of<Login>(context).registrateInApp
+        builder: (_) => context.read<Login>().registrateInApp
             ? HomePage()
             : LoginPage());
   }
