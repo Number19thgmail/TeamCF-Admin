@@ -64,7 +64,7 @@ abstract class _SelectTeamBase with Store {
     // Выбор команды
     String? docId = await SelectTeamService().existPlayer(uid: uId);
 
-    Player p = Player(
+    PlayerData p = PlayerData(
       team: capitan ? teamName : selectedTeam,
       name: uName,
       uid: uId,
@@ -83,7 +83,7 @@ abstract class _SelectTeamBase with Store {
   Future registrateTeam() async {
     // Регистрация команды
     await SelectTeamService().registrateTeam(
-      team: Team(
+      team: TeamData(
         name: teamName,
         uidCapitan: uId,
       ),

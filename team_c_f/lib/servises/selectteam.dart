@@ -16,7 +16,7 @@ class SelectTeamService {
         .then((response) => response.docs.length == 0);
   }
 
-  Future registrateTeam({required Team team}) async {
+  Future registrateTeam({required TeamData team}) async {
     // регистрация команды
     await _teamsCollection.add(team.toMap());
   }
@@ -36,21 +36,21 @@ class SelectTeamService {
     return _teamsCollection.get().then(
           (QuerySnapshot response) => response.docs
               .where((QueryDocumentSnapshot doc) =>
-                  Team.fromMap(data: doc.data()).players.length < 3)
+                  TeamData.fromMap(data: doc.data()).players.length < 3)
               .map(
-                (QueryDocumentSnapshot doc) => Team.fromMap(data: doc.data()).name,
+                (QueryDocumentSnapshot doc) => TeamData.fromMap(data: doc.data()).name,
               )
               .toList(),
         );
   }
 
-  Future<bool> registratePlayer({required Player player}) async {
+  Future<bool> registratePlayer({required PlayerData player}) async {
     // регистрация игрока
     await _playersCollection.add(player.toMap());
     return true;
   }
 
-  Future<bool> updatePlayer({required Player player}) async {
+  Future<bool> updatePlayer({required PlayerData player}) async {
     // обновление игрока (добавление команды)
     await _playersCollection.doc(player.docId).update(
           player.toMap(),

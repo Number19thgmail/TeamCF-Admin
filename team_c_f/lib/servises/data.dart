@@ -14,28 +14,30 @@ class DataService {
       FirebaseFirestore.instance.collection('currentTour');
   final CollectionReference _toursCollection =
       FirebaseFirestore.instance.collection('tours');
+  final CollectionReference _forecastsCollection =
+      FirebaseFirestore.instance.collection('forecasts');
 
-  void initData() {
-    getCurrentTour()
-        .then((CurrentTour currentTour) => Data.currentTour = currentTour);
-    getPlayers().then((List<Player> players) => Data.players = players);
-    getTeams().then((List<Team> teams) => Data.teams = teams);
-    getTours().then((List<Tour> tours) => Data.tours = tours);
+  Future initData() async {
+    Data.currentTour = await getCurrentTour();
+    Data.players = await getPlayers();
+    Data.teams = await getTeams();
+    Data.tours = await getTours();
+    Data.sortData();
   }
 
-  Future<CurrentTour> getCurrentTour() {
+  Future<CurrentTourData> getCurrentTour() {
     return _currentTourCollection.get().then(
-          (QuerySnapshot response) => CurrentTour.fromMap(
+          (QuerySnapshot response) => CurrentTourData.fromMap(
             data: response.docs.single.data(),
           ),
         );
   }
 
-  Future<List<Player>> getPlayers() {
+  Future<List<PlayerData>> getPlayers() {
     return _playersCollection.get().then(
           (QuerySnapshot response) => response.docs
               .map(
-                (QueryDocumentSnapshot doc) => Player.fromMap(
+                (QueryDocumentSnapshot doc) => PlayerData.fromMap(
                   data: doc.data(),
                 ),
               )
@@ -43,11 +45,11 @@ class DataService {
         );
   }
 
-  Future<List<Team>> getTeams() {
+  Future<List<TeamData>> getTeams() {
     return _teamsCollection.get().then(
           (QuerySnapshot response) => response.docs
               .map(
-                (QueryDocumentSnapshot doc) => Team.fromMap(
+                (QueryDocumentSnapshot doc) => TeamData.fromMap(
                   data: doc.data(),
                 ),
               )
@@ -55,11 +57,11 @@ class DataService {
         );
   }
 
-  Future<List<Tour>> getTours() {
+  Future<List<TourData>> getTours() {
     return _toursCollection.get().then(
           (QuerySnapshot response) => response.docs
               .map(
-                (QueryDocumentSnapshot doc) => Tour.fromMap(
+                (QueryDocumentSnapshot doc) => TourData.fromMap(
                   data: doc.data(),
                 ),
               )

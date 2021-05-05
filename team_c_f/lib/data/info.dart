@@ -1,13 +1,13 @@
-class Info {
+class InfoData {
   final List<String> regulations;
   final String link;
-  Info({
+  InfoData({
     required this.regulations,
     required this.link,
   });
 
-  factory Info.fromMap({required Map<String, dynamic> data}) {
-    return Info(
+  factory InfoData.fromMap({required Map<String, dynamic> data}) {
+    return InfoData(
       link: data['Link'],
       regulations: [...data['Regulations']],
     );

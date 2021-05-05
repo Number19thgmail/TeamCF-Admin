@@ -1,6 +1,6 @@
-class CurrentTour {
+class CurrentTourData {
   String round;
-  CurrentTour({required this.round});
+  CurrentTourData({required this.round});
 
   Map<String, dynamic> toMap() {
     return {
@@ -8,7 +8,7 @@ class CurrentTour {
     };
   }
 
-  factory CurrentTour.fromMap({required Map<String, dynamic> data}){
-    return CurrentTour(round: data['Round']);
+  factory CurrentTourData.fromMap({required Map<String, dynamic> data}){
+    return CurrentTourData(round: data['Round']);
   }
 }

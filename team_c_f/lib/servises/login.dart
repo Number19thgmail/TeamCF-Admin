@@ -17,9 +17,9 @@ class LoginService {
         .then((QuerySnapshot response) => response.docs.isNotEmpty);
   }
 
-  Future<Info> getInfo() {
+  Future<InfoData> getInfo() {
     return _infoCollection.get().then(
-          (QuerySnapshot response) => Info.fromMap(
+          (QuerySnapshot response) => InfoData.fromMap(
             data: response.docs.single.data(),
           ),
         );

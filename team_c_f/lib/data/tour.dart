@@ -1,17 +1,19 @@
-class Tour {
+class TourData {
   final String round;
-  late Map<String, int> team; // проверить порядок
-  Tour({required this.round});
+  String? name;
+  late List<List<String>> team; // проверить порядок
+  TourData({required this.round, this.name});
 
-  Map<String, dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     return {
       'Round': round,
       'Team': team,
+      'Name': name == null ? round : name,
     };
   }
 
-  factory Tour.fromMap({required Map<String, dynamic> data}){
-    Tour t = Tour(round: data['Round']);
+  factory TourData.fromMap({required Map<String, dynamic> data}) {
+    TourData t = TourData(round: data['Round'], name: data['Name']);
     t.team = data['Team'];
     return t;
   }

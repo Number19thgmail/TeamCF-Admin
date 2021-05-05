@@ -94,7 +94,7 @@ class LoginView extends StatelessWidget {
               Provider.of<Login>(context)
                   .setDataToSelectTeam(buttonText: 'Зарегистрироваться');
               return SelectTeamView(
-                selectTeam: Provider.of<Login>(context).selectTeam,
+                selectTeam: context.read<Login>().selectTeam,
               );
             },
           ),

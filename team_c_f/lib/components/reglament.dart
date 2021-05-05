@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team_c_f/data/info.dart';
 
 class Reglament extends StatelessWidget {
-  final Info info;
+  final InfoData info;
   Reglament({required this.info});
   @override
   Widget build(BuildContext context) {

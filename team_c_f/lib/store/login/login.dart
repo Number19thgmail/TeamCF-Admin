@@ -18,11 +18,11 @@ abstract class LoginBase with Store {
     initInfo();
   }
   @observable
-  Info? info;
+  InfoData? info;
 
   @action
   void initInfo(){
-    LoginService().getInfo().then((Info value) => info = value);
+    LoginService().getInfo().then((InfoData value) => info = value);
   }
 
   String userId = '';

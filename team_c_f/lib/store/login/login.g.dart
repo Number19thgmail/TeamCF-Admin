@@ -20,13 +20,13 @@ mixin _$Login on LoginBase, Store {
   final _$infoAtom = Atom(name: 'LoginBase.info');
 
   @override
-  Info? get info {
+  InfoData? get info {
     _$infoAtom.reportRead();
     return super.info;
   }
 
   @override
-  set info(Info? value) {
+  set info(InfoData? value) {
     _$infoAtom.reportWrite(value, super.info, () {
       super.info = value;
     });

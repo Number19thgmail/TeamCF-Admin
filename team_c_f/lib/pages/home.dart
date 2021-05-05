@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
+import 'package:team_c_f/pages/team.dart';
 import 'package:team_c_f/servises/data.dart';
 import 'package:team_c_f/store/home/home.dart';
 import 'package:team_c_f/store/login/login.dart';
@@ -14,19 +15,21 @@ class HomePage extends StatelessWidget {
     DataService().initData();
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          children: [
-            Data.tours != null
-                ? Data.tours!.isNotEmpty
-                    ? Text(Data.tours![0].round)
-                    : Text('Туров нет')
-                : Text('Идёт загрузка'),
-            ElevatedButton(
+        body: Observer(
+          builder: (_) => Column(
+            children: [
+              if (state.selectedIndex == 0) TeamPage(),
+              Data.tours.isNotEmpty
+                  ? Text(Data.tours[0].round)
+                  : Text('Туров нет'),
+              ElevatedButton(
                 onPressed: Provider.of<Login>(context).googleLogout,
                 child: Text(
-                  'logout',
-                )),
-          ],
+                  '${state.selectedIndex}',
+                ),
+              ),
+            ],
+          ),
         ),
         bottomNavigationBar: Observer(
           builder: (_) => BottomNavyBar(
@@ -34,20 +37,12 @@ class HomePage extends StatelessWidget {
             onItemSelected: state.selectIndex,
             selectedIndex: state.selectedIndex,
             iconSize: 20.0,
-            items: <BottomNavyBarItem> [
+            items: <BottomNavyBarItem>[
               BottomNavyBarItem(
                 icon: Icon(Icons.people),
-                title: Column(
-                  children: [
-                    Text(
-                      'Моя',
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                    Text(
-                      'команда',
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                  ],
+                title: Text(
+                  'Моя команда',
+                  style: Theme.of(context).textTheme.caption,
                 ),
               ),
               BottomNavyBarItem(
@@ -59,17 +54,9 @@ class HomePage extends StatelessWidget {
               ),
               BottomNavyBarItem(
                 icon: Icon(Icons.add_to_photos),
-                title: Column(
-                  children: [
-                    Text(
-                      'Текущий',
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                    Text(
-                      'тур',
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                  ],
+                title: Text(
+                  'Текущий тур',
+                  style: Theme.of(context).textTheme.caption,
                 ),
               ),
               BottomNavyBarItem(
