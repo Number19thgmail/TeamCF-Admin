@@ -79,7 +79,6 @@ class Tournament with ChangeNotifier {
         curr.sort((a, b) => a.tour[6].compareTo(b.tour[6]));
         schedule.addAll([...curr]);
 
-        // schedule.sort((a, b) => a.tour.length.compareTo(b.tour.length));
         notifyListeners();
       },
     );
