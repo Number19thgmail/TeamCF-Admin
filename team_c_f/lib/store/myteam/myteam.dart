@@ -12,6 +12,27 @@ abstract class _MyTeamBase with Store {
   _MyTeamBase({required this.me}) {
     team = Team(
         team: Data.teams.where((element) => element.name == me.team).single);
+    if (me.uid == team!.team.uidCapitan) {
+      List<PlayerData> inTeam = [];
+      inTeam.addAll(
+        Data.players.where((PlayerData p) => p.team == team!.team.name),
+      );
+      unconfirmPlayer.addAll(
+        inTeam.where(
+          (PlayerData p) =>
+              team!.team.players.every((String uid) => uid != p.uid),
+        ),
+      );
+    }
+  }
+
+  @observable
+  List<PlayerData> unconfirmPlayer = [];
+
+  @action
+  void confirm({required String uid, required bool confirm}) {
+    unconfirmPlayer.removeWhere((PlayerData p) => p.uid == uid);
+    if (confirm) team!.team.players.add(uid);
   }
 
   @observable

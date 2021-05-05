@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/pages/login.dart';
 import 'package:team_c_f/store/login/login.dart';
 import 'package:team_c_f/pages/home.dart';
@@ -22,6 +23,7 @@ myApp() async {
       home: MultiProvider(
         providers: [
           Provider<Login>(create: (_) => Login()),
+          ChangeNotifierProvider<Data>(create: (_) => Data()),
         ],
         child: FirstPage(),
       ),
@@ -35,8 +37,8 @@ class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Observer(
-        builder: (_) => context.read<Login>().registrateInApp
-            ? HomePage()
-            : LoginPage());
+      builder: (_) =>
+          context.read<Login>().registrateInApp ? HomePage() : LoginPage(),
+    );
   }
 }

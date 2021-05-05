@@ -1,23 +1,38 @@
+import 'package:flutter/material.dart';
 import 'package:team_c_f/data/currenttour.dart';
 import 'package:team_c_f/data/player.dart';
 import 'package:team_c_f/data/team.dart';
 import 'package:team_c_f/data/tour.dart';
+import 'package:team_c_f/servises/data.dart';
 
-class Data {
+class Data with ChangeNotifier {
+  bool downloadSuccessful = false;
+
+  Data() {
+    DataService().initData().then((result) {
+      sortTour();
+      sortData();
+      downloadSuccessful = result;
+      notifyListeners();
+    });
+  }
+
   static late CurrentTourData currentTour;
   static late List<PlayerData> players;
   static late List<TeamData> teams;
   static late List<TourData> tours;
 
-  static void sortData() {
+  static void sortTour() {
     tours.sort((TourData a, b) =>
         a.round.compareTo(b.round)); // сортировка туров по порядку
+  }
 
+  static void sortData() {
     players.sort((PlayerData a, b) => b.goals
         .compareTo(a.goals)); // сортировка участников по количеству забитых
     players.forEach(
       (PlayerData p) {
-        p.prevPosition = players.indexOf(p);
+        p.prevPosition = players.indexOf(p) + 1;
       },
     ); // указание текущей позиции игрока
 
@@ -71,7 +86,7 @@ class Data {
         b.points.compareTo(a.points)); // сортировка команд по количеству очков
     teams.forEach(
       (TeamData t) {
-        t.prevPosition = teams.indexOf(t);
+        t.prevPosition = teams.indexOf(t) + 1;
       },
     ); // указание текущей позиции команды
   }

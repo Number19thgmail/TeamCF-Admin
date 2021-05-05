@@ -1,8 +1,8 @@
 class PlayerData {
   String? docId;
   final String uid;
-  final String name;
-  final String? team;
+  String name;
+  String? team;
   late List<int?> points = [];
 
   int get maxTour => points.fold(

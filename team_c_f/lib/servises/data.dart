@@ -5,7 +5,8 @@ import 'package:team_c_f/data/player.dart';
 import 'package:team_c_f/data/team.dart';
 import 'package:team_c_f/data/tour.dart';
 
-class DataService {
+class DataService{
+
   final CollectionReference _playersCollection =
       FirebaseFirestore.instance.collection('players');
   final CollectionReference _teamsCollection =
@@ -14,15 +15,15 @@ class DataService {
       FirebaseFirestore.instance.collection('currentTour');
   final CollectionReference _toursCollection =
       FirebaseFirestore.instance.collection('tours');
-  final CollectionReference _forecastsCollection =
-      FirebaseFirestore.instance.collection('forecasts');
+  // final CollectionReference _forecastsCollection =
+  //     FirebaseFirestore.instance.collection('forecasts');
 
-  Future initData() async {
+  Future<bool> initData() async {
     Data.currentTour = await getCurrentTour();
     Data.players = await getPlayers();
     Data.teams = await getTeams();
     Data.tours = await getTours();
-    Data.sortData();
+    return true;
   }
 
   Future<CurrentTourData> getCurrentTour() {
