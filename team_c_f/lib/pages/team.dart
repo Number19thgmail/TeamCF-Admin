@@ -81,9 +81,11 @@ class TeamPage extends StatelessWidget {
                       ),
                     ),
                 if (state.team != null)
-                  ShowTeam(
-                    // Показ информации о моей команде
-                    team: state.team!.team,
+                  Observer(
+                                      builder: (_) => ShowTeam(
+                      // Показ информации о моей команде
+                      team: state.team!.team,
+                    ),
                   ),
               ],
             )
