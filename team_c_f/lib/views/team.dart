@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/data/team.dart';
+import 'package:team_c_f/store/team/team.dart';
 import 'package:team_c_f/views/player.dart';
 
 class ShowTeam extends StatelessWidget {
   // Класс отображения информации об указанной команде
-  final TeamData team; // Команда
+  final Team team; // Команда
   ShowTeam({Key? key, required this.team}) : super(key: key);
 
   @override
@@ -14,17 +15,18 @@ class ShowTeam extends StatelessWidget {
       child: Column(
         children: [
           Card(
-            child: ListTile(
-              // Информация о команде
-              leading: CircleAvatar(
-                child: Text(
-                  team.prevPosition.toString(),
+            child: Observer(
+              builder: (_) => ListTile(
+                // Информация о команде
+                leading: CircleAvatar(
+                  child: Text(
+                    team.team.prevPosition.toString(),
+                  ),
                 ),
-              ),
-              title: Text(team.name),
-              trailing: Text(
-                team.points.toString()
-                //showPoints(team.points),
+                title: Text(team.team.name),
+                trailing: Text(team.team.points.toString()
+                    //showPoints(team.points),
+                    ),
               ),
             ),
           ),
@@ -33,7 +35,7 @@ class ShowTeam extends StatelessWidget {
             margin: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                ...team.players.map(
+                ...team.team.players.map(
                   (String uid) => ShowPlayer(
                       player: Data.players
                           .where((player) => player.uid == uid)

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:team_c_f/data/currenttour.dart';
-import 'package:team_c_f/data/player.dart';
-import 'package:team_c_f/data/team.dart';
-import 'package:team_c_f/data/tour.dart';
+import 'package:team_c_f/models/currenttour.dart';
+import 'package:team_c_f/models/player.dart';
+import 'package:team_c_f/models/team.dart';
+import 'package:team_c_f/models/tour.dart';
 import 'package:team_c_f/servises/data.dart';
 
 class Data with ChangeNotifier {

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:team_c_f/data/info.dart';
+import 'package:team_c_f/models/info.dart';
 
 class LoginService {
   final CollectionReference _playersCollection =

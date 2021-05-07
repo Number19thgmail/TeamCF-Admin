@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:team_c_f/components/confirmedplayer.dart';
 import 'package:team_c_f/components/selectteam.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/data/player.dart';
+import 'package:team_c_f/models/player.dart';
 import 'package:team_c_f/store/login/login.dart';
 import 'package:team_c_f/store/myteam/myteam.dart';
 import 'package:provider/provider.dart';
@@ -81,11 +81,9 @@ class TeamPage extends StatelessWidget {
                       ),
                     ),
                 if (state.team != null)
-                  Observer(
-                                      builder: (_) => ShowTeam(
-                      // Показ информации о моей команде
-                      team: state.team!.team,
-                    ),
+                  ShowTeam(
+                    // Показ информации о моей команде
+                    team: state.team!,
                   ),
               ],
             )

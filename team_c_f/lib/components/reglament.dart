@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:team_c_f/data/info.dart';
+import 'package:team_c_f/models/info.dart';
 
 class Reglament extends StatelessWidget {
   final InfoData info;

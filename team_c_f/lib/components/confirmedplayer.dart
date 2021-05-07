@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/data/player.dart';
+import 'package:team_c_f/models/player.dart';
 import 'package:team_c_f/store/team/team.dart';
 
 class PlayerToConfirm extends StatelessWidget {
@@ -29,7 +29,6 @@ class PlayerToConfirm extends StatelessWidget {
             ),
             onPressed: () {
               team.addWin();
-              //Data.players.where((PlayerData p) => p.uid == player.uid).single.name = 'New name 4';
               Fluttertoast.showToast(
                 msg: '${player.name} добавлен в вашу команду',
               );

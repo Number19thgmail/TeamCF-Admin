@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:team_c_f/data/player.dart';
-import 'package:team_c_f/data/team.dart';
+import 'package:team_c_f/models/player.dart';
+import 'package:team_c_f/models/team.dart';
 
 class MyTeamService {
   final CollectionReference _playersCollection =

@@ -1,7 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/data/player.dart';
-import 'package:team_c_f/data/team.dart';
+import 'package:team_c_f/models/player.dart';
+import 'package:team_c_f/models/team.dart';
 part 'team.g.dart';
 
 class Team extends _TeamBase with _$Team {

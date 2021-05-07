@@ -1,6 +1,6 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:team_c_f/data/player.dart';
+import 'package:team_c_f/models/player.dart';
 
 class ShowPlayer extends StatelessWidget {
   // Класс отображающий информацию об указанном игроке

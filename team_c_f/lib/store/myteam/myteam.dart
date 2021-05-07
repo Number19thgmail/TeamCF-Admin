@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/data/player.dart';
+import 'package:team_c_f/models/player.dart';
 import 'package:team_c_f/store/team/team.dart';
 part 'myteam.g.dart';
 

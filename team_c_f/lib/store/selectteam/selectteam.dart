@@ -1,7 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:team_c_f/servises/selectteam.dart';
-import 'package:team_c_f/data/team.dart';
-import 'package:team_c_f/data/player.dart';
+import 'package:team_c_f/models/team.dart';
+import 'package:team_c_f/models/player.dart';
 part 'selectteam.g.dart';
 
 class SelectTeam = _SelectTeamBase with _$SelectTeam;

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobx/mobx.dart';
-import 'package:team_c_f/data/info.dart';
+import 'package:team_c_f/models/info.dart';
 import 'package:team_c_f/servises/login.dart';
 import 'package:team_c_f/store/selectteam/selectteam.dart';
 
