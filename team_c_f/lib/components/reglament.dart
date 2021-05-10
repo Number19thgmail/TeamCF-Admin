@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/models/info.dart';
 
-class Reglament extends StatelessWidget {
+class ReglamentView extends StatelessWidget {
   final InfoData info;
-  Reglament({required this.info});
+  ReglamentView({required this.info});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,12 +17,6 @@ class Reglament extends StatelessWidget {
                   Navigator.of(context).pop(true);
                 },
               ),
-              // IconButton(
-              //   icon: Icon(Icons.arrow_back),
-              //   onPressed: () {
-              //     Navigator.of(context).pop();
-              //   },
-              // ),
               SizedBox(width: 20),
               Text('Правила конкурса'),
             ],

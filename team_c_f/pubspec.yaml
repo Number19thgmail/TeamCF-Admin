@@ -32,7 +32,7 @@ dependencies:
   http: ^0.13.1
   html: ^0.15.0
   carousel_slider: ^3.0.0
-  redux: ^5.0.0
+  flutter_bloc: ^7.0.0
   custom_navigation_bar: ^0.8.1
   bottom_navy_bar: ^6.0.0
 

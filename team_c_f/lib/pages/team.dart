@@ -1,61 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:team_c_f/components/confirmedplayer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:team_c_f/components/unconfirmedplayer.dart';
 import 'package:team_c_f/components/selectteam.dart';
-import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/models/player.dart';
+import 'package:team_c_f/store/bloc/myteam.dart';
+import 'package:team_c_f/store/components/myteam.dart';
 import 'package:team_c_f/store/login/login.dart';
-import 'package:team_c_f/store/myteam/myteam.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/views/team.dart';
 
 class TeamPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    MyTeam state = MyTeam(
-        player: Data.players
-            .where((PlayerData p) => p.uid == context.read<Login>().userId)
-            .single);
-    return Observer(
-      builder: (_) => state.team != null
-          ? Column(
+    MyTeamBloc bloc = context.watch<MyTeamBloc>();
+    context.read<Login>().changeName(bloc.state.name);
+    context.read<Login>().setDataToSelectTeam(buttonText: 'Выбрать команду');
+    return BlocBuilder<MyTeamBloc, MyTeamState>(
+      bloc: bloc,
+      builder: (context, state) => Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8.0),
+            child: Column(
               children: [
                 Card(
-                  color: Colors.red[100],
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100)),
                   child: ListTile(
                     leading: CircleAvatar(
                       // Показывает место в таблице бомбардиров
                       backgroundColor: Colors.blue[100],
-                      child: Text(state.me.prevPosition.toString()),
+                      child: Text(bloc.state.position),
                     ),
                     title: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(state.me.name), // Показывает имя участника
+                        Text(bloc.state.name), // Показывает имя участника
                       ],
                     ),
-                    subtitle: state.me.team != null
+                    subtitle: bloc.state.team != 'Нет команды'
                         ? Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              // Показываем статус игрока, подтвержден ли он капитаном команды
                               Icon(Icons.done,
-                                  color: state.team!.team.players
-                                              .where((String uid) =>
-                                                  uid == state.me.uid)
-                                              .length ==
-                                          1
+                                  color: bloc.state.confirmed
                                       ? Colors.green
                                       : Colors.grey),
-                              Text(state.me.team!),
+                              Text(bloc.state.team),
                             ],
                           )
-                        : SelectTeamView(
-                            selectTeam: context.read<Login>().selectTeam),
+                        : Text(
+                            'Нет команды',
+                            textAlign: TextAlign.center,
+                          ),
                     trailing: CircleAvatar(
                       backgroundColor: Colors.blue[100],
                       child: IconButton(
@@ -66,28 +63,27 @@ class TeamPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (state.team != null)
-                  if (state.team!.team.uidCapitan == state.me.uid)
-                    // Отображение для капитана списка игроков, которые зарегистрировались, но ещё не получили подтверждение в его команде
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          ...state.unconfirmPlayer.map(
-                            (PlayerData p) =>
-                                PlayerToConfirm(player: p, team: state.team!),
-                          ),
-                        ],
-                      ),
-                    ),
-                if (state.team != null)
-                  ShowTeam(
-                    // Показ информации о моей команде
-                    team: state.team!,
+                if (bloc.state.team == 'Нет команды')
+                  SelectTeamView(
+                    selectTeam: context.read<Login>().selectTeam,
+                    updateMyTeam: true,
                   ),
               ],
-            )
-          : Text('Загрузка'),
+            ),
+          ),
+          if (bloc.state.capitan &&
+              bloc.state.unconfirm
+                  .isNotEmpty) // Отображение для капитана списка игроков, которые зарегистрировались, но ещё не получили подтверждение в его команде
+            ...bloc.state.unconfirm.map(
+              (p) => UnconfirmedPlayerView(player: p),
+            ),
+          if (bloc.state.teamData != null)
+            ShowTeam(
+              // Показ информации о моей команде
+              team: bloc.state.teamData!,
+            ),
+        ],
+      ),
     );
   }
 }

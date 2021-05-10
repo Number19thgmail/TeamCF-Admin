@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/store/team/team.dart';
+import 'package:team_c_f/servises/servises.dart';
+import 'package:team_c_f/store/components/team.dart';
 import 'package:team_c_f/views/player.dart';
 
 class ShowTeam extends StatelessWidget {
   // Класс отображения информации об указанной команде
-  final Team team; // Команда
+  final TeamModel team; // Команда
   ShowTeam({Key? key, required this.team}) : super(key: key);
 
   @override
@@ -24,8 +25,8 @@ class ShowTeam extends StatelessWidget {
                   ),
                 ),
                 title: Text(team.team.name),
-                trailing: Text(team.team.points.toString()
-                    //showPoints(team.points),
+                trailing: Text(//team.team.points.toString()
+                    showPoints(team.points),
                     ),
               ),
             ),

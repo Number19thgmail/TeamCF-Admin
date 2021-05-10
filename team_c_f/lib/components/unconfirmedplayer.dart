@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/models/player.dart';
+import 'package:team_c_f/store/bloc/myteam.dart';
+import 'package:team_c_f/store/components/unconfirmedplayer.dart';
+import 'package:provider/provider.dart';
 import 'package:team_c_f/store/team/team.dart';
 
-class PlayerToConfirm extends StatelessWidget {
+class UnconfirmedPlayerView extends StatelessWidget {
   // Класс, для отображения неподтвержденных игроков
-  final PlayerData player; // Неподтвержденный игрок
-  final Team team;
-  PlayerToConfirm({Key? key, required this.player, required this.team}) : super(key: key);
+  final UnconfirmedPlayerModel player; // Неподтвержденный игрок
+  UnconfirmedPlayerView({Key? key, required this.player}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    MyTeamBloc bloc = context.watch<MyTeamBloc>();
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -28,7 +31,8 @@ class PlayerToConfirm extends StatelessWidget {
               color: Colors.green,
             ),
             onPressed: () {
-              team.addWin();
+              bloc.state.selectId = player.uid;
+              bloc.add(MyTeamEvent.confirmedPlayer);
               Fluttertoast.showToast(
                 msg: '${player.name} добавлен в вашу команду',
               );
@@ -41,9 +45,8 @@ class PlayerToConfirm extends StatelessWidget {
               color: Colors.red,
             ),
             onPressed: () {
-              // context
-              //     .read<Tournament>()
-              //     .confirmPlayer(uid: player.uid, confirm: false);
+              bloc.state.selectId = player.uid;
+              bloc.add(MyTeamEvent.unconfirmedPlayer);
               Fluttertoast.showToast(
                 msg: 'Заявка отклонена',
               );

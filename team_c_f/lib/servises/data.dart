@@ -5,8 +5,7 @@ import 'package:team_c_f/models/player.dart';
 import 'package:team_c_f/models/team.dart';
 import 'package:team_c_f/models/tour.dart';
 
-class DataService{
-
+class DataService {
   final CollectionReference _playersCollection =
       FirebaseFirestore.instance.collection('players');
   final CollectionReference _teamsCollection =
@@ -30,6 +29,7 @@ class DataService{
     return _currentTourCollection.get().then(
           (QuerySnapshot response) => CurrentTourData.fromMap(
             data: response.docs.single.data(),
+            docId: response.docs.single.id,
           ),
         );
   }
@@ -40,6 +40,7 @@ class DataService{
               .map(
                 (QueryDocumentSnapshot doc) => PlayerData.fromMap(
                   data: doc.data(),
+                  docId: doc.id,
                 ),
               )
               .toList(),
@@ -52,6 +53,7 @@ class DataService{
               .map(
                 (QueryDocumentSnapshot doc) => TeamData.fromMap(
                   data: doc.data(),
+                  docId: doc.id,
                 ),
               )
               .toList(),

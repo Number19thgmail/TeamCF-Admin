@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:team_c_f/data/data.dart';
+import 'package:team_c_f/store/bloc/myteam.dart';
 import 'package:team_c_f/store/login/login.dart';
 import 'package:team_c_f/store/selectteam/selectteam.dart';
 
 class SelectTeamView extends StatelessWidget {
   // Класс отображения выбора команды или регистрации новой
   final SelectTeam selectTeam;
+  final bool updateMyTeam;
 
   const SelectTeamView({
     Key? key,
     required this.selectTeam,
+    required this.updateMyTeam,
   }) : super(key: key);
 
   @override
@@ -135,7 +139,11 @@ class SelectTeamView extends StatelessWidget {
                                 selectTeam.registrateTeam().then(
                                   (_) {
                                     context.read<Login>().validateInApp();
-                                    context.read<Login>().clearData();
+                                    context.read<Data>().clearData();
+                                    if (updateMyTeam)
+                                      context
+                                          .read<MyTeamBloc>()
+                                          .add(MyTeamEvent.reset);
                                   },
                                 );
                               }
@@ -146,7 +154,11 @@ class SelectTeamView extends StatelessWidget {
                             selectTeam.assertTeam().then(
                               (_) {
                                 context.read<Login>().validateInApp();
-                                context.read<Login>().clearData();
+                                context.read<Data>().clearData();
+                                if (updateMyTeam)
+                                  context
+                                      .read<MyTeamBloc>()
+                                      .add(MyTeamEvent.reset);
                               },
                             );
                           }

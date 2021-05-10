@@ -17,6 +17,17 @@ class Data with ChangeNotifier {
     });
   }
 
+  void clearData() {
+    downloadSuccessful = false;
+    notifyListeners();
+    DataService().initData().then((result) {
+      sortTour();
+      sortData();
+      downloadSuccessful = result;
+      notifyListeners();
+    });
+  }
+
   static late CurrentTourData currentTour;
   static late List<PlayerData> players;
   static late List<TeamData> teams;

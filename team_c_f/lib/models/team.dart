@@ -36,13 +36,14 @@ class TeamData {
     };
   }
 
-  factory TeamData.fromMap({required Map<String, dynamic> data}) {
+  factory TeamData.fromMap({required Map<String, dynamic> data, required String docId}) {
     TeamData t = TeamData(
       name: data['Name'] as String,
       uidCapitan: data['Capitan'],
     );
     t.players = [...data['Players']];
     t.goal = [...data['Goal']];
+    t.docId = docId;
     return t;
   }
 }

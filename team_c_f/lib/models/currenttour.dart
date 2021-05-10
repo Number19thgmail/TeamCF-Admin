@@ -1,4 +1,5 @@
 class CurrentTourData {
+  late String docId;
   String round;
   CurrentTourData({required this.round});
 
@@ -8,7 +9,9 @@ class CurrentTourData {
     };
   }
 
-  factory CurrentTourData.fromMap({required Map<String, dynamic> data}){
-    return CurrentTourData(round: data['Round']);
+  factory CurrentTourData.fromMap({required Map<String, dynamic> data, required String docId}){
+    CurrentTourData curr = CurrentTourData(round: data['Round']);
+    curr.docId = docId;
+    return curr;
   }
 }

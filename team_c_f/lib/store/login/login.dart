@@ -21,7 +21,7 @@ abstract class LoginBase with Store {
   InfoData? info;
 
   @action
-  void initInfo(){
+  void initInfo() {
     LoginService().getInfo().then((InfoData value) => info = value);
   }
 
@@ -85,12 +85,13 @@ abstract class LoginBase with Store {
     loginStatus = ObservableFuture.value(false);
     userId = '';
     registrateInApp = false;
+    clearData();
     return await Future.value(true);
   }
 
   @action
   Future validateInApp() async {
-    registrateInApp = await   LoginService().existPlayer(uid: userId);
+    registrateInApp = await LoginService().existPlayer(uid: userId);
   }
 
   Future getGoogleUser() async {
@@ -105,7 +106,7 @@ abstract class LoginBase with Store {
   }
 
   @action
-  void clearData(){
+  void clearData() {
     userName = '';
     selectTeam.lastTeamName = '';
     selectTeam.teamName = '';

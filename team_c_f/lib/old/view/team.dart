@@ -84,7 +84,7 @@ class _TeamViewState extends State<TeamView> {
             ShowTeam(
               // Показ информации о моей команде
               team: context.read<Tournament>().myTeam!,
-            )
+            ),
         ],
       ),
     );

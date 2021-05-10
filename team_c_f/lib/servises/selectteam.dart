@@ -36,9 +36,16 @@ class SelectTeamService {
     return _teamsCollection.get().then(
           (QuerySnapshot response) => response.docs
               .where((QueryDocumentSnapshot doc) =>
-                  TeamData.fromMap(data: doc.data()).players.length < 3)
+                  TeamData.fromMap(
+                    data: doc.data(),
+                    docId: doc.id,
+                  ).players.length <
+                  3)
               .map(
-                (QueryDocumentSnapshot doc) => TeamData.fromMap(data: doc.data()).name,
+                (QueryDocumentSnapshot doc) => TeamData.fromMap(
+                  data: doc.data(),
+                  docId: doc.id,
+                ).name,
               )
               .toList(),
         );

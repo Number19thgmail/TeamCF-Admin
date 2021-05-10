@@ -53,7 +53,7 @@ class LoginView extends StatelessWidget {
                 if (login.info != null)
                   Navigator.of(context)
                       .push(MaterialPageRoute<bool?>(
-                          builder: (_) => Reglament(info: login.info!)))
+                          builder: (_) => ReglamentView(info: login.info!)))
                       .then((value) => login.changeName(value!.toString()));
               },
               child: Text('Правила конкурса'),
@@ -95,6 +95,7 @@ class LoginView extends StatelessWidget {
                   .setDataToSelectTeam(buttonText: 'Зарегистрироваться');
               return SelectTeamView(
                 selectTeam: context.read<Login>().selectTeam,
+                updateMyTeam: false,
               );
             },
           ),

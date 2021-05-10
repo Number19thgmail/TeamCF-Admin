@@ -34,13 +34,14 @@ class PlayerData {
     };
   }
 
-  factory PlayerData.fromMap({required Map<String, dynamic> data}) {
+  factory PlayerData.fromMap({required Map<String, dynamic> data, required String docId}) {
     PlayerData p = PlayerData(
       name: data['Name'],
       team: data['Team'],
       uid: data['UserId'],
     );
     p.points = [...data['Points']];
+    p.docId = docId;
     return p;
   }
 }

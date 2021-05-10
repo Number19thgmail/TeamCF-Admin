@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/servises/selectteam.dart';
 import 'package:team_c_f/models/team.dart';
 import 'package:team_c_f/models/player.dart';
@@ -70,6 +71,7 @@ abstract class _SelectTeamBase with Store {
       uid: uId,
       docId: docId,
     );
+    Data().clearData();
     return docId == null
         ? await SelectTeamService().registratePlayer(
             player: p,
