@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/models/player.dart';
-import 'package:team_c_f/store/bloc/myteam.dart';
-import 'package:team_c_f/store/components/unconfirmedplayer.dart';
+import 'package:team_c_f/storebloc/blocs/myteam.dart';
+import 'package:team_c_f/storebloc/models/unconfirmedplayer.dart';
 import 'package:provider/provider.dart';
-import 'package:team_c_f/store/team/team.dart';
 
 class UnconfirmedPlayerView extends StatelessWidget {
   // Класс, для отображения неподтвержденных игроков

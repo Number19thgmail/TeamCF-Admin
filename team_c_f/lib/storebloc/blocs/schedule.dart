@@ -1,10 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:team_c_f/servises/schedule.dart';
-import 'package:team_c_f/store/components/schedule.dart';
-import 'package:team_c_f/store/components/unconfirmedplayer.dart';
+import 'package:team_c_f/data/data.dart';
+import 'package:team_c_f/models/tour.dart';
+import 'package:team_c_f/storebloc/components/schedule.dart';
+import 'package:team_c_f/storebloc/models/tour.dart';
 
 enum ScheduleEvent {
-  createSchedule
+  createSuccessful
 } //confirmedPlayer, unconfirmedPlayer, reset }
 
 class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
@@ -13,8 +14,14 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   @override
   Stream<ScheduleState> mapEventToState(ScheduleEvent event) async* {
     switch (event) {
-      case ScheduleEvent.createSchedule:
-        yield state;
+      case ScheduleEvent.createSuccessful:
+        yield state.copyWith(
+          tours: Data.tours
+              .map(
+                (TourData tour) => TourModel(tour: tour),
+              )
+              .toList(),
+        );
         break;
 
       // switch (event) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/servises/servises.dart';
-import 'package:team_c_f/store/components/team.dart';
+import 'package:team_c_f/storebloc/models/team.dart';
 import 'package:team_c_f/views/player.dart';
 
 class ShowTeam extends StatelessWidget {

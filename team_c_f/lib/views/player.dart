@@ -2,7 +2,7 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:team_c_f/models/player.dart';
 import 'package:team_c_f/servises/servises.dart';
-import 'package:team_c_f/store/bloc/myteam.dart';
+import 'package:team_c_f/storebloc/blocs/myteam.dart';
 import 'package:provider/provider.dart';
 
 class ShowPlayer extends StatelessWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/store/bloc/myteam.dart';
+import 'package:team_c_f/storebloc/blocs/myteam.dart';
 import 'package:team_c_f/store/login/login.dart';
 import 'package:team_c_f/store/selectteam/selectteam.dart';
 

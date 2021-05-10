@@ -13,7 +13,7 @@ class DataService {
   final CollectionReference _currentTourCollection =
       FirebaseFirestore.instance.collection('currentTour');
   final CollectionReference _toursCollection =
-      FirebaseFirestore.instance.collection('tours');
+      FirebaseFirestore.instance.collection('schedule');
   // final CollectionReference _forecastsCollection =
   //     FirebaseFirestore.instance.collection('forecasts');
 

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/models/currenttour.dart';
+import 'package:team_c_f/models/meet.dart';
 import 'package:team_c_f/models/player.dart';
 import 'package:team_c_f/models/team.dart';
 import 'package:team_c_f/models/tour.dart';
 import 'package:team_c_f/servises/data.dart';
+import 'package:team_c_f/servises/schedule.dart';
 
 class Data with ChangeNotifier {
   bool downloadSuccessful = false;
@@ -35,7 +37,7 @@ class Data with ChangeNotifier {
 
   static void sortTour() {
     tours.sort((TourData a, b) =>
-        a.round.compareTo(b.round)); // сортировка туров по порядку
+        int.parse(a.round).compareTo(int.parse(b.round))); // сортировка туров по порядку
   }
 
   static void sortData() {
@@ -56,31 +58,33 @@ class Data with ChangeNotifier {
                 teams.where((TeamData team) => team.name == pair[0]).single;
             TeamData away =
                 teams.where((TeamData team) => team.name == pair[1]).single;
-            if (home.goal[round] == null && away.goal[round] == null) {
-              home.lose++;
-              away.lose++;
-            } else if (home.goal[round] == null) {
-              home.lose++;
-              away.win++;
-              home.missed += away.goal[round]!;
-            } else if (away.goal[round] == null) {
-              away.lose++;
-              home.win++;
-              away.missed += home.goal[round]!;
-            } else {
-              int goalHome = home.goal[round]!;
-              int goalAway = away.goal[round]!;
-              home.missed += goalAway;
-              away.missed += goalHome;
-              if (goalHome > goalAway) {
-                home.win++;
-                away.lose++;
-              } else if (goalAway > goalHome) {
-                away.win++;
+            if (home.goal.length > round) {
+              if (home.goal[round] == null && away.goal[round] == null) {
                 home.lose++;
+                away.lose++;
+              } else if (home.goal[round] == null) {
+                home.lose++;
+                away.win++;
+                home.missed += away.goal[round]!;
+              } else if (away.goal[round] == null) {
+                away.lose++;
+                home.win++;
+                away.missed += home.goal[round]!;
               } else {
-                home.draw++;
-                away.draw++;
+                int goalHome = home.goal[round]!;
+                int goalAway = away.goal[round]!;
+                home.missed += goalAway;
+                away.missed += goalHome;
+                if (goalHome > goalAway) {
+                  home.win++;
+                  away.lose++;
+                } else if (goalAway > goalHome) {
+                  away.win++;
+                  home.lose++;
+                } else {
+                  home.draw++;
+                  away.draw++;
+                }
               }
             }
           },
@@ -101,49 +105,8 @@ class Data with ChangeNotifier {
       },
     ); // указание текущей позиции команды
   }
-  // static void initTeams({required List<TeamData> data}){
-  //   data.sort((TeamData a, b) => a.points.compareTo(b.points));
-  // }
 
-  // Текущий тур (подписка)
-  // {
-  //     *получаемые поля
-  //     номер тура (строка).
-  // }
-  // Игроки
-  // {
-  //     *получаемые поля
-  //     идентификатор (строка),
-  //     имя (строка),
-  //     название команды (строка),
-  //     лист забитых за тур (лист интов, null при пропуске тура).
-
-  //     *вычисляемые поля
-  //     максимум забитых за тур (инт),
-  //     количество забитых за все матчи (инт),
-  //     позиция (инт).
-  // }
-  // Команды
-  // {
-  //     *получаемые поля
-  //     название (строка),
-  //     идентификатор капитана (строка)
-  //     лист участников (лист строк с идентификаторами).
-
-  //     *вычисляемые поля
-  //     максимум забитых за тур (инт)
-  //     количество забитых за все матчи (инт),
-  //     количество пропущенных за все матчи (инт),
-  //     победы (инт),
-  //     ничьи (инт),
-  //     поражения (инт),
-  //     очки (инт),
-  //     позиция (инт).
-  // }
-  // Туры
-  // {
-  //     *получаемые поля
-  //     номер тура (строка),
-  //     лист участников (лист типа: команда, забитые).
-  // }
+  static Future<MeetData> getMeets(String stage) async {
+    return ScheduleService().getMeets(stage: stage);
+  }
 }

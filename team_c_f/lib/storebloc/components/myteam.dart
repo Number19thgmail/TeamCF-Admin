@@ -1,8 +1,8 @@
 import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/models/player.dart';
 import 'package:team_c_f/models/team.dart';
-import 'package:team_c_f/store/components/team.dart';
-import 'package:team_c_f/store/components/unconfirmedplayer.dart';
+import 'package:team_c_f/storebloc/models/team.dart';
+import 'package:team_c_f/storebloc/models/unconfirmedplayer.dart';
 
 class MyTeamState {
   final String uid;

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:team_c_f/servises/myteam.dart';
-import 'package:team_c_f/store/components/myteam.dart';
-import 'package:team_c_f/store/components/unconfirmedplayer.dart';
+import 'package:team_c_f/storebloc/components/myteam.dart';
+import 'package:team_c_f/storebloc/models/unconfirmedplayer.dart';
 
 enum MyTeamEvent { confirmedPlayer, unconfirmedPlayer, reset }
 
