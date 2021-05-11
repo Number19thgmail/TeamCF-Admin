@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/servises/createschedule.dart';
 import 'package:team_c_f/servises/servises.dart';
-import 'package:team_c_f/storebloc/components/createschedule.dart';
+import 'package:team_c_f/storebloc/states/createschedule.dart';
 
 enum CreateScheduleEvent { changeCircle, createSchedule }
 

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:team_c_f/components/unconfirmedplayer.dart';
 import 'package:team_c_f/components/selectteam.dart';
 import 'package:team_c_f/storebloc/blocs/myteam.dart';
-import 'package:team_c_f/storebloc/components/myteam.dart';
+import 'package:team_c_f/storebloc/states/myteam.dart';
 import 'package:team_c_f/store/login/login.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/views/team.dart';

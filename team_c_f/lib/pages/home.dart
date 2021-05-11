@@ -5,13 +5,16 @@ import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/pages/schedule.dart';
 import 'package:team_c_f/pages/team.dart';
+import 'package:team_c_f/pages/tour.dart';
 import 'package:team_c_f/storebloc/blocs/myteam.dart';
 import 'package:team_c_f/storebloc/blocs/schedule.dart';
-import 'package:team_c_f/storebloc/components/myteam.dart';
-import 'package:team_c_f/storebloc/components/schedule.dart';
+import 'package:team_c_f/storebloc/blocs/tour.dart';
+import 'package:team_c_f/storebloc/states/myteam.dart';
+import 'package:team_c_f/storebloc/states/schedule.dart';
 import 'package:team_c_f/store/home/home.dart';
 import 'package:team_c_f/store/login/login.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:team_c_f/storebloc/states/tour.dart';
 
 class HomePage extends StatelessWidget {
   static Home state = Home();
@@ -31,6 +34,11 @@ class HomePage extends StatelessWidget {
                     ScheduleState(),
                   ),
                 ),
+                BlocProvider(
+                  create: (BuildContext context) => TourBloc(
+                    TourState(name: Data.currentTour.round),
+                  ),
+                ),
               ],
               child: Scaffold(
                 body: Observer(
@@ -40,16 +48,9 @@ class HomePage extends StatelessWidget {
                         if (state.selectedIndex == 0)
                           TeamPage()
                         else if (state.selectedIndex == 1)
-                          SchedulePage(),
-                        Data.tours.isNotEmpty
-                            ? Text(Data.tours[0].round)
-                            : Text('Туров нет'),
-                        ElevatedButton(
-                          onPressed: Provider.of<Login>(context).googleLogout,
-                          child: Text(
-                            '${state.selectedIndex}',
-                          ),
-                        ),
+                          SchedulePage()
+                        else if (state.selectedIndex == 2)
+                          TourPage(back: false)
                       ],
                     ),
                   ),

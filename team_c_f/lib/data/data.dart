@@ -37,7 +37,7 @@ class Data with ChangeNotifier {
 
   static void sortTour() {
     tours.sort((TourData a, b) =>
-        int.parse(a.round).compareTo(int.parse(b.round))); // сортировка туров по порядку
+        a.round.compareTo(b.round)); // сортировка туров по порядку
   }
 
   static void sortData() {

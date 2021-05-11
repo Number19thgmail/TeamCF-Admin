@@ -103,7 +103,7 @@ List<TourData> createSchedule(int circles) {
         pair.add(match);
       }
       curr.add(
-        TourData.all(round: (i + 1 + q * tour).toString(), team: pair),
+        TourData.all(round: (i + 1 + q * tour), team: pair),
       );
     }
   }

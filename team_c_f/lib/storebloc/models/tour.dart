@@ -9,8 +9,8 @@ class TourModel {
   late List<List<int?>> goals;
 
   TourModel({required TourData tour}) {
-    name = tour.name ?? tour.round;
-    int round = int.parse(tour.round) - 1;
+    name = tour.name ?? tour.round.toString();
+    int round = tour.round - 1;
     result = tour.team.map(
       (List<String> pair) {
         return pair.map(

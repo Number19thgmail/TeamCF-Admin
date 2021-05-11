@@ -5,7 +5,7 @@ class Home = _HomeBase with _$Home;
 
 abstract class _HomeBase with Store {
   @observable
-  int selectedIndex = 0;
+  int selectedIndex = 1;
 
   @action
   void selectIndex(int index){

@@ -1,10 +1,10 @@
 class TourData {
-  final String round;
+  final int round;
   String? name;
   late List<List<String>> team;
   TourData({required this.round, this.name});
 
-  String get stage => name?? round;
+  String get stage => name?? round.toString();
 
   TourData.all({
     required this.round,
@@ -15,7 +15,7 @@ class TourData {
     return {
       'Round': round,
       'Team': team.map((List<String> match) => match.first + '><' + match.last).toList(),
-      'Name': name ?? round,
+      'Name': name ?? round.toString(),
     };
   }
 

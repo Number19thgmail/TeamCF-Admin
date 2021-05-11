@@ -62,7 +62,9 @@ class CreateScheduleView extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     bloc.add(CreateScheduleEvent.createSchedule);
-                    context.read<ScheduleBloc>().add(ScheduleEvent.createSuccessful);
+                    context
+                        .read<ScheduleBloc>()
+                        .add(ScheduleEvent(event: Event.createSuccessful));
                   },
                   child: Text(
                     'Создать расписание',
