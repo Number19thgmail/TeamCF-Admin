@@ -1,6 +1,6 @@
 class CurrentTourData {
   late String docId;
-  String round;
+  int round;
   CurrentTourData({required this.round});
 
   Map<String, dynamic> toMap() {

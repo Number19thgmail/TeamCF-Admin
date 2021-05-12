@@ -9,6 +9,16 @@ class ShowTour extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String title;
+    double fontSize;
+    if (tour.name.split(' ').length > 1) {
+      title =
+          tour.name.split(' ')[0] + '\n' + tour.name.split(' ')[1] + ' матч';
+      fontSize = MediaQuery.of(context).size.width / 20;
+    } else {
+      title = tour.name;
+      fontSize = MediaQuery.of(context).size.width / 15;
+    }
     return Container(
       padding: const EdgeInsets.all(3.0),
       child: InkWell(
@@ -20,10 +30,10 @@ class ShowTour extends StatelessWidget {
         child: CircleAvatar(
             radius: MediaQuery.of(context).size.width / 10,
             child: Text(
-              tour.name,
-              maxLines: 3,
-              style:
-                  TextStyle(fontSize: MediaQuery.of(context).size.width / 15),
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: TextStyle(fontSize: fontSize),
             )),
       ),
     );
