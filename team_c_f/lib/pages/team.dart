@@ -24,6 +24,10 @@ class TeamPage extends StatelessWidget {
             child: Column(
               children: [
                 Card(
+                  color: Colors.cyan[300],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: ListTile(
                     leading: CircleAvatar(
                       // Показывает место в таблице бомбардиров
