@@ -3,13 +3,13 @@ import 'package:team_c_f/models/team.dart';
 import 'package:team_c_f/models/tour.dart';
 
 class TourModel {
+  late int stage;
   late String name;
   late List<List<Map<String, int?>>> result;
-  late List<List<String>> matches;
-  late List<List<int?>> goals;
 
   TourModel({required TourData tour}) {
     name = tour.name ?? tour.round.toString();
+    stage = tour.round;
     int round = tour.round - 1;
     result = tour.team.map(
       (List<String> pair) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/storebloc/blocs/schedule.dart';
+import 'package:team_c_f/storebloc/blocs/tour.dart' as tourBloc;
 import 'package:team_c_f/storebloc/models/tour.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +24,12 @@ class ShowTour extends StatelessWidget {
       padding: const EdgeInsets.all(3.0),
       child: InkWell(
         onTap: () {
+          // context.read<tourBloc.TourBloc>().add(
+          //       tourBloc.TourEvent(
+          //           event: tourBloc.Event.selectTour, stage: tour.stage),
+          //     );
           context.read<ScheduleBloc>().add(
-                ScheduleEvent(event: Event.selectTour, stage: tour.name),
+                ScheduleEvent(event: Event.selectTour, round: tour.stage),
               );
         },
         child: CircleAvatar(

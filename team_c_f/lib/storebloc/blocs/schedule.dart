@@ -5,10 +5,10 @@ import 'package:team_c_f/storebloc/states/schedule.dart';
 import 'package:team_c_f/storebloc/models/tour.dart';
 
 class ScheduleEvent {
-  final String? stage;
+  int? round;
   final Event event;
 
-  ScheduleEvent({this.stage, required this.event});
+  ScheduleEvent({required this.event, this.round});
 }
 
 enum Event {
@@ -33,9 +33,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         );
         break;
       case Event.selectTour:
-        if (event.stage != null) {
-          yield state.copyWith(nameTour: event.stage, tourSelected: true);
-        }
+          yield state.copyWith(tourSelected: true, round: event.round);
         break;
       case Event.unselectTour:
         yield state.copyWith(tourSelected: false);

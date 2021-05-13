@@ -6,7 +6,7 @@ import 'package:team_c_f/storebloc/models/tour.dart';
 import 'package:team_c_f/storebloc/states/tour.dart';
 
 class TourEvent {
-  String? stage;
+  int? stage;
   final Event event;
 
   TourEvent({this.stage, required this.event});
@@ -32,7 +32,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
         break;
       case Event.selectTour:
         if (event.stage != null) {
-          yield state;
+          yield await state.copyWith(round: event.stage);
         }
         break;
     }

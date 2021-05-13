@@ -6,24 +6,23 @@ import 'package:team_c_f/models/team.dart';
 import 'package:team_c_f/models/tour.dart';
 import 'package:team_c_f/servises/data.dart';
 import 'package:team_c_f/servises/schedule.dart';
+import 'package:team_c_f/servises/tour.dart';
 
 class Data with ChangeNotifier {
   bool downloadSuccessful = false;
 
   Data() {
-    DataService().initData().then((result) {
-      sortTour();
-      sortData();
-      downloadSuccessful = result;
-      notifyListeners();
-    });
+    initData();
   }
 
   void clearData() {
     downloadSuccessful = false;
     notifyListeners();
+    initData();
+  }
+
+  void initData(){
     DataService().initData().then((result) {
-      sortTour();
       sortData();
       downloadSuccessful = result;
       notifyListeners();
@@ -41,8 +40,8 @@ class Data with ChangeNotifier {
   }
 
   static void sortData() {
-    players.sort((PlayerData a, b) => b.goals
-        .compareTo(a.goals)); // сортировка участников по количеству забитых
+    sortTour();
+    sortPlayer(players: players);
     players.forEach(
       (PlayerData p) {
         p.prevPosition = players.indexOf(p) + 1;
@@ -91,6 +90,19 @@ class Data with ChangeNotifier {
         );
       },
     ); // определение wdl для команд и количества пропущенных
+    sortTeam(teams: teams);
+    teams.forEach(
+      (TeamData t) {
+        t.prevPosition = teams.indexOf(t) + 1;
+      },
+    ); // указание текущей позиции команды
+  }
+
+  static Future<MeetData> getMeets(int stage) async {
+    return TourService().getMeets(stage: stage);
+  }
+
+  static void sortTeam({required List<TeamData> teams}) {
     teams.sort((TeamData a, b) => (b.goals - b.missed)
         .compareTo(a.goals - a.missed)); // сортировка команд по разнице забитых
     teams.sort((TeamData a, b) =>
@@ -99,14 +111,10 @@ class Data with ChangeNotifier {
         b.goals.compareTo(a.goals)); // сортировка команд по количеству забитых
     teams.sort((TeamData a, b) =>
         b.points.compareTo(a.points)); // сортировка команд по количеству очков
-    teams.forEach(
-      (TeamData t) {
-        t.prevPosition = teams.indexOf(t) + 1;
-      },
-    ); // указание текущей позиции команды
   }
 
-  static Future<MeetData> getMeets(String stage) async {
-    return ScheduleService().getMeets(stage: stage);
+  static void sortPlayer({required List<PlayerData> players}) {
+    players.sort((PlayerData a, b) => b.goals
+        .compareTo(a.goals)); // сортировка участников по количеству забитых
   }
 }

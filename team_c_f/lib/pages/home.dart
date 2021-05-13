@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget {
                 ),
                 BlocProvider(
                   create: (BuildContext context) => TourBloc(
-                    TourState(name: Data.currentTour.round),
+                    TourState(round: Data.currentTour.round),
                   ),
                 ),
               ],
