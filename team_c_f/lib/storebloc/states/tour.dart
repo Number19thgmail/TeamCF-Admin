@@ -1,35 +1,31 @@
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/models/meet.dart';
+import 'package:team_c_f/models/meets.dart';
 import 'package:team_c_f/models/tour.dart';
-import 'package:team_c_f/servises/tour.dart';
 import 'package:team_c_f/storebloc/models/meet.dart';
 import 'package:team_c_f/storebloc/models/tour.dart';
 
 class TourState {
   final int round;
-  MeetModel? meets;
+  late MeetsModel meets;
   late TourModel tour;
 
   TourState({required this.round}) {
     tour = TourModel(
         tour: Data.tours.where((TourData t) => t.round == round).single);
-    TourService()
-        .getMeets(stage: round)
-        .then((MeetData value) => meets = MeetModel(meet: value));
+    meets = MeetsModel(
+        meet: Data.meets.where((MeetsData m) => m.round == round).single);
   }
 
-  Future<TourState> copyWith({
+  TourState copyWith({
     int? round,
-    MeetModel? meets,
+    MeetsData? meetsData,
     TourModel? tour,
-  }) async {
-    if (round != null) {
-      if (await TourService().existsMeets(stage: round)) {
-        meets = MeetModel(
-          meet: await TourService().getMeets(stage: round),
-        );
-      }
-    }
+  }) {
+    MeetsModel? meets;
+    if (meetsData != null) meets = MeetsModel(meet: meetsData);
+    // if (round != null)
+    //   meets = MeetsModel(
+    //       meet: Data.meets.where((MeetsData m) => m.round == round).single);
     return TourState.all(
       round: round ?? this.round,
       meets: meets ?? this.meets,

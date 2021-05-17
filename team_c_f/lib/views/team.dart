@@ -13,9 +13,14 @@ class ShowTeam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: [
           Card(
+            color: Colors.cyan[200],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Observer(
               builder: (_) => ListTile(
                 // Информация о команде
@@ -25,9 +30,10 @@ class ShowTeam extends StatelessWidget {
                   ),
                 ),
                 title: Text(team.team.name),
-                trailing: Text(//team.team.points.toString()
-                    showPoints(team.points),
-                    ),
+                trailing: Text(
+                  //team.team.points.toString()
+                  showPoints(team.points),
+                ),
               ),
             ),
           ),

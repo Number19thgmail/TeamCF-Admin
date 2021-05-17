@@ -139,7 +139,7 @@ class SelectTeamView extends StatelessWidget {
                                 selectTeam.registrateTeam().then(
                                   (_) {
                                     context.read<Login>().validateInApp();
-                                    context.read<Data>().clearData();
+                                    context.read<Data>().refreshData();
                                     if (updateMyTeam)
                                       context
                                           .read<MyTeamBloc>()
@@ -154,7 +154,7 @@ class SelectTeamView extends StatelessWidget {
                             selectTeam.assertTeam().then(
                               (_) {
                                 context.read<Login>().validateInApp();
-                                context.read<Data>().clearData();
+                                context.read<Data>().refreshData();
                                 if (updateMyTeam)
                                   context
                                       .read<MyTeamBloc>()

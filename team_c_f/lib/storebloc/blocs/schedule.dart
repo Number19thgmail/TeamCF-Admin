@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/models/tour.dart';
+import 'package:team_c_f/storebloc/blocs/tour.dart';
 import 'package:team_c_f/storebloc/states/schedule.dart';
 import 'package:team_c_f/storebloc/models/tour.dart';
+import 'package:team_c_f/storebloc/states/tour.dart';
 
 class ScheduleEvent {
   int? round;
@@ -33,7 +35,11 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         );
         break;
       case Event.selectTour:
-          yield state.copyWith(tourSelected: true, round: event.round);
+        state.tourBloc = TourBloc(
+          TourState(round: event.round!),
+        );
+        yield state.copyWith(
+            tourSelected: true, round: event.round!, tourBloc: state.tourBloc);
         break;
       case Event.unselectTour:
         yield state.copyWith(tourSelected: false);

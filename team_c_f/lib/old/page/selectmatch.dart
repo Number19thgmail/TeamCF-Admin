@@ -3,9 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:team_c_f/old/data/shortmatch.dart';
 import 'package:team_c_f/old/servise/htmlparse.dart';
 import 'package:team_c_f/old/servise/make.dart';
-import 'package:intl/intl.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 import 'package:http/http.dart' as http;
 
 class SelectMatch extends StatefulWidget {
@@ -28,16 +25,18 @@ class _SelectMatchState extends State<SelectMatch> {
       (date) {
         http.Client()
             .get(Uri.parse('https://www.sports.ru/football/match/$date/'))
-            .then((value) {
-          context.read<DataMatch>().add(
-            [
-              ...getMatchs(
-                body: value.body,
-                date: '$date',
-              )
-            ],
-          );
-        });
+            .then(
+          (value) {
+            context.read<DataMatch>().add(
+              [
+                ...getMatchs(
+                  body: value.body,
+                  date: '$date',
+                )
+              ],
+            );
+          },
+        );
       },
     );
   }
@@ -59,24 +58,24 @@ class _SelectMatchState extends State<SelectMatch> {
             ElevatedButton(
               onPressed: () {
                 range.clear();
-                DateRangePicker.showDatePicker(
-                  context: context,
-                  initialFirstDate: DateTime.now(),
-                  initialLastDate: DateTime.now(),
-                  firstDate: DateTime(2021),
-                  lastDate: DateTime(2040),
-                ).then((value) {
-                  setState(() {
-                    period = value;
-                    for (DateTime i = value.first;
-                        i.isBefore(value.last.add(Duration(minutes: 1)));
-                        i = i.add(Duration(days: 1))) {
-                      range.add(DateFormat('yyyy-MM-dd').format(i));
-                    }
-                  });
-                  context.read<DataMatch>().data.clear();
-                  download();
-                });
+                // DateRangePicker.showDatePicker(
+                //   context: context,
+                //   initialFirstDate: DateTime.now(),
+                //   initialLastDate: DateTime.now(),
+                //   firstDate: DateTime(2021),
+                //   lastDate: DateTime(2040),
+                // ).then((value) {
+                //   setState(() {
+                //     period = value;
+                //     for (DateTime i = value.first;
+                //         i.isBefore(value.last.add(Duration(minutes: 1)));
+                //         i = i.add(Duration(days: 1))) {
+                //       range.add(DateFormat('yyyy-MM-dd').format(i));
+                //     }
+                //   });
+                //   context.read<DataMatch>().data.clear();
+                //   download();
+                // });
               },
               child: Text('Выбрать даты'),
             ),

@@ -37,7 +37,7 @@ dependencies:
   bottom_navy_bar: ^6.0.0
 
   provider: ^5.0.0
-  date_range_picker: ^1.0.7
+  flutter_date_pickers: ^0.2.4
   firebase_auth: ^1.0.1
   cloud_firestore: ^1.0.3
   google_sign_in: ^5.0.1

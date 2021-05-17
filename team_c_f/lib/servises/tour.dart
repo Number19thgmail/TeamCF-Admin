@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:team_c_f/models/meet.dart';
+import 'package:team_c_f/models/meets.dart';
 
 class TourService {
   final CollectionReference _meetsCollection =
@@ -10,21 +10,24 @@ class TourService {
     QuerySnapshot snapshot = await _meetsCollection.get();
     if (snapshot.docs.length != 1) {
       _meetsCollection.doc(doc.id).delete();
-      return _meetsCollection
-          .where('Round', isEqualTo: stage)
-          .get()
-          .then((QuerySnapshot response) => response.docs.length == 1);
+      return (await _meetsCollection.where('Round', isEqualTo: stage).get())
+              .docs
+              .length ==
+          1;
     } else {
       _meetsCollection.doc(doc.id).delete();
       return false;
     }
   }
 
-  Future<MeetData> getMeets({required int stage}) {
-    return _meetsCollection.where('Round', isEqualTo: stage).get().then(
-          (QuerySnapshot response) => MeetData.fromMap(
+  Future<MeetsData?> getMeets({required int stage}) async {
+    QuerySnapshot response =
+        await _meetsCollection.where('Round', isEqualTo: stage).get();
+    return response.docs.length != 0
+        ? MeetsData.fromMap(
             data: response.docs.single.data(),
-          ),
-        );
+            uid: response.docs.single.id,
+          )
+        : null;
   }
 }

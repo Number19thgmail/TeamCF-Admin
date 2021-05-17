@@ -2,6 +2,16 @@ import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/models/team.dart';
 import 'package:team_c_f/models/tour.dart';
 
+String showSelectIn(int count) {
+  return count > 0
+      ? count == 1
+          ? ' (Выбран 1 матч)'
+          : count < 5
+              ? ' (Выбрано $count матча)'
+              : ' (Выбрано $count матчей)'
+      : '';
+}
+
 String showPoints(int points) {
   // Функция изменения склонения слова "N очков"
   return points.toString() +
@@ -68,12 +78,12 @@ String showTours({required int tours}) {
 List<TourData> createSchedule(int circles) {
   List<TeamData> registTeam =
       Data.teams.where((TeamData team) => team.players.length == 3).toList();
-  List<String> teams =['1', '2', '3', '4', '5']; 
+  List<String> teams = ['1', '2', '3', '4', '5'];
   // registTeam
   //     .map((TeamData team) => team.name)
   //     .toList(); //['1', '2', '3', '4', '5'];
   List<TourData> curr = [];
-  int count = 5;//registTeam.length;
+  int count = 5; //registTeam.length;
   int tour = (count.isEven ? count - 1 : count);
   for (int q = 0; q < circles; q++) {
     for (int i = 0; i < tour; i++) {

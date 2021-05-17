@@ -71,7 +71,7 @@ abstract class _SelectTeamBase with Store {
       uid: uId,
       docId: docId,
     );
-    Data().clearData();
+    Data().refreshData();
     return docId == null
         ? await SelectTeamService().registratePlayer(
             player: p,

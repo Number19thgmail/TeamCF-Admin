@@ -1,8 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:team_c_f/data/data.dart';
-import 'package:team_c_f/models/tour.dart';
-import 'package:team_c_f/storebloc/states/schedule.dart';
-import 'package:team_c_f/storebloc/models/tour.dart';
 import 'package:team_c_f/storebloc/states/tour.dart';
 
 class TourEvent {
@@ -28,11 +25,16 @@ class TourBloc extends Bloc<TourEvent, TourState> {
         yield state;
         break;
       case Event.selectMeets:
-        yield state;
+        Data().refreshData();
+        yield state.copyWith(round: state.round);
         break;
       case Event.selectTour:
         if (event.stage != null) {
-          yield await state.copyWith(round: event.stage);
+          yield state.copyWith(
+              round: event.stage,
+              meetsData: Data.meets
+                  .where((element) => element.round == event.stage)
+                  .single);
         }
         break;
     }

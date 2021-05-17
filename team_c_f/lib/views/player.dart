@@ -39,6 +39,10 @@ class ShowPlayer extends StatelessWidget {
           }
         },
         child: Card(
+                  color: Colors.cyan[100],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
           child: ListTile(
             leading: CircleAvatar(
               child: Text(player.prevPosition.toString()),

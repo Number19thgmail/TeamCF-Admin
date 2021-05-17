@@ -1,15 +1,16 @@
 import 'package:team_c_f/models/meet.dart';
+import 'package:team_c_f/models/meets.dart';
 
-class MeetModel {
-  late List<String> team = [];
-  late List<int> score = [];
-  late String info;
+class MeetsModel {
+  late int round;
+  late String deadline;
+  late List<MeetData> meets;
   late bool started;
 
-  MeetModel({required MeetData meet}) {
-    team = meet.team;
-    score = meet.score;
-    info = meet.date.toString();
+  MeetsModel({required MeetsData meet}) {
     started = meet.started;
+    deadline = meet.deadline;
+    meets = meet.meets;
+    round = meet.round;
   }
 }

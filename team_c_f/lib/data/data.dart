@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:team_c_f/models/currenttour.dart';
-import 'package:team_c_f/models/meet.dart';
+import 'package:team_c_f/models/meets.dart';
 import 'package:team_c_f/models/player.dart';
 import 'package:team_c_f/models/team.dart';
 import 'package:team_c_f/models/tour.dart';
 import 'package:team_c_f/servises/data.dart';
-import 'package:team_c_f/servises/schedule.dart';
 import 'package:team_c_f/servises/tour.dart';
 
 class Data with ChangeNotifier {
@@ -15,7 +14,7 @@ class Data with ChangeNotifier {
     initData();
   }
 
-  void clearData() {
+  void refreshData() {
     downloadSuccessful = false;
     notifyListeners();
     initData();
@@ -33,6 +32,7 @@ class Data with ChangeNotifier {
   static late List<PlayerData> players;
   static late List<TeamData> teams;
   static late List<TourData> tours;
+  static late List<MeetsData> meets;
 
   static void sortTour() {
     tours.sort((TourData a, b) =>
@@ -98,7 +98,7 @@ class Data with ChangeNotifier {
     ); // указание текущей позиции команды
   }
 
-  static Future<MeetData> getMeets(int stage) async {
+  static Future<MeetsData?> getMeets(int stage) async {
     return TourService().getMeets(stage: stage);
   }
 

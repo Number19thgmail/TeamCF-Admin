@@ -8,7 +8,7 @@ import 'package:team_c_f/storebloc/states/createschedule.dart';
 import 'package:team_c_f/storebloc/states/schedule.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/storebloc/models/tour.dart';
-import 'package:team_c_f/views/tour.dart';
+import 'package:team_c_f/views/touravatar.dart';
 
 class SchedulePage extends StatelessWidget {
   @override
@@ -22,7 +22,6 @@ class SchedulePage extends StatelessWidget {
               : Container(
                   height: MediaQuery.of(context).size.height,
                   width: double.infinity,
-                  color: Colors.amber,
                   child: Wrap(
                     alignment: WrapAlignment.spaceAround,
                     runAlignment: WrapAlignment.center,
@@ -30,7 +29,7 @@ class SchedulePage extends StatelessWidget {
                     runSpacing: 20,
                     children: [
                       ...bloc.state.tours.map(
-                        (TourModel tour) => ShowTour(tour: tour),
+                        (TourModel tour) => ShowTourAvatar(tour: tour),
                       ),
                     ],
                   ),

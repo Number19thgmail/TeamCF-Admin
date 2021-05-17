@@ -2,8 +2,6 @@ import 'package:team_c_f/data/data.dart';
 import 'package:team_c_f/models/tour.dart';
 import 'package:team_c_f/storebloc/blocs/tour.dart';
 import 'package:team_c_f/storebloc/models/tour.dart';
-import 'package:team_c_f/storebloc/models/meet.dart';
-import 'package:team_c_f/storebloc/states/tour.dart';
 
 class ScheduleState {
   bool get enableSchedule => Data.tours.isNotEmpty;
@@ -18,12 +16,12 @@ class ScheduleState {
 
   ScheduleState copyWith({
     List<TourModel>? tours,
-    MeetModel? meets,
+    //MeetsModel? meets,
     int? nameTour,
     bool? tourSelected,
     int? round,
+    TourBloc? tourBloc,
   }) {
-    if (round != null) tourBloc = TourBloc(TourState(round: round));
     return ScheduleState.all(
       tours: tours ?? this.tours,
       tourSelected: tourSelected ?? this.tourSelected,
