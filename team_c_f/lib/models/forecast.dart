@@ -1,21 +1,16 @@
 class ForecastData {
+  late String docId;
   final String uid;
-  final List<String> rate;
+  final List<int> rate;
   final String? team;
-  final String stage;
+  final int round;
   int result = 0;
-
-  // - идентификатор игрока,
-  // - лист прогнозов,
-  // - название тура,
-  // - название команды,
-  // - результат.
 
   ForecastData({
     required this.uid,
     required this.rate,
     required this.team,
-    required this.stage,
+    required this.round,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,19 +18,20 @@ class ForecastData {
       'UserId': uid,
       'Rate': rate,
       'Team': team,
-      'Stage': stage,
+      'Round': round,
       'Result': result,
     };
   }
 
-  factory ForecastData.fromMap({required Map<String, dynamic> data}) {
+  factory ForecastData.fromMap({required Map<String, dynamic> data, required String docId}) {
     ForecastData f = ForecastData(
       uid: data['UserId'],
-      rate: data['Rate'],
+      rate: data['Rate'].cast<int>(),
       team: data['Team'],
-      stage: data['Stage'],
+      round: data['Round'],
     );
     f.result = data['Result'];
+    f.docId = docId;
     return f;
   }
 }

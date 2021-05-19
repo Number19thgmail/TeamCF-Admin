@@ -33,6 +33,7 @@ class Data with ChangeNotifier {
   static late List<TeamData> teams;
   static late List<TourData> tours;
   static late List<MeetsData> meets;
+  static late List<String> names = [];
 
   static void sortTour() {
     tours.sort((TourData a, b) =>
@@ -96,10 +97,6 @@ class Data with ChangeNotifier {
         t.prevPosition = teams.indexOf(t) + 1;
       },
     ); // указание текущей позиции команды
-  }
-
-  static Future<MeetsData?> getMeets(int stage) async {
-    return TourService().getMeets(stage: stage);
   }
 
   static void sortTeam({required List<TeamData> teams}) {

@@ -8,9 +8,9 @@ class SelectMeetsService {
 
   void cteateMeet({required MeetsData meet}) {
     MeetsData current = Data.meets.where((element) => element.round == meet.round).single;
-    meet.uid = current.uid;
+    meet.docId = current.docId;
     Data.meets.remove(current);
     Data.meets.add(meet);
-    _meetsCollection.doc(meet.uid).update(meet.toMap());
+    _meetsCollection.doc(meet.docId).update(meet.toMap());
   }
 }

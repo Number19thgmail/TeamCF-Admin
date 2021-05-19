@@ -9,7 +9,7 @@ class MeetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime date = DateFormat('yyyy-MM-dd HH:mm').parse(meetData.date);
-    String status = meetData == 'Не начат'
+    String status = meetData.status == 'Не начат'
         ? date.day == DateTime.now().day
             ? DateFormat('HH:mm').format(date)
             : DateFormat('dd.MM').format(date)
@@ -18,7 +18,7 @@ class MeetView extends StatelessWidget {
       padding: const EdgeInsets.all(2.0),
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        color: meetData.started ? Colors.green[100] : Colors.yellow[200],
+        color: meetData.started ? Colors.green[100] : Colors.yellow[300],
         width: MediaQuery.of(context).size.width / 2 - 15,
         child: Column(
           children: [

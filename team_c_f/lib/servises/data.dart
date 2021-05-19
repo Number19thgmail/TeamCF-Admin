@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team_c_f/models/currenttour.dart';
 import 'package:team_c_f/data/data.dart';
+import 'package:team_c_f/models/forecast.dart';
 import 'package:team_c_f/models/meets.dart';
 import 'package:team_c_f/models/player.dart';
 import 'package:team_c_f/models/team.dart';
@@ -17,6 +18,8 @@ class DataService {
       FirebaseFirestore.instance.collection('schedule');
   final CollectionReference _meetsCollection =
       FirebaseFirestore.instance.collection('meets');
+  final CollectionReference _forecastsCollection =
+      FirebaseFirestore.instance.collection('forecasts');
 
   Future<bool> initData() async {
     Data.currentTour = await getCurrentTour();
@@ -24,7 +27,20 @@ class DataService {
     Data.teams = await getTeams();
     Data.tours = await getTours();
     Data.meets = await getMeets();
+    Data.names = await getUidLeftForecast();
     return true;
+  }
+
+  Future<List<String>> getUidLeftForecast() {
+    int round = Data.currentTour.round;
+    if (Data.meets.where((element) => element.round == round).single.started)
+      round++;
+    return _forecastsCollection.where('Round', isEqualTo: round).get().then(
+          (QuerySnapshot response) => response.docs
+              .map((QueryDocumentSnapshot doc) =>
+                  ForecastData.fromMap(data: doc.data(), docId: doc.id).uid)
+              .toList(),
+        );
   }
 
   Future<CurrentTourData> getCurrentTour() {
@@ -79,7 +95,7 @@ class DataService {
           (QuerySnapshot response) => response.docs
               .map(
                 (QueryDocumentSnapshot doc) =>
-                    MeetsData.fromMap(data: doc.data(), uid: doc.id),
+                    MeetsData.fromMap(data: doc.data(), docId: doc.id),
               )
               .toList(),
         );

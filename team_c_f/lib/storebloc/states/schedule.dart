@@ -16,7 +16,6 @@ class ScheduleState {
 
   ScheduleState copyWith({
     List<TourModel>? tours,
-    //MeetsModel? meets,
     int? nameTour,
     bool? tourSelected,
     int? round,
@@ -26,7 +25,7 @@ class ScheduleState {
       tours: tours ?? this.tours,
       tourSelected: tourSelected ?? this.tourSelected,
       round: round ?? this.round,
-      tourBloc: tourBloc ?? tourBloc,
+      tourBloc: tourBloc ?? this.tourBloc,
     );
   }
 

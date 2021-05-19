@@ -1,11 +1,11 @@
 import 'meet.dart';
 
 class MeetsData {
-  late String uid;
+  late String docId;
   final int round;
   final List<MeetData> meets;
   final String deadline;
-  final bool started;
+  late bool started;
 
   MeetsData({
     required this.round,
@@ -15,7 +15,7 @@ class MeetsData {
   });
 
   factory MeetsData.fromMap(
-      {required Map<String, dynamic> data, required String uid}) {
+      {required Map<String, dynamic> data, required String docId}) {
     List<MeetData> a = [];
     if (data['Meets'].isNotEmpty)
       a.addAll(
@@ -33,7 +33,7 @@ class MeetsData {
       deadline: data['Deadline'],
       started: data['Started'],
     );
-    meets.uid = uid;
+    meets.docId = docId;
     return meets;
   }
 

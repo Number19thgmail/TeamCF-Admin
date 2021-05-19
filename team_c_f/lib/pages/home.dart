@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:team_c_f/data/data.dart';
+import 'package:team_c_f/models/meets.dart';
 import 'package:team_c_f/pages/schedule.dart';
 import 'package:team_c_f/pages/team.dart';
 import 'package:team_c_f/pages/tour.dart';
 import 'package:team_c_f/storebloc/blocs/myteam.dart';
 import 'package:team_c_f/storebloc/blocs/schedule.dart';
 import 'package:team_c_f/storebloc/blocs/tour.dart';
+import 'package:team_c_f/storebloc/models/meet.dart';
 import 'package:team_c_f/storebloc/states/myteam.dart';
 import 'package:team_c_f/storebloc/states/schedule.dart';
 import 'package:team_c_f/store/home/home.dart';
@@ -36,7 +38,10 @@ class HomePage extends StatelessWidget {
                 ),
                 BlocProvider(
                   create: (BuildContext context) => TourBloc(
-                    TourState(round: Data.currentTour.round),
+                    TourState(
+                      round: Data.currentTour.round,
+                      uid: context.read<Login>().userId,
+                    ),
                   ),
                 ),
               ],

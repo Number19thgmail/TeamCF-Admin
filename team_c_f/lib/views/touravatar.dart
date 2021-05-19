@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:team_c_f/store/login/login.dart';
 import 'package:team_c_f/storebloc/blocs/schedule.dart';
 import 'package:team_c_f/storebloc/blocs/tour.dart' as tourBloc;
 import 'package:team_c_f/storebloc/models/tour.dart';
@@ -25,7 +26,11 @@ class ShowTourAvatar extends StatelessWidget {
       child: InkWell(
         onTap: () {
           context.read<ScheduleBloc>().add(
-                ScheduleEvent(event: Event.selectTour, round: tour.stage),
+                ScheduleEvent(
+                  event: Event.selectTour,
+                  round: tour.stage,
+                  uid: context.read<Login>().userId,
+                ),
               );
           context.read<tourBloc.TourBloc>().add(
                 tourBloc.TourEvent(

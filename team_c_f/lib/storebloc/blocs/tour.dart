@@ -10,6 +10,7 @@ class TourEvent {
 }
 
 enum Event {
+  showListAbsense,
   makeForecast,
   selectMeets,
   selectTour,
@@ -21,8 +22,11 @@ class TourBloc extends Bloc<TourEvent, TourState> {
   @override
   Stream<TourState> mapEventToState(TourEvent event) async* {
     switch (event.event) {
+      case Event.showListAbsense:
+        yield state.copyWith(size: !state.size);
+        break;
       case Event.makeForecast:
-        yield state;
+        yield state.copyWith();
         break;
       case Event.selectMeets:
         Data().refreshData();
@@ -31,10 +35,11 @@ class TourBloc extends Bloc<TourEvent, TourState> {
       case Event.selectTour:
         if (event.stage != null) {
           yield state.copyWith(
-              round: event.stage,
-              meetsData: Data.meets
-                  .where((element) => element.round == event.stage)
-                  .single);
+            round: event.stage,
+            // meetsData: Data.meets
+            //     .where((element) => element.round == event.stage)
+            //     .single,
+          );
         }
         break;
     }
