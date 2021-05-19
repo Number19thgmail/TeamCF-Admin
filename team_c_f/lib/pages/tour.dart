@@ -205,8 +205,8 @@ class TourPage extends StatelessWidget {
                     ),
               ShowTour(tour: state.tour),
               ElevatedButton(
-                onPressed: (){
-                  TourService().closeForecasting(round: state.tour.stage);
+                onPressed: () {
+                  bloc.add(TourEvent(event: Event.closeForecasting));
                 },
                 child: Text('Закрыть приём прогнозов'),
               ),

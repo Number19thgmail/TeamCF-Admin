@@ -14,39 +14,32 @@ class MeetView extends StatelessWidget {
             ? DateFormat('HH:mm').format(date)
             : DateFormat('dd.MM').format(date)
         : meetData.status;
+    String score = meetData.started
+        ? '${meetData.score.first}:${meetData.score.last}'
+        : '-';
+    double width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Container(
         padding: const EdgeInsets.all(8.0),
         color: meetData.started ? Colors.green[100] : Colors.yellow[300],
-        width: MediaQuery.of(context).size.width / 2 - 15,
+        width: width - 15,
         child: Column(
           children: [
-            Text(status),
             Table(
               columnWidths: {
-                0: IntrinsicColumnWidth(flex: 0.9),
-                1: IntrinsicColumnWidth(flex: 0.1)
+                0: FixedColumnWidth(width/6.5),
+                1: FixedColumnWidth(width/3),
+                2: FixedColumnWidth(width/10),
+                3: FixedColumnWidth(width/3)
               },
               children: [
                 TableRow(
                   children: [
-                    Text(meetData.team.first),
-                    if (!meetData.started)
-                      Text(
-                        meetData.score.first.toString(),
-                        textAlign: TextAlign.right,
-                      ),
-                  ],
-                ),
-                TableRow(
-                  children: [
+                    Text(status, textAlign: TextAlign.center),
+                    Text(meetData.team.first, textAlign: TextAlign.right),
+                    Text(score, textAlign: TextAlign.center),
                     Text(meetData.team.last),
-                    if (!meetData.started)
-                      Text(
-                        meetData.score.last.toString(),
-                        textAlign: TextAlign.right,
-                      ),
                   ],
                 ),
               ],

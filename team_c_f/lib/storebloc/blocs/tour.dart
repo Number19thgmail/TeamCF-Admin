@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:team_c_f/data/data.dart';
+import 'package:team_c_f/servises/tour.dart';
 import 'package:team_c_f/storebloc/states/tour.dart';
 
 class TourEvent {
@@ -10,6 +11,7 @@ class TourEvent {
 }
 
 enum Event {
+  closeForecasting,
   showListAbsense,
   makeForecast,
   selectMeets,
@@ -22,6 +24,11 @@ class TourBloc extends Bloc<TourEvent, TourState> {
   @override
   Stream<TourState> mapEventToState(TourEvent event) async* {
     switch (event.event) {
+      case Event.closeForecasting:
+        TourService().closeForecasting(round: state.tour.stage);
+        Data().refreshData();
+        yield state.copyWith(meetsData: Data.meets.where((m) => m.round == state.tour.stage).single);
+        break;
       case Event.showListAbsense:
         yield state.copyWith(size: !state.size);
         break;
