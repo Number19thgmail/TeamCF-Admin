@@ -1,51 +1,117 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:team_c_f/servise/auth.dart';
-import 'package:team_c_f/servise/operationdb.dart';
+import 'package:team_c_f/models/currenttour.dart';
+import 'package:team_c_f/models/meets.dart';
+import 'package:team_c_f/models/player.dart';
+import 'package:team_c_f/models/team.dart';
+import 'package:team_c_f/models/tour.dart';
+import 'package:team_c_f/servises/data.dart';
+import 'package:team_c_f/servises/tour.dart';
 
-class Account with ChangeNotifier {
-  // Единый класс с информацией о Google-аккаунте и регистрации в приложении
-  bool _signInGoogle = false;
-  bool _registedInApp = false;
-  String _userId = '';
+class Data with ChangeNotifier {
+  bool downloadSuccessful = false;
 
-  bool get signIn => _signInGoogle; // Выполнен вход в Google-аккаунт
-  bool get registedInApp =>
-      _registedInApp; // Выполнена ли регистрации в приложении
-  String get userId => _userId; // Уникальный идентификатор Google-аккаунта
-
-  Account() {
-    // Конструктор
-    calculateVariables();
+  Data() {
+    initData();
   }
 
-  void calculateVariables() {
-    // Вычисление переменных
-    if (FirebaseAuth.instance.currentUser != null) {
-      _userId = FirebaseAuth.instance.currentUser.uid;
-      _signInGoogle = true;
-      DatabaseService().userExists(userId: _userId).then((value) {
-        _registedInApp = value;
-        notifyListeners();
-      });
-    } else {
-      _userId = '';
-      _signInGoogle = false;
-      _registedInApp = false;
-      notifyListeners();
-    }
-  }
-
-  Future changeSignIn() async {
-    // Изменение статуса входа в Google-аккаунт
-    _signInGoogle ? await signOutGoogle() : await signInWithGoogle();
-    calculateVariables();
-  }
-
-  void registedUser() {
-    // Регистрация пользователя в приложении
-    _registedInApp = true;
-
+  void refreshData() {
+    downloadSuccessful = false;
     notifyListeners();
+    initData();
+  }
+
+  void initData(){
+    DataService().initData().then((result) {
+      sortData();
+      downloadSuccessful = result;
+      notifyListeners();
+    });
+  }
+
+  static late CurrentTourData currentTour;
+  static late List<PlayerData> players;
+  static late List<TeamData> teams;
+  static late List<TourData> tours;
+  static late List<MeetsData> meets;
+  static late List<String> names = [];
+
+  static void sortTour() {
+    tours.sort((TourData a, b) =>
+        a.round.compareTo(b.round)); // сортировка туров по порядку
+  }
+
+  static void sortData() {
+    sortTour();
+    sortPlayer(players: players);
+    players.forEach(
+      (PlayerData p) {
+        p.prevPosition = players.indexOf(p) + 1;
+      },
+    ); // указание текущей позиции игрока
+
+    tours.forEach(
+      (TourData tour) {
+        int round = tours.indexOf(tour);
+        tour.team.forEach(
+          (List<String> pair) {
+            TeamData home =
+                teams.where((TeamData team) => team.name == pair[0]).single;
+            TeamData away =
+                teams.where((TeamData team) => team.name == pair[1]).single;
+            if (home.goal.length > round) {
+              if (home.goal[round] == null && away.goal[round] == null) {
+                home.lose++;
+                away.lose++;
+              } else if (home.goal[round] == null) {
+                home.lose++;
+                away.win++;
+                home.missed += away.goal[round]!;
+              } else if (away.goal[round] == null) {
+                away.lose++;
+                home.win++;
+                away.missed += home.goal[round]!;
+              } else {
+                int goalHome = home.goal[round]!;
+                int goalAway = away.goal[round]!;
+                home.missed += goalAway;
+                away.missed += goalHome;
+                if (goalHome > goalAway) {
+                  home.win++;
+                  away.lose++;
+                } else if (goalAway > goalHome) {
+                  away.win++;
+                  home.lose++;
+                } else {
+                  home.draw++;
+                  away.draw++;
+                }
+              }
+            }
+          },
+        );
+      },
+    ); // определение wdl для команд и количества пропущенных
+    sortTeam(teams: teams);
+    teams.forEach(
+      (TeamData t) {
+        t.prevPosition = teams.indexOf(t) + 1;
+      },
+    ); // указание текущей позиции команды
+  }
+
+  static void sortTeam({required List<TeamData> teams}) {
+    teams.sort((TeamData a, b) => (b.goals - b.missed)
+        .compareTo(a.goals - a.missed)); // сортировка команд по разнице забитых
+    teams.sort((TeamData a, b) =>
+        b.win.compareTo(a.win)); // сортировка команд по количеству побед
+    teams.sort((TeamData a, b) =>
+        b.goals.compareTo(a.goals)); // сортировка команд по количеству забитых
+    teams.sort((TeamData a, b) =>
+        b.points.compareTo(a.points)); // сортировка команд по количеству очков
+  }
+
+  static void sortPlayer({required List<PlayerData> players}) {
+    players.sort((PlayerData a, b) => b.goals
+        .compareTo(a.goals)); // сортировка участников по количеству забитых
   }
 }
